@@ -111,7 +111,7 @@ class Lock {
 //  adquiriendo previamente el cerrojo. Esto significa que las operaciones
 //  sobre variables condici�n han de ejecutarse en exclusi�n mutua.
 //
-//  Las variables condici�n de Nachos deber�an funcionar seg�n el estilo
+//  Las variables condici�n de ManaOS deber�an funcionar seg�n el estilo
 //  "Mesa". Cuando un Signal() o Broadast() despierta a otro hilo,
 //  �ste se coloca en la cola de preparados. El hilo despertado es responsable
 //  de volver a adquirir el cerrojo. Esto lo deben implementar en el cuerpo de
@@ -152,7 +152,7 @@ class Condition {
 
 /*
 
-C�digo original del Nachos para las variables condici�n - NO USAR
+C�digo original del ManaOS para las variables condici�n - NO USAR
   
 class Condition {
   public:

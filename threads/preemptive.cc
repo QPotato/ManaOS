@@ -39,10 +39,10 @@ void PreemptiveScheduler::SetUp ( unsigned long timeSliceLength )
       ASSERT (false);
       break;
     
-    // child process: original Nachos code
+    // child process: original ManaOS code
     case 0:
       LetMeBeMonitored ();
-      // resumes Nachos execution as a child process
+      // resumes ManaOS execution as a child process
       return;
     
     // parent process: monitor code

@@ -5,7 +5,7 @@
 //	are left to the reader).
 //
 // Any implementation of a synchronization routine needs some
-// primitive atomic operation.  We assume Nachos is running on
+// primitive atomic operation.  We assume ManaOS is running on
 // a uniprocessor, and thus atomicity can be provided by
 // turning off interrupts.  While interrupts are disabled, no
 // context switch can occur, and thus the current thread is guaranteed

@@ -1,9 +1,9 @@
 /* syscalls.h 
- * 	Nachos system call interface.  These are Nachos kernel operations
+ * 	ManaOS system call interface.  These are ManaOS kernel operations
  * 	that can be invoked from user programs, by trapping to the kernel
  *	via the "syscall" instruction.
  *
- *	This file is included by user programs and by the Nachos kernel. 
+ *	This file is included by user programs and by the ManaOS kernel. 
  *
  * Copyright (c) 1992-1993 The Regents of the University of California.
  * All rights reserved.  See copyright.h for copyright notice and limitation 
@@ -32,17 +32,17 @@
 
 #ifndef IN_ASM
 
-/* The system call interface.  These are the operations the Nachos
+/* The system call interface.  These are the operations the ManaOS
  * kernel needs to support, to be able to run user programs.
  *
  * Each of these is invoked by a user program by simply calling the 
  * procedure; an assembly language stub stuffs the system call code
  * into a register, and traps to the kernel.  The kernel procedures
- * are then invoked in the Nachos kernel, after appropriate error checking, 
+ * are then invoked in the ManaOS kernel, after appropriate error checking, 
  * from the system call entry point in exception.cc.
  */
 
-/* Stop Nachos, and print out performance stats */
+/* Stop ManaOS, and print out performance stats */
 void Halt();		
  
 
@@ -54,7 +54,7 @@ void Exit(int status);
 /* A unique identifier for an executing user program (address space) */
 typedef int SpaceId;	
  
-/* Run the executable, stored in the Nachos file "name", and return the 
+/* Run the executable, stored in the ManaOS file "name", and return the 
  * address space identifier
  */
 SpaceId Exec(char *name);
@@ -70,11 +70,11 @@ int Join(SpaceId id);
  * both files *and* hardware I/O devices.
  *
  * If this assignment is done before doing the file system assignment,
- * note that the Nachos file system has a stub implementation, which
+ * note that the ManaOS file system has a stub implementation, which
  * will work for the purposes of testing out these routines.
  */
  
-/* A unique identifier for an open Nachos file. */
+/* A unique identifier for an open ManaOS file. */
 typedef int OpenFileId;	
 
 /* when an address space starts up, it has two open files, representing 
@@ -86,10 +86,10 @@ typedef int OpenFileId;
 #define ConsoleInput	0  
 #define ConsoleOutput	1  
  
-/* Create a Nachos file, with "name" */
+/* Create a ManaOS file, with "name" */
 void Create(char *name);
 
-/* Open the Nachos file "name", and return an "OpenFileId" that can 
+/* Open the ManaOS file "name", and return an "OpenFileId" that can 
  * be used to read and write to the file.
  */
 OpenFileId Open(char *name);

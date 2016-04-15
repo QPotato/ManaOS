@@ -1,5 +1,5 @@
 // sysdep.h 
-//	System-dependent interface.  Nachos uses the routines defined
+//	System-dependent interface.  ManaOS uses the routines defined
 //	here, rather than directly calling the UNIX library functions, to
 //	simplify porting between versions of UNIX, and even to
 //	other systems, such as MSDOS and the Macintosh.
@@ -55,7 +55,7 @@ extern int Random();
 extern char *AllocBoundedArray(int size);
 extern void DeallocBoundedArray(const char *p, int size);
 
-// Other C library routines that are used by Nachos.
+// Other C library routines that are used by ManaOS.
 // These are assumed to be portable, so we don't include a wrapper.
 extern "C" {
 #include <stdlib.h>		// for atoi, atof, abs

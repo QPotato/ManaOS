@@ -1,5 +1,5 @@
 // system.cc 
-//	Nachos initialization and cleanup routines.
+//	ManaOS initialization and cleanup routines.
 //
 // Copyright (c) 1992-1993 The Regents of the University of California.
 // All rights reserved.  See copyright.h for copyright notice and limitation 
@@ -9,7 +9,7 @@
 #include "system.h"
 #include "preemptive.h"
 
-// This defines *all* of the global data structures used by Nachos.
+// This defines *all* of the global data structures used by ManaOS.
 // These are all initialized and de-allocated by this file.
 
 Thread *currentThread;			// the thread we are running now
@@ -73,13 +73,13 @@ TimerInterruptHandler(void* dummy)
 
 //----------------------------------------------------------------------
 // Initialize
-// 	Initialize Nachos global data structures.  Interpret command
+// 	Initialize ManaOS global data structures.  Interpret command
 //	line arguments in ALRMorder to determine flags for the initialization.  
 // 
 //	"argc" is the number of command line arguments (including the name
-//		of the command) -- ex: "nachos -d +" -> argc = 3 
+//		of the command) -- ex: "ManaOS -d +" -> argc = 3 
 //	"argv" is an array of strings, one for each command line argument
-//		ex: "nachos -d +" -> argv = {"nachos", "-d", "+"}
+//		ex: "ManaOS -d +" -> argv = {"ManaOS", "-d", "+"}
 //----------------------------------------------------------------------
 void
 Initialize(int argc, char **argv)
@@ -195,7 +195,7 @@ Initialize(int argc, char **argv)
 
 //----------------------------------------------------------------------
 // Cleanup
-// 	Nachos is halting.  De-allocate global data structures.
+// 	ManaOS is halting.  De-allocate global data structures.
 //----------------------------------------------------------------------
 void
 Cleanup()

@@ -19,7 +19,7 @@
 //	on bootup.
 //
 //	The file system assumes that the bitmap and directory files are
-//	kept "open" continuously while Nachos is running.
+//	kept "open" continuously while ManaOS is running.
 //
 //	For those operations (such as Create, Remove) that modify the
 //	directory and/or bitmap, if the operation succeeds, the changes
@@ -36,7 +36,7 @@
 //	   there is no hierarchical directory structure, and only a limited
 //	     number of files can be added to the system
 //	   there is no attempt to make the system robust to failures
-//	    (if Nachos exits in the middle of an operation that modifies
+//	    (if ManaOS exits in the middle of an operation that modifies
 //	    the file system, it may corrupt the disk)
 //
 // Copyright (c) 1992-1993 The Regents of the University of California.
@@ -110,7 +110,7 @@ FileSystem::FileSystem(bool format)
 
     // OK to open the bitmap and directory files now
     // The file system operations assume these two files are left open
-    // while Nachos is running.
+    // while ManaOS is running.
 
         freeMapFile = new OpenFile(FreeMapSector);
         directoryFile = new OpenFile(DirectorySector);
@@ -136,7 +136,7 @@ FileSystem::FileSystem(bool format)
 	}
     } else {
     // if we are not formatting the disk, just open the files representing
-    // the bitmap and directory; these are left open while Nachos is running
+    // the bitmap and directory; these are left open while ManaOS is running
         freeMapFile = new OpenFile(FreeMapSector);
         directoryFile = new OpenFile(DirectorySector);
     }
@@ -144,7 +144,7 @@ FileSystem::FileSystem(bool format)
 
 //----------------------------------------------------------------------
 // FileSystem::Create
-// 	Create a file in the Nachos file system (similar to UNIX create).
+// 	Create a file in the ManaOS file system (similar to UNIX create).
 //	Since we can't increase the size of files dynamically, we have
 //	to give Create the initial size of the file.
 //

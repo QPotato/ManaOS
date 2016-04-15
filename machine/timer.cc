@@ -10,8 +10,8 @@
 //      In order to introduce some randomness into time-slicing, if "doRandom"
 //      is set, then the interrupt is comes after a random number of ticks.
 //
-//	Remember -- nothing in here is part of Nachos.  It is just
-//	an emulation for the hardware that Nachos is running on top of.
+//	Remember -- nothing in here is part of ManaOS.  It is just
+//	an emulation for the hardware that ManaOS is running on top of.
 //
 //  DO NOT CHANGE -- part of the machine emulation
 //
@@ -65,7 +65,7 @@ Timer::TimerExpired()
     interrupt->Schedule(TimerHandler, this, TimeOfNextInterrupt(), 
 		TimerInt);
 
-    // invoke the Nachos interrupt handler for this device
+    // invoke the ManaOS interrupt handler for this device
     (*handler)(arg);
 }
 

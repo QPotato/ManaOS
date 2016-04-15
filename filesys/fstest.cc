@@ -2,9 +2,9 @@
 //	Simple test routines for the file system.  
 //
 //	We implement:
-//	   Copy -- copy a file from UNIX to Nachos
-//	   Print -- cat the contents of a Nachos file 
-//	   Perftest -- a stress test for the Nachos file system
+//	   Copy -- copy a file from UNIX to ManaOS
+//	   Print -- cat the contents of a ManaOS file 
+//	   Perftest -- a stress test for the ManaOS file system
 //		read and write a really large file in tiny chunks
 //		(won't work on baseline system!)
 //
@@ -25,7 +25,7 @@
 
 //----------------------------------------------------------------------
 // Copy
-// 	Copy the contents of the UNIX file "from" to the Nachos file "to"
+// 	Copy the contents of the UNIX file "from" to the ManaOS file "to"
 //----------------------------------------------------------------------
 
 void
@@ -47,9 +47,9 @@ Copy(const char *from, const char *to)
     fileLength = ftell(fp);
     fseek(fp, 0, 0);
 
-// Create a Nachos file of the same length
+// Create a ManaOS file of the same length
     DEBUG('f', "Copying file %s, size %d, to file %s\n", from, fileLength, to);
-    if (!fileSystem->Create(to, fileLength)) {	 // Create Nachos file
+    if (!fileSystem->Create(to, fileLength)) {	 // Create ManaOS file
 	printf("Copy: couldn't create output file %s\n", to);
 	fclose(fp);
 	return;
@@ -64,14 +64,14 @@ Copy(const char *from, const char *to)
 	openFile->Write(buffer, amountRead);	
     delete [] buffer;
 
-// Close the UNIX and the Nachos files
+// Close the UNIX and the ManaOS files
     delete openFile;
     fclose(fp);
 }
 
 //----------------------------------------------------------------------
 // Print
-// 	Print the contents of the Nachos file "name".
+// 	Print the contents of the ManaOS file "name".
 //----------------------------------------------------------------------
 
 void
@@ -92,13 +92,13 @@ Print(const char *name)
 	    printf("%c", buffer[i]);
     delete [] buffer;
 
-    delete openFile;		// close the Nachos file
+    delete openFile;		// close the ManaOS file
     return;
 }
 
 //----------------------------------------------------------------------
 // PerformanceTest
-// 	Stress the Nachos file system by creating a large file, writing
+// 	Stress the ManaOS file system by creating a large file, writing
 //	it out a bit at a time, reading it back a bit at a time, and then
 //	deleting the file.
 //

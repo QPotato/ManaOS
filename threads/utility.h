@@ -3,7 +3,7 @@
 //
 //	The debugging routines allow the user to turn on selected
 //	debugging messages, controllable from the command line arguments
-//	passed to Nachos (-d).  You are encouraged to add your own
+//	passed to ManaOS (-d).  You are encouraged to add your own
 //	debugging flags.  The pre-defined debugging flags are:
 //
 //	'+' -- turn on all debug messages

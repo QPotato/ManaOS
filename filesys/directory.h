@@ -42,7 +42,7 @@ class DirectoryEntry {
 // the directory describes a file, and where to find it on disk.
 //
 // The directory data structure can be stored in memory, or on disk.
-// When it is on disk, it is stored as a regular Nachos file.
+// When it is on disk, it is stored as a regular ManaOS file.
 //
 // The constructor initializes a directory structure in memory; the
 // FetchFrom/WriteBack operations shuffle the directory information

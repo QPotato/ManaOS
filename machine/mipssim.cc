@@ -20,7 +20,7 @@ static void Mult(int a, int b, bool signedArith, int* hiPtr, int* loPtr);
 
 //----------------------------------------------------------------------
 // Machine::Run
-// 	Simulate the execution of a user-level program on Nachos.
+// 	Simulate the execution of a user-level program on ManaOS.
 //	Called by the kernel when the program starts up; never returns.
 //
 //	This routine is re-entrant, in that it can be called multiple
@@ -83,9 +83,9 @@ TypeToReg(RegType reg, Instruction *instr)
 //	times concurrently -- one for each thread executing user code.
 //	We get re-entrancy by never caching any data -- we always re-start the
 //	simulation from scratch each time we are called (or after trapping
-//	back to the Nachos kernel on an exception or interrupt), and we always
+//	back to the ManaOS kernel on an exception or interrupt), and we always
 //	store all data back to the machine registers and memory before
-//	leaving.  This allows the Nachos kernel to control our behavior
+//	leaving.  This allows the ManaOS kernel to control our behavior
 //	by controlling the contents of memory, the translation table,
 //	and the register set.
 //----------------------------------------------------------------------

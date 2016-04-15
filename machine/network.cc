@@ -1,6 +1,6 @@
 // network.cc 
 //	Routines to simulate a network interface, using UNIX sockets
-//	to deliver packets between multiple invocations of nachos.
+//	to deliver packets between multiple invocations of ManaOS.
 //
 //  DO NOT CHANGE -- part of the machine emulation
 //

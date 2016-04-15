@@ -52,7 +52,7 @@ Thread::Thread(const char* threadName)
 //
 //      NOTE: if this is the main thread, we can't delete the stack
 //      because we didn't allocate it -- we got it automatically
-//      as part of starting up Nachos.
+//      as part of starting up ManaOS.
 //----------------------------------------------------------------------
 
 Thread::~Thread()
@@ -110,7 +110,7 @@ Thread::Fork(VoidFunctionPtr func, void* arg)
 //	that has been allocated for it.  If we had a smarter compiler,
 //	we wouldn't need to worry about this, but we don't.
 //
-// 	NOTE: Nachos will not catch all stack overflow conditions.
+// 	NOTE: ManaOS will not catch all stack overflow conditions.
 //	In other words, your program may still crash because of an overflow.
 //
 // 	If you get bizarre results (such as seg faults where there is no code)

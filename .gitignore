@@ -1,9 +1,9 @@
 *.o
-filesys/nachos
-network/nachos
-threads/nachos
-userprog/nachos
-vm/nachos
+filesys/ManaOS
+network/ManaOS
+threads/ManaOS
+userprog/ManaOS
+vm/ManaOS
 bin/coff2noff.o
 filesys/addrspace.o
 filesys/bitmap.o

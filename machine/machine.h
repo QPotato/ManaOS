@@ -1,14 +1,14 @@
 // machine.h 
 //	Data structures for simulating the execution of user programs
-//	running on top of Nachos.
+//	running on top of ManaOS.
 //
-//	User programs are loaded into "mainMemory"; to Nachos,
-//	this looks just like an array of bytes.  Of course, the Nachos
+//	User programs are loaded into "mainMemory"; to ManaOS,
+//	this looks just like an array of bytes.  Of course, the ManaOS
 //	kernel is in memory too -- but as in most machines these days,
 //	the kernel is loaded into a separate memory region from user
 //	programs, and accesses to kernel memory are not translated or paged.
 //
-//	In Nachos, user programs are executed one instruction at a time, 
+//	In ManaOS, user programs are executed one instruction at a time, 
 //	by the simulator.  Each memory reference is translated, checked
 //	for errors, etc.
 //
@@ -96,10 +96,10 @@ class Instruction {
 // User programs shouldn't be able to tell that they are running on our 
 // simulator or on the real hardware, except 
 //	we don't support floating point instructions
-//	the system call interface to Nachos is not the same as UNIX 
-//	  (10 system calls in Nachos vs. 200 in UNIX!)
+//	the system call interface to ManaOS is not the same as UNIX 
+//	  (10 system calls in ManaOS vs. 200 in UNIX!)
 // If we were to implement more of the UNIX system calls, we ought to be
-// able to run Nachos on top of Nachos!
+// able to run ManaOS on top of ManaOS!
 //
 // The procedures in this class are defined in machine.cc, mipssim.cc, and
 // translate.cc.
@@ -110,7 +110,7 @@ class Machine {
 				// for running user programs
     ~Machine();			// De-allocate the data structures
 
-// Routines callable by the Nachos kernel
+// Routines callable by the ManaOS kernel
     void Run();	 		// Run a user program
 
     int ReadRegister(int num);	// read the contents of a CPU register
@@ -140,14 +140,14 @@ class Machine {
 				// translation couldn't be completed.
 
     void RaiseException(ExceptionType which, int badVAddr);
-				// Trap to the Nachos kernel, because of a
+				// Trap to the ManaOS kernel, because of a
 				// system call or other exception.  
 
     void Debugger();		// invoke the user program debugger
     void DumpState();		// print the user CPU and memory state 
 
 
-// Data structures -- all of these are accessible to Nachos kernel code.
+// Data structures -- all of these are accessible to ManaOS kernel code.
 // "public" for convenience.
 //
 // Note that *all* communication between the user program and the kernel 
@@ -166,7 +166,7 @@ class Machine {
 //	  mappings of virtual page #'s to physical page #'s
 //
 // If "tlb" is NULL, the linear page table is used
-// If "tlb" is non-NULL, the Nachos kernel is responsible for managing
+// If "tlb" is non-NULL, the ManaOS kernel is responsible for managing
 //	the contents of the TLB.  But the kernel can use any data structure
 //	it wants (eg, segmented paging) for handling TLB cache misses.
 // 
@@ -177,7 +177,7 @@ class Machine {
 // the contents of the TLB are free to be modified by the kernel software.
 
     TranslationEntry *tlb;		// this pointer should be considered 
-					// "read-only" to Nachos kernel code
+					// "read-only" to ManaOS kernel code
 
     TranslationEntry *pageTable;
     unsigned int pageTableSize;
@@ -190,7 +190,7 @@ class Machine {
 };
 
 extern void ExceptionHandler(ExceptionType which);
-				// Entry point into Nachos for handling
+				// Entry point into ManaOS for handling
 				// user system calls and exceptions
 				// Defined in exception.cc
 

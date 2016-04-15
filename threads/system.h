@@ -1,5 +1,5 @@
 // system.h 
-//	All global variables used in Nachos are defined here.
+//	All global variables used in ManaOS are defined here.
 //
 // Copyright (c) 1992-1993 The Regents of the University of California.
 // All rights reserved.  See copyright.h for copyright notice and limitation 
@@ -20,7 +20,7 @@
 extern void Initialize(int argc, char **argv); 	// Initialization,
 						// called before anything else
 extern void Cleanup();				// Cleanup, called when
-						// Nachos is done.
+						// ManaOS is done.
 
 extern Thread *currentThread;			// the thread holding the CPU
 extern Thread *threadToBeDestroyed;  		// the thread that just finished

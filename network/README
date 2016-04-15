@@ -14,23 +14,23 @@ So, be careful out there!
 tom
 -----------
 po.EECS.Berkeley.EDU:network>!19
-./nachos -m 0 -o 1 > & log & ; ./nachos -m 1 -o 0 > & log2 &
+./ManaOS -m 0 -o 1 > & log & ; ./ManaOS -m 1 -o 0 > & log2 &
 [1] 10882
 [2] 10883
 po.EECS.Berkeley.EDU:network>
-[2]    Illegal instruction  ./nachos -m 1 -o 0 >& log2 (core dumped)
+[2]    Illegal instruction  ./ManaOS -m 1 -o 0 >& log2 (core dumped)
 
-[1]    Illegal instruction  ./nachos -m 0 -o 1 >& log (core dumped)
+[1]    Illegal instruction  ./ManaOS -m 0 -o 1 >& log (core dumped)
 
 po.EECS.Berkeley.EDU:network>rm -f log* SOCKET*
 po.EECS.Berkeley.EDU:network>!19
-./nachos -m 0 -o 1 > & log & ; ./nachos -m 1 -o 0 > & log2 &
+./ManaOS -m 0 -o 1 > & log & ; ./ManaOS -m 1 -o 0 > & log2 &
 [1] 10895
 [2] 10896
 po.EECS.Berkeley.EDU:network>
-[1]    Done                 ./nachos -m 0 -o 1 >& log
+[1]    Done                 ./ManaOS -m 0 -o 1 >& log
 
-[2]    Done                 ./nachos -m 1 -o 0 >& log2
+[2]    Done                 ./ManaOS -m 1 -o 0 >& log2
 more log
 Got "Hello there!" from 1, box 1
 Got "Got it!" from 1, box 1

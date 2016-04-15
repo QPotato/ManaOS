@@ -1,7 +1,7 @@
 // openfile.cc 
-//	Routines to manage an open Nachos file.  As in UNIX, a
+//	Routines to manage an open ManaOS file.  As in UNIX, a
 //	file must be open before we can read or write to it.
-//	Once we're all done, we can close it (in Nachos, by deleting
+//	Once we're all done, we can close it (in ManaOS, by deleting
 //	the OpenFile data structure).
 //
 //	Also as in UNIX, for convenience, we keep the file header in
@@ -18,7 +18,7 @@
 
 //----------------------------------------------------------------------
 // OpenFile::OpenFile
-// 	Open a Nachos file for reading and writing.  Bring the file header
+// 	Open a ManaOS file for reading and writing.  Bring the file header
 //	into memory while the file is open.
 //
 //	"sector" -- the location on disk of the file header for this file
@@ -33,7 +33,7 @@ OpenFile::OpenFile(int sector)
 
 //----------------------------------------------------------------------
 // OpenFile::~OpenFile
-// 	Close a Nachos file, de-allocating any in-memory data structures.
+// 	Close a ManaOS file, de-allocating any in-memory data structures.
 //----------------------------------------------------------------------
 
 OpenFile::~OpenFile()

@@ -1,5 +1,5 @@
 // progtest.cc 
-//	Test routines for demonstrating that Nachos can load
+//	Test routines for demonstrating that ManaOS can load
 //	a user program and execute it.  
 //
 //	Also, routines for testing the Console hardware device.

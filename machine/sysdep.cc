@@ -1,5 +1,5 @@
 // sysdep.cc
-//	Implementation of system-dependent interface.  Nachos uses the 
+//	Implementation of system-dependent interface.  ManaOS uses the 
 //	routines defined here, rather than directly calling the UNIX library,
 //	to simplify porting between versions of UNIX, and even to
 //	other systems, such as MSDOS.
@@ -9,7 +9,7 @@
 //
 //	NOTE: all of these routines refer to operations on the underlying
 //	host machine (e.g., the DECstation, SPARC, etc.), supporting the 
-//	Nachos simulation code.  Nachos implements similar operations,
+//	ManaOS simulation code.  ManaOS implements similar operations,
 //	(such as opening a file), but those are implemented in terms
 //	of hardware devices, which are simulated by calls to the underlying
 //	routines in the host workstation OS.
@@ -82,7 +82,7 @@ PollFile(int fd)
 // decide how long to wait if there are no characters on the file
     pollTime.tv_sec = 0;
     if (interrupt->getStatus() == IdleMode)
-        pollTime.tv_usec = 20000;              	// delay to let other nachos run
+        pollTime.tv_usec = 20000;              	// delay to let other ManaOS run
     else
         pollTime.tv_usec = 0;                 	// no delay
 
@@ -224,8 +224,8 @@ Unlink(const char *name)
 //----------------------------------------------------------------------
 // OpenSocket
 // 	Open an interprocess communication (IPC) connection.  For now, 
-//	just open a datagram port where other Nachos (simulating 
-//	workstations on a network) can send messages to this Nachos.
+//	just open a datagram port where other ManaOS (simulating 
+//	workstations on a network) can send messages to this ManaOS.
 //----------------------------------------------------------------------
 
 int
@@ -264,7 +264,7 @@ InitSocketName(struct sockaddr_un *uname, const char *name)
 
 //----------------------------------------------------------------------
 // AssignNameToSocket
-// 	Give a UNIX file name to the IPC port, so other instances of Nachos
+// 	Give a UNIX file name to the IPC port, so other instances of ManaOS
 //	can locate the port. 
 //----------------------------------------------------------------------
 
@@ -329,7 +329,7 @@ ReadFromSocket(int sockID, char *buffer, int packetSize)
 
 //----------------------------------------------------------------------
 // SendToSocket
-// 	Transmit a fixed size packet to another Nachos' IPC port.
+// 	Transmit a fixed size packet to another ManaOS' IPC port.
 //	Abort on error.
 //----------------------------------------------------------------------
 void
@@ -366,8 +366,8 @@ CallOnUserAbort(VoidNoArgFunctionPtr func)
 
 //----------------------------------------------------------------------
 // Sleep
-// 	Put the UNIX process running Nachos to sleep for x seconds,
-//	to give the user time to start up another invocation of Nachos
+// 	Put the UNIX process running ManaOS to sleep for x seconds,
+//	to give the user time to start up another invocation of ManaOS
 //	in a different UNIX shell.
 //----------------------------------------------------------------------
 

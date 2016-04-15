@@ -1,11 +1,11 @@
 // nettest.cc 
-//	Test out message delivery between two "Nachos" machines,
+//	Test out message delivery between two "ManaOS" machines,
 //	using the Post Office to coordinate delivery.
 //
 //	Two caveats:
-//	  1. Two copies of Nachos must be running, with machine ID's 0 and 1:
-//		./nachos -m 0 -o 1 &
-//		./nachos -m 1 -o 0 &
+//	  1. Two copies of ManaOS must be running, with machine ID's 0 and 1:
+//		./ManaOS -m 0 -o 1 &
+//		./ManaOS -m 1 -o 0 &
 //
 //	  2. You need an implementation of condition variables,
 //	     which is *not* provided as part of the baseline threads 

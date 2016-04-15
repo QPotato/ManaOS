@@ -1,5 +1,5 @@
 // stats.h 
-//	Data structures for gathering statistics about Nachos performance.
+//	Data structures for gathering statistics about ManaOS performance.
 //
 // DO NOT CHANGE -- these stats are maintained by the machine emulation
 //
@@ -14,14 +14,14 @@
 #include "copyright.h"
 
 // The following class defines the statistics that are to be kept
-// about Nachos behavior -- how much time (ticks) elapsed, how
+// about ManaOS behavior -- how much time (ticks) elapsed, how
 // many user instructions executed, etc.
 //
 // The fields in this class are public to make it easier to update.
 
 class Statistics {
   public:
-    int totalTicks;      	// Total time running Nachos
+    int totalTicks;      	// Total time running ManaOS
     int idleTicks;       	// Time spent idle (no threads to run)
     int systemTicks;	 	// Time spent executing system code
     int userTicks;       	// Time spent executing user code
@@ -48,7 +48,7 @@ class Statistics {
 // take in a real system.  A "tick" is a just a unit of time -- if you 
 // like, a microsecond.
 //
-// Since Nachos kernel code is directly executed, and the time spent
+// Since ManaOS kernel code is directly executed, and the time spent
 // in the kernel measured by the number of calls to enable interrupts,
 // these time constants are none too exact.
 

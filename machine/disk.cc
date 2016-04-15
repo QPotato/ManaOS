@@ -32,9 +32,9 @@ static void DiskDone(void* arg) { ((Disk *)arg)->HandleInterrupt(); }
 // Disk::Disk()
 // 	Initialize a simulated disk.  Open the UNIX file (creating it
 //	if it doesn't exist), and check the magic number to make sure it's 
-// 	ok to treat it as Nachos disk storage.
+// 	ok to treat it as ManaOS disk storage.
 //
-//	"name" -- text name of the file simulating the Nachos disk
+//	"name" -- text name of the file simulating the ManaOS disk
 //	"callWhenDone" -- interrupt handler to be called when disk read/write
 //	   request completes
 //	"callArg" -- argument to pass the interrupt handler
@@ -155,7 +155,7 @@ Disk::WriteRequest(int sectorNumber, const char* data)
 //----------------------------------------------------------------------
 // Disk::HandleInterrupt()
 // 	Called when it is time to invoke the disk interrupt handler,
-//	to tell the Nachos kernel that the disk request is done.
+//	to tell the ManaOS kernel that the disk request is done.
 //----------------------------------------------------------------------
 
 void

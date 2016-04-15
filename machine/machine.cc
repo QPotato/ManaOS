@@ -89,7 +89,7 @@ Machine::~Machine()
 
 //----------------------------------------------------------------------
 // Machine::RaiseException
-// 	Transfer control to the Nachos kernel from user mode, because
+// 	Transfer control to the ManaOS kernel from user mode, because
 //	the user program either invoked a system call, or some exception
 //	occured (such as the address translation failed).
 //
@@ -113,7 +113,7 @@ Machine::RaiseException(ExceptionType which, int badVAddr)
 //----------------------------------------------------------------------
 // Machine::Debugger
 // 	Primitive debugger for user programs.  Note that we can't use
-//	gdb to debug user programs, since gdb doesn't run on top of Nachos.
+//	gdb to debug user programs, since gdb doesn't run on top of ManaOS.
 //	It could, but you'd have to implement *a lot* more system calls
 //	to get it to work!
 //

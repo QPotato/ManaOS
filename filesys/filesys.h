@@ -1,5 +1,5 @@
 // filesys.h 
-//	Data structures to represent the Nachos file system.
+//	Data structures to represent the ManaOS file system.
 //
 //	A file system is a set of files stored on disk, organized
 //	into directories.  Operations on the file system have to
@@ -9,9 +9,9 @@
 //	class (openfile.h).
 //
 //	We define two separate implementations of the file system. 
-//	The "STUB" version just re-defines the Nachos file system 
+//	The "STUB" version just re-defines the ManaOS file system 
 //	operations as operations on the native UNIX file system on the machine
-//	running the Nachos simulation.  This is provided in case the
+//	running the ManaOS simulation.  This is provided in case the
 //	multiprogramming and virtual memory assignments (which make use
 //	of the file system) are done before the file system assignment.
 //
@@ -25,7 +25,7 @@
 //	system does not provide a hierarchical directory structure.  
 //	In addition, there is a bitmap for allocating
 //	disk sectors.  Both the root directory and the bitmap are themselves
-//	stored as files in the Nachos file system -- this causes an interesting
+//	stored as files in the ManaOS file system -- this causes an interesting
 //	bootstrap problem when the simulated disk is initialized. 
 //
 // Copyright (c) 1992-1993 The Regents of the University of California.

@@ -235,7 +235,7 @@ Interrupt::Idle()
 
 //----------------------------------------------------------------------
 // Interrupt::Halt
-// 	Shut down Nachos cleanly, printing out performance statistics.
+// 	Shut down ManaOS cleanly, printing out performance statistics.
 //----------------------------------------------------------------------
 void
 Interrupt::Halt()
@@ -249,8 +249,8 @@ Interrupt::Halt()
 // RestarTicks
 // Restart the total ticks statistic and the pending interrupts list.
 //
-// This function helps to fix the nachos ticks's bug. After some time (when totalTicks
-// reach the maximun positive number) nachos will schedule a pending interrupt at a
+// This function helps to fix the ManaOS ticks's bug. After some time (when totalTicks
+// reach the maximun positive number) ManaOS will schedule a pending interrupt at a
 // negative time, after that, it hangs.
 //----------------------------------------------------------------------------------------
 
@@ -285,7 +285,7 @@ void Interrupt::RestartTicks()
 //
 //	Implementation: just put it on a sorted list.
 //
-//	NOTE: the Nachos kernel should not call this routine directly.
+//	NOTE: the ManaOS kernel should not call this routine directly.
 //	Instead, it is only called by the hardware device simulators.
 //
 //	"handler" is the procedure to call when the interrupt occurs
@@ -306,7 +306,7 @@ Interrupt::Schedule(VoidFunctionPtr handler, void* arg, int fromNow, IntType typ
         when = fromNow;
     }
 #else
-    // This assert terminates Nachos if the ticks overflowed
+    // This assert terminates ManaOS if the ticks overflowed
     ASSERT(when >= 0);
 #endif
     PendingInterrupt *toOccur = new PendingInterrupt(handler, arg, when, type);

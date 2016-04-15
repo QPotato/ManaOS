@@ -41,13 +41,13 @@
 // Interrupts can be disabled (IntOff) or enabled (IntOn)
 enum IntStatus { IntOff, IntOn };
 
-// Nachos can be running kernel code (SystemMode), user code (UserMode),
+// ManaOS can be running kernel code (SystemMode), user code (UserMode),
 // or there can be no runnable thread, because the ready list 
 // is empty (IdleMode).
 enum MachineStatus {IdleMode, SystemMode, UserMode};
 
 // IntType records which hardware device generated an interrupt.
-// In Nachos, we support a hardware timer device, a disk, a console
+// In ManaOS, we support a hardware timer device, a disk, a console
 // display and keyboard, and a network.
 enum IntType { TimerInt, DiskInt, ConsoleWriteInt, ConsoleReadInt, 
 				NetworkSendInt, NetworkRecvInt};

@@ -1,5 +1,5 @@
 // stats.h 
-//	Routines for managing statistics about Nachos performance.
+//	Routines for managing statistics about ManaOS performance.
 //
 // DO NOT CHANGE -- these stats are maintained by the machine emulation.
 //

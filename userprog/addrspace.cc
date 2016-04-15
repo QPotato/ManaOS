@@ -4,10 +4,10 @@
 //	In order to run a user program, you must:
 //
 //	1. link with the -N -T 0 option 
-//	2. run coff2noff to convert the object file to Nachos format
-//		(Nachos object code format is essentially just a simpler
+//	2. run coff2noff to convert the object file to ManaOS format
+//		(ManaOS object code format is essentially just a simpler
 //		version of the UNIX executable object code format)
-//	3. load the NOFF file into the Nachos file system
+//	3. load the NOFF file into the ManaOS file system
 //		(if you haven't implemented the file system yet, you
 //		don't need to do this last step)
 //

@@ -43,7 +43,7 @@ class Console {
 				// initialize the hardware console device
     ~Console();			// clean up console emulation
 
-// external interface -- Nachos kernel code can call these
+// external interface -- ManaOS kernel code can call these
     void PutChar(char ch);	// Write "ch" to the console display, 
 				// and return immediately.  "writeHandler" 
 				// is called when the I/O completes. 

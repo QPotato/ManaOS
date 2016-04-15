@@ -140,7 +140,7 @@ BitMap::Print()
 
 //----------------------------------------------------------------------
 // BitMap::FetchFromFile
-// 	Initialize the contents of a bitmap from a Nachos file.
+// 	Initialize the contents of a bitmap from a ManaOS file.
 //
 //	"file" is the place to read the bitmap from
 //----------------------------------------------------------------------
@@ -153,7 +153,7 @@ BitMap::FetchFrom(OpenFile *file)
 
 //----------------------------------------------------------------------
 // BitMap::WriteBack
-// 	Store the contents of a bitmap to a Nachos file.
+// 	Store the contents of a bitmap to a ManaOS file.
 //
 //	"file" is the place to write the bitmap to
 //----------------------------------------------------------------------

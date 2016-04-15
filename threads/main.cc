@@ -8,10 +8,10 @@
 //
 // 	Most of this file is not needed until later assignments.
 //
-// Usage: nachos -d <debugflags> -rs <random seed #>
-//		-s -x <nachos file> -c <consoleIn> <consoleOut>
-//		-f -cp <unix file> <nachos file>
-//		-p <nachos file> -r <nachos file> -l -D -t
+// Usage: ManaOS -d <debugflags> -rs <random seed #>
+//		-s -x <ManaOS file> -c <consoleIn> <consoleOut>
+//		-f -cp <unix file> <ManaOS file>
+//		-p <ManaOS file> -r <ManaOS file> -l -D -t
 //              -n <network reliability> -m <machine id>
 //              -o <other machine id>
 //              -z
@@ -27,17 +27,17 @@
 //
 //  FILESYS
 //    -f causes the physical disk to be formatted
-//    -cp copies a file from UNIX to Nachos
-//    -p prints a Nachos file to stdout
-//    -r removes a Nachos file from the file system
-//    -l lists the contents of the Nachos directory
+//    -cp copies a file from UNIX to ManaOS
+//    -p prints a ManaOS file to stdout
+//    -r removes a ManaOS file from the file system
+//    -l lists the contents of the ManaOS directory
 //    -D prints the contents of the entire file system 
-//    -t tests the performance of the Nachos file system
+//    -t tests the performance of the ManaOS file system
 //
 //  NETWORK
 //    -n sets the network reliability
 //    -m sets this machine's host id (needed for the network)
-//    -o runs a simple test of the Nachos network software
+//    -o runs a simple test of the ManaOS network software
 //
 //  NOTE -- flags are ignored until the relevant assignment.
 //  Some of the flags are interpreted here; some in system.cc.
@@ -57,7 +57,7 @@
 // External functions used by this file
 
 void ThreadTest();
-void Copy(const char *unixFile, const char *nachosFile);
+void Copy(const char *unixFile, const char *ManaOSFile);
 void Print(const char *file);
 void PerformanceTest(void);
 void StartProcess(const char *file);
@@ -73,9 +73,9 @@ void MailTest(int networkID);
 //	(optionally) Call test procedure
 //
 //	"argc" is the number of command line arguments (including the name
-//		of the command) -- ex: "nachos -d +" -> argc = 3 
+//		of the command) -- ex: "ManaOS -d +" -> argc = 3 
 //	"argv" is an array of strings, one for each command line argument
-//		ex: "nachos -d +" -> argv = {"nachos", "-d", "+"}
+//		ex: "ManaOS -d +" -> argv = {"ManaOS", "-d", "+"}
 //----------------------------------------------------------------------
 
 int
@@ -109,24 +109,24 @@ main(int argc, char **argv)
 	        argCount = 3;
 	    }
 	    interrupt->Halt();		// once we start the console, then 
-					// Nachos will loop forever waiting 
+					// ManaOS will loop forever waiting 
 					// for console input
 	}
 #endif // USER_PROGRAM
 #ifdef FILESYS
-	if (!strcmp(*argv, "-cp")) { 		// copy from UNIX to Nachos
+	if (!strcmp(*argv, "-cp")) { 		// copy from UNIX to ManaOS
 	    ASSERT(argc > 2);
 	    Copy(*(argv + 1), *(argv + 2));
 	    argCount = 3;
-	} else if (!strcmp(*argv, "-p")) {	// print a Nachos file
+	} else if (!strcmp(*argv, "-p")) {	// print a ManaOS file
 	    ASSERT(argc > 1);
 	    Print(*(argv + 1));
 	    argCount = 2;
-	} else if (!strcmp(*argv, "-r")) {	// remove Nachos file
+	} else if (!strcmp(*argv, "-r")) {	// remove ManaOS file
 	    ASSERT(argc > 1);
 	    fileSystem->Remove(*(argv + 1));
 	    argCount = 2;
-	} else if (!strcmp(*argv, "-l")) {	// list Nachos directory
+	} else if (!strcmp(*argv, "-l")) {	// list ManaOS directory
             fileSystem->List();
 	} else if (!strcmp(*argv, "-D")) {	// print entire filesystem
             fileSystem->Print();
@@ -139,7 +139,7 @@ main(int argc, char **argv)
 	    ASSERT(argc > 1);
             Delay(2); 				// delay for 2 seconds
 						// to give the user time to 
-						// start up another nachos
+						// start up another ManaOS
             MailTest(atoi(*(argv + 1)));
             argCount = 2;
         }
@@ -147,7 +147,7 @@ main(int argc, char **argv)
     }
 
     currentThread->Finish();	// NOTE: if the procedure "main" 
-				// returns, then the program "nachos"
+				// returns, then the program "ManaOS"
 				// will exit (as any other normal program
 				// would).  But there may be other
 				// threads on the ready list.  We switch

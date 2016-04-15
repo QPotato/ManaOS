@@ -79,7 +79,7 @@ Console::~Console()
 //	input from the simulated keyboard (eg, has it been typed?).
 //
 //	Only read it in if there is buffer space for it (if the previous
-//	character has been grabbed out of the buffer by the Nachos kernel).
+//	character has been grabbed out of the buffer by the ManaOS kernel).
 //	Invoke the "read" interrupt handler, once the character has been 
 //	put into the buffer. 
 //----------------------------------------------------------------------
@@ -107,7 +107,7 @@ Console::CheckCharAvail()
 //----------------------------------------------------------------------
 // Console::WriteDone()
 // 	Internal routine called when it is time to invoke the interrupt
-//	handler to tell the Nachos kernel that the output character has
+//	handler to tell the ManaOS kernel that the output character has
 //	completed.
 //----------------------------------------------------------------------
 

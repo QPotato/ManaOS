@@ -1,10 +1,10 @@
 // exception.cc 
-//	Entry point into the Nachos kernel from user programs.
+//	Entry point into the ManaOS kernel from user programs.
 //	There are two kinds of things that can cause control to
 //	transfer back to here from user code:
 //
 //	syscall -- The user code explicitly requests to call a procedure
-//	in the Nachos kernel.  Right now, the only function we support is
+//	in the ManaOS kernel.  Right now, the only function we support is
 //	"Halt".
 //
 //	exceptions -- The user code does something that the CPU can't handle.
@@ -12,7 +12,7 @@
 //	etc.  
 //
 //	Interrupts (which can also cause control to transfer from user
-//	code into the Nachos kernel) are handled elsewhere.
+//	code into the ManaOS kernel) are handled elsewhere.
 //
 // For now, this only handles the Halt() system call.
 // Everything else core dumps.
@@ -27,7 +27,7 @@
 
 //----------------------------------------------------------------------
 // ExceptionHandler
-// 	Entry point into the Nachos kernel.  Called when a user program
+// 	Entry point into the ManaOS kernel.  Called when a user program
 //	is executing, and either does a syscall, or generates an addressing
 //	or arithmetic exception.
 //

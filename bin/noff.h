@@ -1,11 +1,11 @@
 /* noff.h 
- *     Data structures defining the Nachos Object Code Format
+ *     Data structures defining the ManaOS Object Code Format
  *
  *     Basically, we only know about three types of segments:
  *	code (read-only), initialized data, and unitialized data
  */
 
-#define NOFFMAGIC	0xbadfad 	/* magic number denoting Nachos 
+#define NOFFMAGIC	0xbadfad 	/* magic number denoting ManaOS 
 					 * object code file 
 					 */
 
