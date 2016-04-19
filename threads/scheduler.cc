@@ -28,8 +28,9 @@
 //----------------------------------------------------------------------
 
 Scheduler::Scheduler()
-{ 
-    readyList = new List<Thread*>; 
+{
+    for(int i = 0; i < MIN_PRIORITY + 1; i++) 
+        readyLists[i] = new List<Thread*>; 
 } 
 
 //----------------------------------------------------------------------
@@ -39,7 +40,8 @@ Scheduler::Scheduler()
 
 Scheduler::~Scheduler()
 { 
-    delete readyList; 
+    for(int i = 0; i < MIN_PRIORITY + 1; i++) 
+        delete readyLists[i];
 } 
 
 //----------------------------------------------------------------------
@@ -50,15 +52,21 @@ Scheduler::~Scheduler()
 //	"thread" is the thread to be put on the ready list.
 //----------------------------------------------------------------------
 
-void
-Scheduler::ReadyToRun (Thread *thread)
+void Scheduler::ReadyToRun (Thread *thread)
 {
-    DEBUG('t', "Putting thread %s on ready list.\n", thread->getName());
+    DEBUG('t', "Putting thread %s on ready list, prioridad minima.\n", thread->getName());
 
     thread->setStatus(READY);
-    readyList->Append(thread);
+    readyLists[MIN_PRIORITY]->Append(thread);
 }
+void Scheduler::ReadyToRun(Thread* thread, int prioridad)
+{
+    ASSERT(prioridad >= 0 && prioridad <= 10);
+    DEBUG('t', "Putting thread %s on ready list con prioridad %d.\n", thread->getName(), prioridad);
 
+    thread->setStatus(READY);
+    readyLists[prioridad]->Append(thread);
+}
 //----------------------------------------------------------------------
 // Scheduler::FindNextToRun
 // 	Return the next thread to be scheduled onto the CPU.
@@ -67,10 +75,12 @@ Scheduler::ReadyToRun (Thread *thread)
 //	Thread is removed from the ready list.
 //----------------------------------------------------------------------
 
-Thread *
-Scheduler::FindNextToRun ()
+Thread * Scheduler::FindNextToRun ()
 {
-    return readyList->Remove();
+    int l;
+    for(l = 0; readyLists[l]->IsEmpty() && l < MIN_PRIORITY; l++);
+    
+    return readyLists[l]->Remove();
 }
 
 //----------------------------------------------------------------------
@@ -87,8 +97,7 @@ Scheduler::FindNextToRun ()
 //	"nextThread" is the thread to be put into the CPU.
 //----------------------------------------------------------------------
 
-void
-Scheduler::Run (Thread *nextThread)
+void Scheduler::Run (Thread *nextThread)
 {
     Thread *oldThread = currentThread;
     
@@ -149,5 +158,6 @@ void
 Scheduler::Print()
 {
     printf("Ready list contents:\n");
-    readyList->Apply(ThreadPrint);
+    for(int i = 0; i < MIN_PRIORITY + 1; i++) 
+        readyLists[i]->Apply(ThreadPrint);
 }

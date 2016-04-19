@@ -156,7 +156,7 @@ Puerto::Puerto()
 {
     send = new Semaphore("send", 0);
     rec = new Semaphore("rec", 0);
-    msg_lock = new Lock("perro");
+    msgLock = new Lock("perro");
 }
 
 Puerto::~Puerto()
@@ -166,9 +166,9 @@ Puerto::~Puerto()
 }
 
 void Puerto::Send(int msg) {
-    msg_lock->Acquire();
-    msg_queue.Append(msg);
-    msg_lock->Release();
+    msgLock->Acquire();
+    msgQueue.Append(msg);
+    msgLock->Release();
     rec->V();
     send->P();
 }
@@ -176,8 +176,8 @@ void Puerto::Send(int msg) {
 void Puerto::Receive(int* buf) {
     send->V();
     rec->P();
-    msg_lock->Acquire();
-    *buf = msg_queue.Remove();
-    msg_lock->Release();
+    msgLock->Acquire();
+    *buf = msgQueue.Remove();
+    msgLock->Release();
 }
 

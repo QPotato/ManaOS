@@ -36,6 +36,7 @@
 // sem�foro -- aunque hubieras podido leer el valor, no te sirve de nada,
 // porque mientras tanto otro hilo puede haber modificado el sem�foro,
 // si t� has perdido la CPU durante un tiempo.
+class Thread;
 
 class Semaphore {
   public:
@@ -186,8 +187,8 @@ class Puerto {
     private:
         Semaphore *send;
         Semaphore *rec;
-        List<int> msg_queue;
-        Lock *msg_lock;
+        List<int> msgQueue;
+        Lock *msgLock;
 };
 
 

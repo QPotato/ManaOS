@@ -41,8 +41,24 @@ Thread::Thread(const char* threadName)
 #ifdef USER_PROGRAM
     space = NULL;
 #endif
+    joinPort = NULL;
 }
 
+Thread::Thread(const char* threadName, bool enableJoin)
+{
+    name = threadName;
+    stackTop = NULL;
+    stack = NULL;
+    status = JUST_CREATED;
+#ifdef USER_PROGRAM
+    space = NULL;
+#endif
+
+    if(enableJoin)
+        joinPort = new Puerto;
+    else
+        joinPort = NULL;
+}
 //----------------------------------------------------------------------
 // Thread::~Thread
 // 	De-allocate a thread.
@@ -62,6 +78,9 @@ Thread::~Thread()
     ASSERT(this != currentThread);
     if (stack != NULL)
 	DeallocBoundedArray((char *) stack, StackSize * sizeof(HostMemoryAddress));
+	
+	if(joinPort != NULL)
+	    delete joinPort;
 }
 
 //----------------------------------------------------------------------
@@ -84,8 +103,7 @@ Thread::~Thread()
 //	"arg" is a single argument to be passed to the procedure.
 //----------------------------------------------------------------------
 
-void 
-Thread::Fork(VoidFunctionPtr func, void* arg)
+void Thread::Fork(VoidFunctionPtr func, void* arg)
 {
 #ifdef HOST_x86_64
     DEBUG('t', "Forking thread \"%s\" with func = 0x%lx, arg = %ld\n",
@@ -119,8 +137,7 @@ Thread::Fork(VoidFunctionPtr func, void* arg)
 // 	Don't do this: void foo() { int bigArray[10000]; ... }
 //----------------------------------------------------------------------
 
-void
-Thread::CheckOverflow()
+void Thread::CheckOverflow()
 {
     if (stack != NULL) {
 	ASSERT(*stack == STACK_FENCEPOST);
@@ -143,19 +160,36 @@ Thread::CheckOverflow()
 //----------------------------------------------------------------------
 
 //
-void
-Thread::Finish ()
+void Thread::Finish ()
 {
     interrupt->SetLevel(IntOff);		
     ASSERT(this == currentThread);
     
-    DEBUG('t', "Finishing thread \"%s\"\n", getName());
+    if(joinPort != NULL)
+    {
+        DEBUG('j', "%s esperando que le hagan join\n", getName());
+        joinPort->Send(0);
+        DEBUG('t', "Thread \"%s\" en estado zombie\n", getName());
+    }
+    else
+    {
+        threadToBeDestroyed = currentThread;
+        DEBUG('t', "Finishing thread \"%s\"\n", getName());
+    }
     
-    threadToBeDestroyed = currentThread;
+    
     Sleep();					// invokes SWITCH
     // not reached
 }
 
+void Thread::Join()
+{
+    DEBUG('j', "%s esta esperando a que %s termine\n", currentThread->getName(), getName());
+    int dummy;
+    joinPort->Receive(&dummy);
+    threadToBeDestroyed = this;
+    DEBUG('j', "%s termino join con %s\n", currentThread->getName(), getName());
+}
 //----------------------------------------------------------------------
 // Thread::Yield
 // 	Relinquish the CPU if any other thread is ready to run.
@@ -174,8 +208,7 @@ Thread::Finish ()
 // 	Similar to Thread::Sleep(), but a little different.
 //----------------------------------------------------------------------
 
-void
-Thread::Yield ()
+void Thread::Yield ()
 {
     Thread *nextThread;
     IntStatus oldLevel = interrupt->SetLevel(IntOff);
@@ -211,8 +244,7 @@ Thread::Yield ()
 //	so that there can't be a time slice between pulling the first thread
 //	off the ready list, and switching to it.
 //----------------------------------------------------------------------
-void
-Thread::Sleep ()
+void Thread::Sleep ()
 {
     Thread *nextThread;
     
@@ -252,8 +284,7 @@ static void InterruptEnable() { interrupt->Enable(); }
 //	"arg" is the parameter to be passed to the procedure
 //----------------------------------------------------------------------
 
-void
-Thread::StackAllocate (VoidFunctionPtr func, void* arg)
+void Thread::StackAllocate (VoidFunctionPtr func, void* arg)
 {
     stack = (HostMemoryAddress *) AllocBoundedArray(StackSize * sizeof(HostMemoryAddress));
 
@@ -287,8 +318,7 @@ Thread::StackAllocate (VoidFunctionPtr func, void* arg)
 //	while executing kernel code.  This routine saves the former.
 //----------------------------------------------------------------------
 
-void
-Thread::SaveUserState()
+void Thread::SaveUserState()
 {
     for (int i = 0; i < NumTotalRegs; i++)
 	userRegisters[i] = machine->ReadRegister(i);
@@ -303,8 +333,7 @@ Thread::SaveUserState()
 //	while executing kernel code.  This routine restores the former.
 //----------------------------------------------------------------------
 
-void
-Thread::RestoreUserState()
+void Thread::RestoreUserState()
 {
     for (int i = 0; i < NumTotalRegs; i++)
 	machine->WriteRegister(i, userRegisters[i]);

@@ -39,6 +39,7 @@
 
 #include "copyright.h"
 #include "utility.h"
+#include "synch.h"
 
 #ifdef USER_PROGRAM
 #include "machine.h"
@@ -69,6 +70,7 @@ enum ThreadStatus { JUST_CREATED, RUNNING, READY, BLOCKED };
 //    
 //  Some threads also belong to a user address space; threads
 //  that only run in the kernel have a NULL address space.
+class Puerto;
 
 class Thread {
   private:
@@ -79,6 +81,7 @@ class Thread {
 
   public:
     Thread(const char* debugName);	// initialize a Thread 
+    Thread(const char* debugName, bool enableJoin);
     ~Thread(); 				// deallocate a Thread
 					// NOTE -- thread being deleted
 					// must not be running when delete 
@@ -93,6 +96,7 @@ class Thread {
 						// relinquish the processor
     void Finish();  				// The thread is done executing
     
+    void Join();
     void CheckOverflow();   			// Check if thread has 
 						// overflowed its stack
     void setStatus(ThreadStatus st) { status = st; }
@@ -101,7 +105,7 @@ class Thread {
 
   private:
     // some of the private data for this class is listed above
-    
+    Puerto* joinPort;
     HostMemoryAddress* stack; 		// Bottom of the stack 
 					// NULL if this is the main thread
 					// (If NULL, don't deallocate stack)

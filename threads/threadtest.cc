@@ -25,28 +25,22 @@
 //      debugging purposes.
 //----------------------------------------------------------------------
 
+int fruta;
+
+#define MOLIN 100000
+void molinete(void* name)
+{
+    for(int i = 0; i < MOLIN; i++)
+    {
+        fruta++;
+        currentThread->Yield();
+    }
+}
+
+
 #ifdef SEMAPHORE_TEST
 Semaphore s("semaforo", 3);
 #endif
-
-Puerto *p;
-
-void emisor(void *name)
-{
-    char *nombre = (char*)name;
-    p->Send((int)(nombre[7]));
-    printf("%s mandó %d\n", nombre, (int)(nombre[7]));
-}
-
-void receptor(void *name)
-{
-    int msg;
-    for(int i = 0; i < 3; i++)
-    {
-        p->Receive(&msg);
-        printf("%s recibió %d\n", (char*)name, msg);
-    }
-}
 
 void
 SimpleThread(void* name)
@@ -83,34 +77,24 @@ SimpleThread(void* name)
 //	SimpleThread ourselves.
 //----------------------------------------------------------------------
 
-void
-ThreadTest()
+void ThreadTest()
 {
     DEBUG('t', "Entering SimpleTest");
-    
-    int emisores = 6;
-    int receptores = 2;
+    fruta = 0;
+    int threads = 8;
     srand(time(NULL));
-    p = new Puerto();
-    for(int i = 0; i < emisores; i++)
+    Thread* test[8];
+    for(int i = 0; i < threads; i++)
     {
         char *threadname = new char[128];
-        sprintf(threadname,"emisor %d", i + 1);
-        Thread* newThread = new Thread (threadname);
-        newThread->Fork (emisor, (void*)threadname);
+        sprintf(threadname,"hilo %d", i + 1);
+        test[i] = new Thread (threadname, true);
+        test[i]->Fork (molinete, (void*)threadname);
     }
     
-    for(int i = 0; i < receptores; i++)
-    {
-        char *threadname = new char[128];
-        sprintf(threadname,"receptor %d", i + 1);
-        Thread* newThread = new Thread (threadname);
-        newThread->Fork (receptor, (void*)threadname);
-    }
+    for(int i = 0; i < threads; i++)
+        test[i]->Join();
     
-    for(int i = 0; i < 1000; i++)
-        currentThread->Yield();
-
-    delete p;
+    printf("\n$$$420$$$ - fruta = %d - $$$420$$$ \n\n", fruta);
 }
 
