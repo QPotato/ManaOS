@@ -151,32 +151,6 @@ class Condition {
     // aqu� se a�aden otros campos que sean necesarios
 };
 
-/*
-
-C�digo original del ManaOS para las variables condici�n - NO USAR
-  
-class Condition {
-  public:
-    Condition(char* debugName);		// initialize condition to 
-					// "no one waiting"
-    ~Condition();			// deallocate the condition
-    char* getName() { return (name); }
-    
-    void Wait(Lock *conditionLock); 	// these are the 3 operations on 
-					// condition variables; releasing the 
-					// lock and going to sleep are 
-					// *atomic* in Wait()
-    void Signal(Lock *conditionLock);   // conditionLock must be held by
-    void Broadcast(Lock *conditionLock);// the currentThread for all of 
-					// these operations
-
-  private:
-    char* name;
-    // plus some other stuff you'll need to define
-};
-
-*/
-
 class Puerto {
     public:
         Puerto();

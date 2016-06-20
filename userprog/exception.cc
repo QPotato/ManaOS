@@ -24,7 +24,7 @@
 #include "copyright.h"
 #include "system.h"
 #include "syscall.h"
-
+#include "pasamemoria.h"
 //----------------------------------------------------------------------
 // ExceptionHandler
 // 	Entry point into the ManaOS kernel.  Called when a user program
@@ -48,16 +48,162 @@
 //	are in machine.h.
 //----------------------------------------------------------------------
 
-void
-ExceptionHandler(ExceptionType which)
+void ExceptionHandler(ExceptionType which)
 {
     int type = machine->ReadRegister(2);
+    
+    //variables de create
+    int r;
+    char nombre[MAX_NOMBRE];
+    
+    //variables de read y write
+    int usrBuffer;
+    int opSize;
+    int fileId;
+    char* buffer;
 
-    if ((which == SyscallException) && (type == SC_Halt)) {
-	DEBUG('a', "Shutdown, initiated by user program.\n");
-   	interrupt->Halt();
-    } else {
-	printf("Unexpected user mode exception %d %d\n", which, type);
-	ASSERT(false);
+    if (which == SyscallException) {
+        switch(type)
+        {
+            case SC_Halt:
+	            DEBUG('A', "Shutdown, initiated by user program.\n");
+           	    interrupt->Halt();
+           	    break;
+       	    
+       	    case SC_Exit:
+	            DEBUG('A', "Syscall no implementada: Exit.\n");
+           	    interrupt->Halt();
+           	    break;
+       	    
+       	    case SC_Exec:
+	            DEBUG('A', "Syscall no implementada: Exec.\n");
+           	    interrupt->Halt();
+           	    break;
+       	    
+       	    case SC_Join:
+	            DEBUG('A', "Syscall no implementada: Join.\n");
+           	    interrupt->Halt();
+           	    break;
+       	    
+       	    case SC_Create:
+       	        r = machine->ReadRegister(4);
+       	        
+       	        readStrFromUsrSegura(r, nombre, MAX_NOMBRE);
+       	        if(fileSystem->Create(nombre, 0))
+       	        {
+    	            DEBUG('A', "Create: la mejor. Vamos ManaOS!\n");
+    	            machine->WriteRegister(2, 0);
+	            }
+	            else
+	            {
+    	            DEBUG('A', "Create: la peor.\n");
+    	            machine->WriteRegister(2, -1);
+    	        }
+    	        machine->WriteRegister(PrevPCReg, machine->ReadRegister(PCReg));
+	            machine->WriteRegister(PCReg, machine->ReadRegister(NextPCReg));
+	            machine->WriteRegister(NextPCReg, machine->ReadRegister(NextPCReg) + 4);
+           	    break;
+       	    case SC_Open:
+	            DEBUG('A', "Syscall no implementada: Open.\n");
+           	    interrupt->Halt();
+           	    break;
+       	    
+       	    case SC_Read:
+   	            // r4 - puntero al buffer (char*)
+   	            // r5 - size (int)
+   	            // r6 - id de archivo (OpenFileId)
+   	            usrBuffer = machine->ReadRegister(4);
+   	            opSize = machine->ReadRegister(5);
+   	            fileId = machine->ReadRegister(6);
+   	            buffer = (char*) malloc(sizeof(char) * opSize);
+   	            if(buffer == NULL)
+   	            {
+                    DEBUG('A', "Operacion de I/O incorrecta.\n");
+       	            machine->WriteRegister(2, -1);
+   	            }
+                else 
+                if(fileId == ConsoleInput)
+                {
+                    synchConsole->read(buffer, opSize);
+                    writeBuffToUsr(buffer, usrBuffer, opSize);
+       	            machine->WriteRegister(2, 0);
+                }
+                else if(fileId == ConsoleOutput)
+                {
+                    printf("No podes leer de la salida a consola, PAVO! Vamos ManaOS!\n");
+            	    interrupt->Halt(); //TODO: cambiar a que mate el proceso llamante
+                }
+                else
+                {
+                    DEBUG('A', "Syscall a medio implementar: Read.\n");
+       	            interrupt->Halt();
+                }
+                free(buffer);
+    	        machine->WriteRegister(PrevPCReg, machine->ReadRegister(PCReg));
+	            machine->WriteRegister(PCReg, machine->ReadRegister(NextPCReg));
+	            machine->WriteRegister(NextPCReg, machine->ReadRegister(NextPCReg) + 4);
+           	    break;
+       	    case SC_Write:
+       	        // void Write(char *buffer, int size, OpenFileId id);
+   	            // r4 - puntero al buffer (char*)
+   	            // r5 - size (int)
+   	            // r6 - id de archivo (OpenFileId)
+   	            usrBuffer = machine->ReadRegister(4);
+   	            opSize = machine->ReadRegister(5);
+   	            fileId = machine->ReadRegister(6);
+   	            buffer = (char*) malloc(sizeof(char) * opSize);
+   	            if(buffer == NULL)
+   	            {
+                    DEBUG('A', "Operacion de I/O incorrecta.\n");
+       	            machine->WriteRegister(2, -1);
+   	            }
+                else if(fileId == ConsoleOutput)
+                {
+                    readBuffFromUsr(usrBuffer, buffer, opSize);
+                    synchConsole->write(buffer, opSize);
+       	            machine->WriteRegister(2, 0);
+                }
+                else if(fileId == ConsoleInput)
+                {
+                    printf("No podes escribir en la entrada de consola, PAVO! Vamos ManaOS!\n");
+            	    interrupt->Halt(); //TODO: cambiar a que mate el proceso llamante
+                }
+                else
+                {
+                    DEBUG('A', "Syscall a medio implementar: Write.\n");
+       	            interrupt->Halt();
+                }
+    	        machine->WriteRegister(PrevPCReg, machine->ReadRegister(PCReg));
+	            machine->WriteRegister(PCReg, machine->ReadRegister(NextPCReg));
+	            machine->WriteRegister(NextPCReg, machine->ReadRegister(NextPCReg) + 4);
+           	    break;
+       	    
+       	    case SC_Close:
+	            DEBUG('A', "Syscall no implementada: Close.\n");
+           	    interrupt->Halt();
+           	    break;
+       	    
+       	    case SC_Fork:
+	            DEBUG('A', "Syscall no implementada: Fork.\n");
+           	    interrupt->Halt();
+           	    break;
+       	    
+       	    case SC_Yield:
+	            DEBUG('A', "Syscall no implementada: Yield.\n");
+           	    interrupt->Halt();
+           	    break;
+       	        
+        }
+    }
+    else if(which == AddressErrorException)
+    {
+	    printf("Segmentation Fault, PAVO!\nVamos ManaOS!\n");
+	    interrupt->Halt(); //TODO: cambiar a que mate el proceso llamante
+    }
+    else
+    {
+	    printf("Unexpected user mode exception %d %d\n", which, type);
+	    ASSERT(false);
+	    
     }
 }

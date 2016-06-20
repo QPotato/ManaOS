@@ -119,3 +119,4 @@ vm/threadtest.o
 vm/timer.o
 vm/translate.o
 vm/utility.o
+*.coff

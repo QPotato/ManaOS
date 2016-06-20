@@ -96,6 +96,11 @@ main(int argc, char **argv)
         if (!strcmp(*argv, "-z"))               // print copyright
             printf ("%s",copyright);
 #ifdef USER_PROGRAM
+        printf("\\ \\   / /_ _ _ __ ___   ___  ___    |  \\/  | __ _ _ __   __ _ / _ \\/ ___|| |\n");
+        printf(" \\ \\ / / _` | '_ ` _ \\ / _ \\/ __|   | |\\/| |/ _` | '_ \\ / _` | | | \\___ \\| |\n");
+        printf("  \\ V / (_| | | | | | | (_) \\__ \\   | |  | | (_| | | | | (_| | |_| |___) |_|\n");
+        printf("   \\_/ \\__,_|_| |_| |_|\\___/|___/   |_|  |_|\\__,_|_| |_|\\__,_|\\___/|____/(_)\n");
+        printf("\nEs un Mana Operating System, es para compartir!\n\n\n");
         if (!strcmp(*argv, "-x")) {        	// run a user program
 	    ASSERT(argc > 1);
             StartProcess(*(argv + 1));
