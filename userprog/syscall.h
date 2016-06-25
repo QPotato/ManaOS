@@ -30,8 +30,6 @@
 #define SC_Fork		9
 #define SC_Yield	10
 
-#define MAX_NOMBRE 1024
-
 #ifndef IN_ASM
 
 /* The system call interface.  These are the operations the ManaOS

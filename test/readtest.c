@@ -16,8 +16,7 @@ int
 main()
 {
     char asd[5];
-    Read(asd, 5, 0);
-    if(!asd[0] == 'a')
-        while(1);
+    Read(asd, 5, ConsoleInput);
+    Write(asd, 50, ConsoleOutput);
     return 0;
 }

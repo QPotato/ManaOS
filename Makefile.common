@@ -25,7 +25,7 @@
 # All rights reserved.  See copyright.h for copyright notice and limitation 
 # of liability and disclaimer of warranty provisions.
 
-CFLAGS = -g -Wall -Wshadow $(INCPATH) $(DEFINES) $(HOST) -DCHANGED -DCONSOLE -DCONSOLE_IO_ONLY
+CFLAGS = -g -Wall -Wshadow $(INCPATH) $(DEFINES) $(HOST) -DCHANGED -DCONSOLE
 LDFLAGS =
 
 # These definitions may change as the software is updated.
@@ -74,6 +74,7 @@ USERPROG_H = ../userprog/addrspace.h\
 	../userprog/bitmap.h\
 	../userprog/pasamemoria.h\
 	../userprog/synchconsole.h\
+	../userprog/userprog.h\
 	../filesys/filesys.h\
 	../filesys/openfile.h\
 	../machine/console.h\
@@ -88,6 +89,7 @@ USERPROG_C = ../userprog/addrspace.cc\
 	../userprog/progtest.cc\
 	../userprog/pasamemoria.cc\
 	../userprog/synchconsole.cc\
+	../userprog/userprog.cc\
 	../userprog/progtest.cc\
 	../machine/console.cc\
 	../machine/machine.cc\
@@ -96,7 +98,7 @@ USERPROG_C = ../userprog/addrspace.cc\
 	../threads/system.cc
 
 USERPROG_O = addrspace.o bitmap.o exception.o progtest.o pasamemoria.o synchconsole.o console.o machine.o \
-	mipssim.o translate.o 
+	mipssim.o translate.o userprog.o
 
 VM_H = 
 VM_C = 
@@ -108,6 +110,7 @@ FILESYS_H =../filesys/directory.h \
 	../filesys/openfile.h\
 	../filesys/synchdisk.h\
 	../machine/disk.h
+	
 FILESYS_C =../filesys/directory.cc\
 	../filesys/filehdr.cc\
 	../filesys/filesys.cc\
@@ -115,6 +118,7 @@ FILESYS_C =../filesys/directory.cc\
 	../filesys/openfile.cc\
 	../filesys/synchdisk.cc\
 	../machine/disk.cc
+	
 FILESYS_O =directory.o filehdr.o filesys.o fstest.o openfile.o synchdisk.o\
 	disk.o
 

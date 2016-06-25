@@ -96,6 +96,7 @@ main(int argc, char **argv)
         if (!strcmp(*argv, "-z"))               // print copyright
             printf ("%s",copyright);
 #ifdef USER_PROGRAM
+        printf("__     __                            __  __                    ___  ____  _ \n");
         printf("\\ \\   / /_ _ _ __ ___   ___  ___    |  \\/  | __ _ _ __   __ _ / _ \\/ ___|| |\n");
         printf(" \\ \\ / / _` | '_ ` _ \\ / _ \\/ __|   | |\\/| |/ _` | '_ \\ / _` | | | \\___ \\| |\n");
         printf("  \\ V / (_| | | | | | | (_) \\__ \\   | |  | | (_| | | | | (_| | |_| |___) |_|\n");

@@ -18,7 +18,7 @@ SynchConsole::SynchConsole()
     writeLock = new Lock("synch console write lock");
     readSemaphore = new Semaphore("synch console read", 0);
     readLock = new Lock("synch console read lock");
-    consola = new Console("consola_read", "consola_write", ra, wd, this);
+    consola = new Console(NULL, NULL, ra, wd, this);
 }
 
 SynchConsole::~SynchConsole()

@@ -13,7 +13,7 @@
 #include "console.h"
 #include "addrspace.h"
 #include "synch.h"
-
+ 
 //----------------------------------------------------------------------
 // StartProcess
 // 	Run a user program.  Open the executable, load it into
@@ -26,9 +26,10 @@ StartProcess(const char *filename)
     OpenFile *executable = fileSystem->Open(filename);
     AddrSpace *space;
 
-    if (executable == NULL) {
-	printf("Unable to open file %s\n", filename);
-	return;
+    if (executable == NULL)
+    {
+        printf("Unable to open file %s\n", filename);
+        return;
     }
     space = new AddrSpace(executable);    
     currentThread->space = space;
@@ -37,6 +38,8 @@ StartProcess(const char *filename)
 
     space->InitRegisters();		// set the initial register values
     space->RestoreState();		// load page table register
+    
+    userProgMgr->add();
 
     machine->Run();			// jump to the user progam
     ASSERT(false);			// machine->Run never returns;

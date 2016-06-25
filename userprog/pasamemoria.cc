@@ -2,26 +2,28 @@
 
 void readStrFromUsr(int usrAddr, char *outStr)
 {
-	do
-	{
-		machine->ReadMem(usrAddr, 1, (int*)outStr);
-		usrAddr++;
-		outStr++;
-	}
-	while(*outStr != '\0');
+    int i = 0, read;
+    machine->ReadMem(usrAddr, 1, &read);
+    while(read != '\0')
+    {
+        outStr[i] = read;
+        i++;
+        machine->ReadMem(usrAddr + i, 1, &read);
+    }
+    outStr[i] = '\0';
 }
 
 void readStrFromUsrSegura(int usrAddr, char *outStr, int size)
 {
-    int i = 0;
-	do
-	{
-		machine->ReadMem(usrAddr, 1, (int*)outStr);
-		usrAddr++;
-		outStr++;
-		i++;
-	}
-	while(*outStr != '\0' && i < size);
+    int i = 0, read;
+    machine->ReadMem(usrAddr, 1, &read);
+    while(read != '\0' && i < size - 1)
+    {
+        outStr[i] = read;
+        i++;
+        machine->ReadMem(usrAddr + i, 1, &read);
+    }
+    outStr[i] = '\0';
 }
 
 void writeStrToUsr(char *str, int usrAddr)
