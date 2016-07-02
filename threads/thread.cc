@@ -39,7 +39,7 @@ Thread::Thread(const char* threadName)
     stack = NULL;
     status = JUST_CREATED;
 #ifdef USER_PROGRAM
-    space = NULL;
+    userProg = NULL;
 #endif
     joinPort = NULL;
 }
@@ -51,7 +51,7 @@ Thread::Thread(const char* threadName, bool enableJoin)
     stack = NULL;
     status = JUST_CREATED;
 #ifdef USER_PROGRAM
-    space = NULL;
+    userProg = NULL;
 #endif
 
     if(enableJoin)
@@ -81,6 +81,11 @@ Thread::~Thread()
 	
 	if(joinPort != NULL)
 	    delete joinPort;
+
+#ifdef USER_PROG    
+    if(userProg != NULL)
+        delete userProg;
+#endif
 }
 
 //----------------------------------------------------------------------
@@ -321,7 +326,7 @@ void Thread::StackAllocate (VoidFunctionPtr func, void* arg)
 void Thread::SaveUserState()
 {
     for (int i = 0; i < NumTotalRegs; i++)
-	userRegisters[i] = machine->ReadRegister(i);
+	    userRegisters[i] = machine->ReadRegister(i);
 }
 
 //----------------------------------------------------------------------
@@ -336,6 +341,6 @@ void Thread::SaveUserState()
 void Thread::RestoreUserState()
 {
     for (int i = 0; i < NumTotalRegs; i++)
-	machine->WriteRegister(i, userRegisters[i]);
+	    machine->WriteRegister(i, userRegisters[i]);
 }
 #endif

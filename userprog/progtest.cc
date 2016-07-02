@@ -20,8 +20,7 @@
 //	memory, and jump to it.
 //----------------------------------------------------------------------
 
-void
-StartProcess(const char *filename)
+void StartProcess(const char *filename)
 {
     OpenFile *executable = fileSystem->Open(filename);
     AddrSpace *space;
@@ -32,14 +31,12 @@ StartProcess(const char *filename)
         return;
     }
     space = new AddrSpace(executable);    
-    currentThread->space = space;
+    currentThread->userProg = new UserProg(space);
 
     delete executable;			// close file
 
     space->InitRegisters();		// set the initial register values
     space->RestoreState();		// load page table register
-    
-    userProgMgr->add();
 
     machine->Run();			// jump to the user progam
     ASSERT(false);			// machine->Run never returns;

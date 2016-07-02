@@ -1,23 +1,23 @@
 #include "userprog.h"
 #include "system.h"
 
-UserProg::UserProg(Thread* t, int pid)
+UserProg::UserProg(AddrSpace* s)
 {
-    thread = t;
     abiertos[0] = NULL;
     abiertos[1] = NULL;
-    Pid = pid;
     maxFileDes = 2;
+    space = s;
 }
 
 UserProg::~UserProg()
 {
     for(int i = 0; i < maxFileDes; i++)
-        if(abiertos[i] != NULL)
-        {
-            delete abiertos[i];
-            abiertos[i] = NULL;
-        }
+        this->cerrar(i);
+    if(space)
+    {
+        delete space;
+        space = NULL;
+    }
 }
 
 int UserProg::abrir(const char* nombre)
@@ -49,39 +49,4 @@ OpenFile* UserProg::getOpenFile(int fd)
         return abiertos[fd];
     else
         return NULL;
-}
-
-//--------------------------------------------------------//
-// Clase encargada de administrar los procesos de usuario.
-//--------------------------------------------------------//
-UserProgMgr::UserProgMgr()
-{
-    nProcesos = 0;
-}
-
-UserProgMgr::~UserProgMgr()
-{
-    for(int i = 0; i < nProcesos; i++)
-        if(procesos[i] != NULL)
-            delete procesos[i];
-}
-
-void UserProgMgr::add()
-{
-    if(nProcesos >= MAX_PROCESOS)
-    {
-        DEBUG('A', "Se excedio el limite de procesos\n");
-        return;
-    }
-    UserProg* up = new UserProg(currentThread, nProcesos);
-    procesos[nProcesos] = up;
-    nProcesos++;
-}
-
-UserProg* UserProgMgr::getCurrent()
-{
-    for(int i = 0; i < nProcesos; i++)
-        if(procesos[i]->gThread() == currentThread)
-            return procesos[i];
-    return NULL;
 }

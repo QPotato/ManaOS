@@ -49,11 +49,14 @@
 //----------------------------------------------------------------------
 void incrementar_PC();
 bool checkFilename(char*);
+void StartProcess(const char *filename);
+void sProc(void* n){ StartProcess((char*)n); }
 
 void ExceptionHandler(ExceptionType which)
 {
     int type = machine->ReadRegister(2);
     
+    //TODO: limpiar toda esta basura
     //variables de create
     int r;
     char nombre[MAX_NOMBRE];
@@ -67,7 +70,7 @@ void ExceptionHandler(ExceptionType which)
     
     //variables de open
     char filename[MAX_NOMBRE];
-    UserProg* up;
+    UserProg* up = currentThread->userProg;
     
     if (which == SyscallException) {
         switch(type)
@@ -83,8 +86,9 @@ void ExceptionHandler(ExceptionType which)
            	    break;
        	    
        	    case SC_Exec:
-	            DEBUG('A', "Syscall no implementada: Exec.\n");
-           	    interrupt->Halt();
+       	        r = machine->ReadRegister(4);
+       	        readStrFromUsrSegura(r, nombre, MAX_NOMBRE);
+       	        currentThread->Fork(sProc, (void*) nombre);
            	    break;
        	    
        	    case SC_Join:
@@ -111,19 +115,18 @@ void ExceptionHandler(ExceptionType which)
            	    break;
            	    
        	    case SC_Open:
-       	        up = userProgMgr->getCurrent();
        	        readStrFromUsrSegura(machine->ReadRegister(4), filename, MAX_NOMBRE);
                 if(!checkFilename(filename))
        	        {
            	        machine->WriteRegister(2, -1);
-           	        DEBUG('A', "El programa Pid: %i, quiso abrir un archivo con nomrbe no valido, llamado %s\n", up->getPid(), filename);
+           	        DEBUG('A', "El programa de usuario, quiso abrir un archivo con nomrbe no valido, llamado %s\n", filename);
        	            
        	        }
        	        else
        	        {
            	        fileDes = up->abrir(filename);
            	        machine->WriteRegister(2, fileDes);
-           	        DEBUG('A', "El programa Pid: %i, abrio un archivo con FD: %i, llamado %s\nVamos ManaOS!\n", up->getPid(), fileDes, filename);
+           	        DEBUG('A', "El programa de usuario, abrio un archivo con FD: %i, llamado %s\nVamos ManaOS!\n", fileDes, filename);
        	        }
        	        incrementar_PC();
            	    break;
@@ -156,18 +159,12 @@ void ExceptionHandler(ExceptionType which)
                 }
                 else
                 {
-                    DEBUG('A', "El programa de usuario leyo del archivo fd: %i\n", fileDes);
-                    up = userProgMgr->getCurrent();
                     op = up->getOpenFile(fileDes);
-                    
-                    DEBUG('A', "op: %lu\n", op);
                     op->Read(buffer, opSize);
-                    DEBUG('A', "El programa de usuario leyo: #%.*s# del archivo fd: %i\n", opSize, buffer, fileDes);
                     writeBuffToUsr(buffer, usrBuffer, opSize);
        	            machine->WriteRegister(2, 0);
                     
                 }
-                DEBUG('A', "El programa de usuario leyo: #%.*s# del archivo fd: %i\n", opSize, buffer, fileDes);
                 free(buffer);
     	        
     	        incrementar_PC();
@@ -204,20 +201,18 @@ void ExceptionHandler(ExceptionType which)
                 {
                     
                     readBuffFromUsr(usrBuffer, buffer, opSize);
-                    up = userProgMgr->getCurrent();
                     op = up->getOpenFile(fileDes);
                     op->Write(buffer, opSize);
        	            machine->WriteRegister(2, 0);
                 }
                 
-                DEBUG('A', "El programa de usuario escribio: #%.*s# del archivo fd: %i\n", opSize, buffer, fileDes);
     	        free(buffer);
     	        incrementar_PC();
            	    break;
        	    
        	    case SC_Close:
-	            DEBUG('A', "Syscall no implementada: Close.\n");
-           	    interrupt->Halt();
+   	            fileDes = machine->ReadRegister(6);
+                up->cerrar(fileDes);
            	    break;
        	    
        	    case SC_Fork:

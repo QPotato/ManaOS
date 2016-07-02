@@ -78,8 +78,7 @@ void MailTest(int networkID);
 //		ex: "ManaOS -d +" -> argv = {"ManaOS", "-d", "+"}
 //----------------------------------------------------------------------
 
-int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     int argCount;			// the number of arguments 
 					// for a particular command
@@ -90,11 +89,6 @@ main(int argc, char **argv)
 #ifdef THREADS
     ThreadTest();
 #endif
-
-    for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount) {
-	argCount = 1;
-        if (!strcmp(*argv, "-z"))               // print copyright
-            printf ("%s",copyright);
 #ifdef USER_PROGRAM
         printf("__     __                            __  __                    ___  ____  _ \n");
         printf("\\ \\   / /_ _ _ __ ___   ___  ___    |  \\/  | __ _ _ __   __ _ / _ \\/ ___|| |\n");
@@ -102,47 +96,55 @@ main(int argc, char **argv)
         printf("  \\ V / (_| | | | | | | (_) \\__ \\   | |  | | (_| | | | | (_| | |_| |___) |_|\n");
         printf("   \\_/ \\__,_|_| |_| |_|\\___/|___/   |_|  |_|\\__,_|_| |_|\\__,_|\\___/|____/(_)\n");
         printf("\nEs un Mana Operating System, es para compartir!\n\n\n");
+#endif
+    for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount)
+    {
+	    argCount = 1;
+        if (!strcmp(*argv, "-z"))               // print copyright
+            printf ("%s",copyright);
+#ifdef USER_PROGRAM
         if (!strcmp(*argv, "-x")) {        	// run a user program
-	    ASSERT(argc > 1);
+	        ASSERT(argc > 1);
             StartProcess(*(argv + 1));
             argCount = 2;
-        } else if (!strcmp(*argv, "-c")) {      // test the console
-	    if (argc == 1)
-	        ConsoleTest(NULL, NULL);
-	    else {
-		ASSERT(argc > 2);
-	        ConsoleTest(*(argv + 1), *(argv + 2));
-	        argCount = 3;
-	    }
+        }
+        else if (!strcmp(*argv, "-c")) {      // test the console
+	        if (argc == 1)
+	            ConsoleTest(NULL, NULL);
+	        else {
+		        ASSERT(argc > 2);
+	            ConsoleTest(*(argv + 1), *(argv + 2));
+	            argCount = 3;
+	        }
 	    interrupt->Halt();		// once we start the console, then 
-					// ManaOS will loop forever waiting 
-					// for console input
-	}
+					            // ManaOS will loop forever waiting 
+					            // for console input
+	    }
 #endif // USER_PROGRAM
 #ifdef FILESYS
-	if (!strcmp(*argv, "-cp")) { 		// copy from UNIX to ManaOS
-	    ASSERT(argc > 2);
-	    Copy(*(argv + 1), *(argv + 2));
-	    argCount = 3;
-	} else if (!strcmp(*argv, "-p")) {	// print a ManaOS file
-	    ASSERT(argc > 1);
-	    Print(*(argv + 1));
-	    argCount = 2;
-	} else if (!strcmp(*argv, "-r")) {	// remove ManaOS file
-	    ASSERT(argc > 1);
-	    fileSystem->Remove(*(argv + 1));
-	    argCount = 2;
-	} else if (!strcmp(*argv, "-l")) {	// list ManaOS directory
-            fileSystem->List();
-	} else if (!strcmp(*argv, "-D")) {	// print entire filesystem
-            fileSystem->Print();
-	} else if (!strcmp(*argv, "-t")) {	// performance test
-            PerformanceTest();
-	}
+	    if (!strcmp(*argv, "-cp")) { 		// copy from UNIX to ManaOS
+	        ASSERT(argc > 2);
+	        Copy(*(argv + 1), *(argv + 2));
+	        argCount = 3;
+	    } else if (!strcmp(*argv, "-p")) {	// print a ManaOS file
+	        ASSERT(argc > 1);
+	        Print(*(argv + 1));
+	        argCount = 2;
+	    } else if (!strcmp(*argv, "-r")) {	// remove ManaOS file
+	        ASSERT(argc > 1);
+	        fileSystem->Remove(*(argv + 1));
+	        argCount = 2;
+	    } else if (!strcmp(*argv, "-l")) {	// list ManaOS directory
+                fileSystem->List();
+	    } else if (!strcmp(*argv, "-D")) {	// print entire filesystem
+                fileSystem->Print();
+	    } else if (!strcmp(*argv, "-t")) {	// performance test
+                PerformanceTest();
+	    }
 #endif // FILESYS
 #ifdef NETWORK
         if (!strcmp(*argv, "-o")) {
-	    ASSERT(argc > 1);
+	        ASSERT(argc > 1);
             Delay(2); 				// delay for 2 seconds
 						// to give the user time to 
 						// start up another ManaOS

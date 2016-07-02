@@ -43,7 +43,7 @@
 
 #ifdef USER_PROGRAM
 #include "machine.h"
-#include "addrspace.h"
+#include "userprog.h"
 #endif
 
 // CPU register state to be saved on context switch.  
@@ -127,21 +127,20 @@ class Thread {
     void SaveUserState();		// save user-level register state
     void RestoreUserState();		// restore user-level register state
 
-    AddrSpace *space;			// User code this thread is running.
+    UserProg *userProg;
 #endif
 };
 
 // Magical machine-dependent routines, defined in switch.s
-
 extern "C" {
-// First frame on thread execution stack; 
-//   	enable interrupts
-//	call "func"
-//	(when func returns, if ever) call ThreadFinish()
-void ThreadRoot();
+    // First frame on thread execution stack; 
+    //   	enable interrupts
+    //	call "func"
+    //	(when func returns, if ever) call ThreadFinish()
+    void ThreadRoot();
 
-// Stop running oldThread and start running newThread
-void SWITCH(Thread *oldThread, Thread *newThread);
+    // Stop running oldThread and start running newThread
+    void SWITCH(Thread *oldThread, Thread *newThread);
 }
 
 #endif // THREAD_H
