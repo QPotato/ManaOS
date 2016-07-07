@@ -17,6 +17,6 @@ main()
 {
     char asd[5];
     Read(asd, 5, ConsoleInput);
-    Write(asd, 50, ConsoleOutput);
+    Write(asd, 5, ConsoleOutput);
     return 0;
 }

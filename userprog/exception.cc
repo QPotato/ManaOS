@@ -50,7 +50,7 @@
 void incrementar_PC();
 bool checkFilename(char*);
 void StartProcess(const char *filename);
-void sProc(void* n){ StartProcess((char*)n); }
+void sProc(void* n);
 
 void ExceptionHandler(ExceptionType which)
 {
@@ -72,6 +72,9 @@ void ExceptionHandler(ExceptionType which)
     char filename[MAX_NOMBRE];
     UserProg* up = currentThread->userProg;
     
+    // Variables de exec
+    Thread* t;
+    
     if (which == SyscallException) {
         switch(type)
         {
@@ -81,14 +84,16 @@ void ExceptionHandler(ExceptionType which)
            	    break;
        	    
        	    case SC_Exit:
-	            DEBUG('A', "Syscall no implementada: Exit.\n");
-           	    interrupt->Halt();
+	            currentThread->Finish();
            	    break;
        	    
        	    case SC_Exec:
        	        r = machine->ReadRegister(4);
        	        readStrFromUsrSegura(r, nombre, MAX_NOMBRE);
-       	        currentThread->Fork(sProc, (void*) nombre);
+	            DEBUG('A', "Exec con: #%s#. Vamos ManaOS!\n", nombre);
+	            t = new Thread(nombre);
+       	        t->Fork(sProc, (void*) nombre);
+    	        incrementar_PC();
            	    break;
        	    
        	    case SC_Join:
@@ -213,6 +218,7 @@ void ExceptionHandler(ExceptionType which)
        	    case SC_Close:
    	            fileDes = machine->ReadRegister(6);
                 up->cerrar(fileDes);
+    	        incrementar_PC();
            	    break;
        	    
        	    case SC_Fork:

@@ -34,7 +34,9 @@ SynchDisk   *synchDisk;
 
 #ifdef USER_PROGRAM	// requires either FILESYS or FILESYS_STUB
 Machine *machine;	// user program memory and registers
+// 2016, los pibes.
 SynchConsole *synchConsole;
+MemoryManager* memoryManager;
 #endif
 
 #ifdef NETWORK
@@ -82,8 +84,7 @@ TimerInterruptHandler(void* dummy)
 //	"argv" is an array of strings, one for each command line argument
 //		ex: "ManaOS -d +" -> argv = {"ManaOS", "-d", "+"}
 //----------------------------------------------------------------------
-void
-Initialize(int argc, char **argv)
+void Initialize(int argc, char **argv)
 {
     int argCount;
     const char* debugArgs = "";
@@ -179,7 +180,9 @@ Initialize(int argc, char **argv)
     
 #ifdef USER_PROGRAM
     machine = new Machine(debugUserProg);	// this must come first
+// 2016, los pibes.
     synchConsole = new SynchConsole();
+    memoryManager = new MemoryManager();
 #endif
 
 #ifdef FILESYS
@@ -217,7 +220,9 @@ Cleanup()
     
 #ifdef USER_PROGRAM
     delete machine;
+// 2016, los pibes.
     delete synchConsole;
+    delete memoryManager;
 #endif
 
 #ifdef FILESYS_NEEDED

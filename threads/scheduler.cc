@@ -54,7 +54,7 @@ Scheduler::~Scheduler()
 
 void Scheduler::ReadyToRun (Thread *thread)
 {
-    DEBUG('t', "Putting thread %s on ready list, prioridad minima.\n", thread->getName());
+    DEBUG('t', "Putting thread %ld on ready list, prioridad minima.\n", thread);
 
     thread->setStatus(READY);
     readyLists[MIN_PRIORITY]->Append(thread);
@@ -110,7 +110,6 @@ void Scheduler::Run (Thread *nextThread)
     
     oldThread->CheckOverflow();		    // check if the old thread
 					    // had an undetected stack overflow
-
     currentThread = nextThread;		    // switch to the next thread
     currentThread->setStatus(RUNNING);      // nextThread is now running
     

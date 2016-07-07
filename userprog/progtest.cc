@@ -19,7 +19,6 @@
 // 	Run a user program.  Open the executable, load it into
 //	memory, and jump to it.
 //----------------------------------------------------------------------
-
 void StartProcess(const char *filename)
 {
     OpenFile *executable = fileSystem->Open(filename);
@@ -43,6 +42,9 @@ void StartProcess(const char *filename)
 					// the address space exits
 					// by doing the syscall "exit"
 }
+
+// Version ejecutable por Thread::Fork
+void sProc(void* n){ StartProcess((char*)n); }
 
 // Data structures needed for the console test.  Threads making
 // I/O requests wait on a Semaphore to delay until the I/O completes.

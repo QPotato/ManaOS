@@ -8,6 +8,7 @@
 
 #include "copyright.h"
 #include "bitmap.h"
+#include "system.h"
 
 //----------------------------------------------------------------------
 // BitMap::BitMap
@@ -162,4 +163,31 @@ void
 BitMap::WriteBack(OpenFile *file)
 {
    file->WriteAt((char *)map, numWords * sizeof(unsigned), 0);
+}
+
+MemoryManager::MemoryManager()
+{
+    bitmap = new BitMap(NumPhysPages);
+}
+
+MemoryManager::~MemoryManager()
+{
+    delete bitmap;
+}
+
+int MemoryManager::alocarPagina()
+{
+    int p;
+    if(( p = bitmap->Find()) == -1)
+    {
+        DEBUG('A', "No hay mas marcos de memoria");
+        interrupt->Halt();
+    }
+    
+    return p;
+}
+
+void MemoryManager::liberarPagina(int which)
+{
+    bitmap->Clear(which);
 }

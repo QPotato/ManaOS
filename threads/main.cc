@@ -63,7 +63,7 @@ void PerformanceTest(void);
 void StartProcess(const char *file);
 void ConsoleTest(const char *in, const char *out);
 void MailTest(int networkID);
-
+void sProc(void* n);
 //----------------------------------------------------------------------
 // main
 // 	Bootstrap the operating system kernel.  
@@ -86,16 +86,15 @@ int main(int argc, char **argv)
     DEBUG('t', "Entering main");
     (void) Initialize(argc, argv);
     
+    printf("__     __                            __  __                    ___  ____  _ \n");
+    printf("\\ \\   / /_ _ _ __ ___   ___  ___    |  \\/  | __ _ _ __   __ _ / _ \\/ ___|| |\n");
+    printf(" \\ \\ / / _` | '_ ` _ \\ / _ \\/ __|   | |\\/| |/ _` | '_ \\ / _` | | | \\___ \\| |\n");
+    printf("  \\ V / (_| | | | | | | (_) \\__ \\   | |  | | (_| | | | | (_| | |_| |___) |_|\n");
+    printf("   \\_/ \\__,_|_| |_| |_|\\___/|___/   |_|  |_|\\__,_|_| |_|\\__,_|\\___/|____/(_)\n");
+    printf("\nEs un Mana Operating System, es para compartir!\n\n\n");
+    
 #ifdef THREADS
     ThreadTest();
-#endif
-#ifdef USER_PROGRAM
-        printf("__     __                            __  __                    ___  ____  _ \n");
-        printf("\\ \\   / /_ _ _ __ ___   ___  ___    |  \\/  | __ _ _ __   __ _ / _ \\/ ___|| |\n");
-        printf(" \\ \\ / / _` | '_ ` _ \\ / _ \\/ __|   | |\\/| |/ _` | '_ \\ / _` | | | \\___ \\| |\n");
-        printf("  \\ V / (_| | | | | | | (_) \\__ \\   | |  | | (_| | | | | (_| | |_| |___) |_|\n");
-        printf("   \\_/ \\__,_|_| |_| |_|\\___/|___/   |_|  |_|\\__,_|_| |_|\\__,_|\\___/|____/(_)\n");
-        printf("\nEs un Mana Operating System, es para compartir!\n\n\n");
 #endif
     for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount)
     {

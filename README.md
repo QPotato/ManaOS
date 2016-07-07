@@ -11,3 +11,8 @@ El AddrSpace puede pasar a UserProg. userRegisters capaz tambien. Hay que cambia
 StartProcess arranca en un kernel, todo lo que genera lo guarda en un nuevo UserProcess y empieza la ejecucion en usuario.
 
 Exec entonces seria simplemente hacer un buen fork con StartProcess.
+
+
+
+--------------------------------------
+Cuando se queda sin threads se queda en un loop infinito. Capaz hay que arreglarlo. Capaz deja de existir el problema cuando haya una shell permanente...

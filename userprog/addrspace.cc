@@ -70,29 +70,29 @@ AddrSpace::AddrSpace(OpenFile *executable)
 
 // how big is address space?
     size = noffH.code.size + noffH.initData.size + noffH.uninitData.size 
-			+ UserStackSize;	// we need to increase the size
-						// to leave room for the stack
+			+ UserStackSize;	// we need to increase the size to leave room for the stack
     numPages = divRoundUp(size, PageSize);
     size = numPages * PageSize;
 
     ASSERT(numPages <= NumPhysPages);		// check we're not trying
-						// to run anything too big --
-						// at least until we have
-						// virtual memory
+						                    // to run anything too big --
+						                    // at least until we have
+						                    // virtual memory
 
     DEBUG('a', "Initializing address space, num pages %d, size %d\n", 
 					numPages, size);
+					
 // first, set up the translation 
     pageTable = new TranslationEntry[numPages];
     for (i = 0; i < numPages; i++) {
-	pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
-	pageTable[i].physicalPage = i;
-	pageTable[i].valid = true;
-	pageTable[i].use = false;
-	pageTable[i].dirty = false;
-	pageTable[i].readOnly = false;  // if the code segment was entirely on 
-					// a separate page, we could set its 
-					// pages to be read-only
+	    pageTable[i].virtualPage = i;	
+	    pageTable[i].physicalPage = memoryManager->alocarPagina();
+	    pageTable[i].valid = true;
+	    pageTable[i].use = false;
+	    pageTable[i].dirty = false;
+	    pageTable[i].readOnly = false;  // if the code segment was entirely on 
+					    // a separate page, we could set its 
+					    // pages to be read-only
     }
     
 // zero out the entire address space, to zero the unitialized data segment 
@@ -122,7 +122,10 @@ AddrSpace::AddrSpace(OpenFile *executable)
 
 AddrSpace::~AddrSpace()
 {
-   delete pageTable;
+    for(int i = 0; i < numPages; i++) {
+        memoryManager->liberarPagina(pageTable[i].physicalPage);
+    }
+    delete pageTable;
 }
 
 //----------------------------------------------------------------------
@@ -162,11 +165,13 @@ AddrSpace::InitRegisters()
 // 	On a context switch, save any machine state, specific
 //	to this address space, that needs saving.
 //
-//	For now, nothing!
 //----------------------------------------------------------------------
 
 void AddrSpace::SaveState() 
-{}
+{
+    pageTable = machine->pageTable;
+    numPages = machine->pageTableSize;
+}
 
 //----------------------------------------------------------------------
 // AddrSpace::RestoreState

@@ -32,9 +32,10 @@ extern Timer *timer;				// the hardware alarm clock
 #ifdef USER_PROGRAM
 #include "machine.h"
 #include "synchconsole.h"
-#include "userprog.h"
+#include "bitmap.h"
 extern Machine* machine;	// user program memory and registers
 extern SynchConsole* synchConsole; // la consola de los programas de usuario (es una sola, no?)
+extern MemoryManager* memoryManager;
 #endif
 
 #ifdef FILESYS_NEEDED 		// FILESYS or FILESYS_STUB 

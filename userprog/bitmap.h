@@ -61,4 +61,14 @@ class BitMap {
     unsigned int *map;			// bit storage
 };
 
+class MemoryManager {
+    public:
+        MemoryManager();
+        ~MemoryManager();
+        
+        BitMap* bitmap;
+        
+        int alocarPagina();
+        void liberarPagina(int);
+};
 #endif // BITMAP_H
