@@ -60,7 +60,7 @@ void ThreadTest();
 void Copy(const char *unixFile, const char *ManaOSFile);
 void Print(const char *file);
 void PerformanceTest(void);
-void StartProcess(const char *file);
+void StartProcess(char *file);
 void ConsoleTest(const char *in, const char *out);
 void MailTest(int networkID);
 void sProc(void* n);
@@ -104,7 +104,9 @@ int main(int argc, char **argv)
 #ifdef USER_PROGRAM
         if (!strcmp(*argv, "-x")) {        	// run a user program
 	        ASSERT(argc > 1);
-            StartProcess(*(argv + 1));
+	        char *spArg = (char*) malloc(strlen(*(argv + 1)) + 1);
+	        strcpy(spArg, *(argv + 1)) ;
+            StartProcess(spArg);
             argCount = 2;
         }
         else if (!strcmp(*argv, "-c")) {      // test the console

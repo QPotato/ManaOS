@@ -59,7 +59,7 @@ void ExceptionHandler(ExceptionType which)
     //TODO: limpiar toda esta basura
     //variables de create
     int r;
-    char nombre[MAX_NOMBRE];
+    char filename[MAX_NOMBRE];
     
     //variables de read y write
     int usrBuffer;
@@ -69,11 +69,11 @@ void ExceptionHandler(ExceptionType which)
     OpenFile* op;
     
     //variables de open
-    char filename[MAX_NOMBRE];
     UserProg* up = currentThread->userProg;
     
     // Variables de exec
     Thread* t;
+    void* arg;
     
     if (which == SyscallException) {
         switch(type)
@@ -89,10 +89,12 @@ void ExceptionHandler(ExceptionType which)
        	    
        	    case SC_Exec:
        	        r = machine->ReadRegister(4);
-       	        readStrFromUsrSegura(r, nombre, MAX_NOMBRE);
-	            DEBUG('A', "Exec con: #%s#. Vamos ManaOS!\n", nombre);
-	            t = new Thread(nombre);
-       	        t->Fork(sProc, (void*) nombre);
+       	        readStrFromUsrSegura(r, filename, MAX_NOMBRE);
+	            DEBUG('A', "Exec con: #%s#. Vamos ManaOS!\n", filename);
+	            t = new Thread(filename);
+	            arg = malloc(strlen(filename) + 1);
+	            strcpy((char*) arg, filename);
+       	        t->Fork(sProc, arg);
     	        incrementar_PC();
            	    break;
        	    
@@ -104,15 +106,15 @@ void ExceptionHandler(ExceptionType which)
        	    case SC_Create:
        	        r = machine->ReadRegister(4);
        	        
-       	        readStrFromUsrSegura(r, nombre, MAX_NOMBRE);
-       	        if(fileSystem->Create(nombre, 0))
+       	        readStrFromUsrSegura(r, filename, MAX_NOMBRE);
+       	        if(fileSystem->Create(filename, 0))
        	        {
     	            DEBUG('A', "Create: la mejor. Vamos ManaOS!\n");
     	            machine->WriteRegister(2, 0);
 	            }
 	            else
 	            {
-    	            DEBUG('A', "Create: la peor.\n");
+    	            DEBUG('A', "Create: la peor. Vamos ManaOS!\n");
     	            machine->WriteRegister(2, -1);
     	        }
     	        
@@ -124,14 +126,14 @@ void ExceptionHandler(ExceptionType which)
                 if(!checkFilename(filename))
        	        {
            	        machine->WriteRegister(2, -1);
-           	        DEBUG('A', "El programa de usuario, quiso abrir un archivo con nomrbe no valido, llamado %s\n", filename);
+           	        DEBUG('A', "El programa de usuario, quiso abrir un archivo con filename no valido, llamado #%s#. Vamos ManaOS!\n", filename);
        	            
        	        }
        	        else
        	        {
            	        fileDes = up->abrir(filename);
            	        machine->WriteRegister(2, fileDes);
-           	        DEBUG('A', "El programa de usuario, abrio un archivo con FD: %i, llamado %s\nVamos ManaOS!\n", fileDes, filename);
+           	        DEBUG('A', "El programa de usuario, abrio un archivo con FD: %i, llamado #%s#. Vamos ManaOS!\n", fileDes, filename);
        	        }
        	        incrementar_PC();
            	    break;
@@ -194,19 +196,20 @@ void ExceptionHandler(ExceptionType which)
                 else if(fileDes == ConsoleOutput)
                 {
                     readBuffFromUsr(usrBuffer, buffer, opSize);
+                    DEBUG('A', "Usuario escribe #%*s# FD: %d\n", opSize, buffer);
                     synchConsole->write(buffer, opSize);
        	            machine->WriteRegister(2, 0);
                 }
                 else if(fileDes == ConsoleInput)
                 {
-                    printf("No podes escribir en la entrada de consola, PAVO! Vamos ManaOS!\n");
+                    DEBUG('A', "No podes escribir en la entrada de consola, PAVO! Vamos ManaOS!\n");
             	    interrupt->Halt(); //TODO: cambiar a que mate el proceso llamante
                 }
                 else
                 {
-                    
                     readBuffFromUsr(usrBuffer, buffer, opSize);
                     op = up->getOpenFile(fileDes);
+                    DEBUG('A', "Usuario escribe #%*s# FD: %d\n", opSize, buffer);
                     op->Write(buffer, opSize);
        	            machine->WriteRegister(2, 0);
                 }

@@ -110,7 +110,7 @@ class Thread {
 					// NULL if this is the main thread
 					// (If NULL, don't deallocate stack)
     ThreadStatus status;		// ready, running or blocked
-    const char* name;
+    char name[1024];
 
     void StackAllocate(VoidFunctionPtr func, void* arg);
     					// Allocate a stack for thread.

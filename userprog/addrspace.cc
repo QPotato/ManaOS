@@ -19,6 +19,7 @@
 #include "system.h"
 #include "addrspace.h"
 #include "noff.h"
+#include "pasamemoria.h"
 
 //----------------------------------------------------------------------
 // SwapHeader
@@ -61,7 +62,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
 {
     NoffHeader noffH;
     unsigned int i, size;
-
+    
     executable->ReadAt((char *)&noffH, sizeof(noffH), 0);
     if ((noffH.noffMagic != NOFFMAGIC) && 
 		(WordToHost(noffH.noffMagic) == NOFFMAGIC))
@@ -97,22 +98,42 @@ AddrSpace::AddrSpace(OpenFile *executable)
     
 // zero out the entire address space, to zero the unitialized data segment 
 // and the stack segment
-    bzero(machine->mainMemory, size);
-
-// then, copy in the code and data segments into memory
-    if (noffH.code.size > 0) {
-        DEBUG('a', "Initializing code segment, at 0x%x, size %d\n", 
-			noffH.code.virtualAddr, noffH.code.size);
-        executable->ReadAt(&(machine->mainMemory[noffH.code.virtualAddr]),
-			noffH.code.size, noffH.code.inFileAddr);
+    //bzero(machine->mainMemory, size);
+    
+    char datosExe[PageSize];
+    int rdSize;
+    
+    DEBUG('a', "Initializing code segment, at 0x%x (virtual), size %d\n",	noffH.code.virtualAddr, noffH.code.size);
+    for(int s = 0; s < noffH.code.size; s += rdSize)
+    {
+        // Escribimos una pagina leida de los datos del ejecutable.
+        rdSize = executable->ReadAt(datosExe, PageSize, noffH.code.inFileAddr + s);
+        for(i = 0; i < rdSize; i++)
+        {
+            // Escribimos el byte i de la pagina (s / PageSize) del ejecutable.
+            int dirVirtual = noffH.code.virtualAddr + s + i;
+            int pagVirtual = dirVirtual / PageSize;
+            int pagFisica = pageTable[pagVirtual].physicalPage;
+            int dirFisica = pagFisica * PageSize + dirVirtual % PageSize;
+            machine->mainMemory[dirFisica] = datosExe[i];
+        }
     }
-    if (noffH.initData.size > 0) {
-        DEBUG('a', "Initializing data segment, at 0x%x, size %d\n", 
-			noffH.initData.virtualAddr, noffH.initData.size);
-        executable->ReadAt(&(machine->mainMemory[noffH.initData.virtualAddr]),
-			noffH.initData.size, noffH.initData.inFileAddr);
+    
+    DEBUG('a', "Initializing data segment, at 0x%x, size %d\n",	noffH.initData.virtualAddr, noffH.initData.size);
+    for(int s = 0; s < noffH.initData.size; s += rdSize)
+    {
+        // Escribimos una pagina leida de los datos del ejecutable.
+        rdSize = executable->ReadAt(datosExe, PageSize, noffH.initData.inFileAddr + s);
+        for(i = 0; i < rdSize; i++)
+        {
+            // Escribimos el byte i de la pagina (s / PageSize) del ejecutable.
+            int dirVirtual = noffH.initData.virtualAddr + s + i;
+            int pagVirtual = dirVirtual / PageSize;
+            int pagFisica = pageTable[pagVirtual].physicalPage;
+            int dirFisica = pagFisica * PageSize + dirVirtual % PageSize;
+            machine->mainMemory[dirFisica] = datosExe[i];
+        }
     }
-
 }
 
 //----------------------------------------------------------------------
@@ -169,8 +190,8 @@ AddrSpace::InitRegisters()
 
 void AddrSpace::SaveState() 
 {
-    pageTable = machine->pageTable;
-    numPages = machine->pageTableSize;
+    //pageTable = machine->pageTable;
+    //numPages = machine->pageTableSize;
 }
 
 //----------------------------------------------------------------------
@@ -183,6 +204,7 @@ void AddrSpace::SaveState()
 
 void AddrSpace::RestoreState() 
 {
+    DEBUG('A', "Seteando la pageTable de %ld. Vamos ManOS.\n", pageTable);
     machine->pageTable = pageTable;
     machine->pageTableSize = numPages;
 }

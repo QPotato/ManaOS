@@ -19,7 +19,7 @@
 // 	Run a user program.  Open the executable, load it into
 //	memory, and jump to it.
 //----------------------------------------------------------------------
-void StartProcess(const char *filename)
+void StartProcess(char *filename)
 {
     OpenFile *executable = fileSystem->Open(filename);
     AddrSpace *space;
@@ -29,9 +29,11 @@ void StartProcess(const char *filename)
         printf("Unable to open file %s\n", filename);
         return;
     }
+    DEBUG('A', "Creando ejecutable a partir de #%s#. Vamos ManaOS\n", filename);
     space = new AddrSpace(executable);    
     currentThread->userProg = new UserProg(space);
 
+    free(filename);
     delete executable;			// close file
 
     space->InitRegisters();		// set the initial register values

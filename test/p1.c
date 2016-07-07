@@ -2,7 +2,9 @@
 
 int main()
 {
-    Write("lol1", 5, ConsoleOutput);
+    Create("asd1");
+    int fd = Open("asd1");
+    Write("lol1", 4, fd);
     
     return 0;
 }

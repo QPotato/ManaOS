@@ -34,7 +34,7 @@ const unsigned STACK_FENCEPOST = 0xdeadbeef;
 
 Thread::Thread(const char* threadName)
 {
-    name = threadName;
+    strcpy(name, threadName);
     stackTop = NULL;
     stack = NULL;
     status = JUST_CREATED;
@@ -46,7 +46,7 @@ Thread::Thread(const char* threadName)
 
 Thread::Thread(const char* threadName, bool enableJoin)
 {
-    name = threadName;
+    strcpy(name, threadName);
     stackTop = NULL;
     stack = NULL;
     status = JUST_CREATED;
