@@ -3,7 +3,7 @@
 int main()
 {
     int argc = getArgc(), i;
-    char arg[9000];
+    char arg[100];
     Write("Hola, soy p4\n", 40, ConsoleOutput);
     for(i = 0; i < argc; i++)
     {
