@@ -1,0 +1,20 @@
+24 abril 2017:
+    empezamos el changelog.
+    
+    estabamos implementando multitarea por time-slicing
+
+    creamos un archivo NOTAS con cosas importantes a tener en cuenta
+
+    anda multitarea por time-slicing. Plancha 3 ejercicio 3
+
+    estamos implementando una syscall para pasar argumentos a programas de usuario.
+
+25 abril 2017:
+    El plan es el siguiente: implementamos 2 syscall
+    1- int getArgc() que le comunica al userprog la cantidad de argumentos via el registro r2
+    2- void getArgv(int n, char *a) que le comunica al userprog el argumento n-esimo via writeStrToUsr
+
+    La syscall exec tiene un problema: como ahora los programas se pueden llamar con argumentos no podemos llamar a exec con eso
+    hay que obtener el primer argumento (nombre del programa) y llamar con eso.
+
+        

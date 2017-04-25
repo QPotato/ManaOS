@@ -1,0 +1,12 @@
+Notas importantes
+
+DEBUG: -d flag
+    t -> thread
+
+
+correr con -p para activar multitarea apropiativa
+correr con -rs seed para setear la semilla. esto es medio confuso...
+
+en main.cc está comentado lo relevante sobre flags para correr y debugear
+
+
