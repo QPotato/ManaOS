@@ -66,13 +66,21 @@ Exec:
 	j	$31
 	.end Exec
 
-	.globl Args
-	.ent	Args
-Args:
-	addiu $2,$0,SC_Args
+	.globl getArgc
+	.ent	getArgc
+getArgc:
+	addiu $2,$0,SC_GetArgc
 	syscall
 	j	$31
-	.end Args
+	.end getArgc
+
+	.globl getArg
+	.ent	getArg
+getArg:
+	addiu $2,$0,SC_GetArg
+	syscall
+	j	$31
+	.end getArg
 
 	.globl Join
 	.ent	Join
