@@ -1,6 +1,8 @@
 #include "userprog.h"
 #include "system.h"
 
+#define min(a,b)  (((a) < (b)) ? (a) : (b))
+
 UserProg::UserProg(AddrSpace* s)
 {
     abiertos[0] = NULL;
@@ -18,6 +20,11 @@ UserProg::~UserProg()
         delete space;
         space = NULL;
     }
+    for(int i = 0; i < this->argc; i++)
+    {
+        free(this->argv[i]);
+    }
+    free(this->argv);
 }
 
 int UserProg::abrir(const char* nombre)
@@ -40,6 +47,65 @@ void UserProg::cerrar(int fd)
         delete abiertos[fd];
         abiertos[fd] = NULL;
     }
+}
+
+void UserProg::parseArgs(char* callString, size_t maxSize)
+{
+    unsigned argcl = 0;
+    size_t sz = min(maxSize, strlen(callString));
+    
+    char **argvl;
+    
+    int init = 0;
+    bool espacios = false;
+    
+    argvl = (char**) malloc(9000 * sizeof (char*));
+    for(unsigned i = 0; i < sz; i++)
+    {
+        if(espacios)
+        {
+            if(callString[i] != ' ')
+            {
+                init = i;
+                espacios = false;
+            }
+        }
+        if(!espacios)
+        {
+            if(callString[i] == ' ')
+            {
+                argvl[argcl] = (char*)malloc((i - init) * sizeof(char));
+                strncpy(argvl[argcl++], &(callString[init]), i - init);
+                espacios = true;
+            }
+        }
+    }
+    
+    //copio los argumentos al userprog
+    this->argsize = 0;
+    this->argc = argcl;
+    this->argv = (char**)malloc(argcl * sizeof(char*));
+    for(unsigned i = 0; i < argcl; i++)
+    {
+        int argSz = strlen(argv[i]);
+        this->argv[i] = (char*)malloc(argSz * sizeof(char));
+        strncpy(this->argv[i], argvl[i], argSz);
+        this->argsize += argSz * sizeof(char);
+    }
+    for(unsigned i = 0; i < argcl; i++)
+        free(argvl[i]);
+    free(argvl);
+    return;
+}
+
+int UserProg::getArgc()
+{
+    return this->argc;
+}
+
+char **UserProg::getArgv()
+{
+    return this->argv;
 }
 
 OpenFile* UserProg::getOpenFile(int fd)

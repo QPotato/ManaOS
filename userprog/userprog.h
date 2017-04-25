@@ -17,10 +17,17 @@ class UserProg
         OpenFile* getOpenFile(int fd);
         void cerrar(int fd);
         
+        void parseArgs(char*, size_t);
+        int getArgc();
+        char** getArgv();
+        
         AddrSpace *space;			// User code this thread is running.
 
     private:
         OpenFile* abiertos[MAX_ABIERTOS];
         int maxFileDes;
+        int argc;
+        char **argv;
+        size_t argsize;
 };
 #endif

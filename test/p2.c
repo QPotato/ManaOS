@@ -2,9 +2,10 @@
 
 int main()
 {
-    Create("asd2");
-    int fd = Open("asd2");
-    Write("lol2", 4, fd);
-    
+    int i;
+    Write("Entro enbucle infinito, soy p2\n", 25, ConsoleOutput);
+    for(i = 0; ; i++)
+        if(i % 1000 == 0)
+            Write("Hola, soy p2\n", 25, ConsoleOutput);
     return 0;
 }

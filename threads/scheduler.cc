@@ -54,7 +54,7 @@ Scheduler::~Scheduler()
 
 void Scheduler::ReadyToRun (Thread *thread)
 {
-    DEBUG('t', "Putting thread %ld on ready list, prioridad minima.\n", thread);
+    DEBUG('t', "Putting thread %s on ready list, prioridad minima.\n", thread->getName());
 
     thread->setStatus(READY);
     readyLists[MIN_PRIORITY]->Append(thread);
