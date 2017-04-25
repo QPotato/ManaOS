@@ -76,9 +76,9 @@ void ExceptionHandler(ExceptionType which)
     void* arg;
     
     // Variables de Args
-    int dArgc, dArgv;
-    int argc;
+    int argc, dArg;
     char** argv;
+    int argn;
     if (which == SyscallException) {
         switch(type)
         {
@@ -102,11 +102,29 @@ void ExceptionHandler(ExceptionType which)
        	        t->userProg->parseArgs(filename, MAX_NOMBRE);
     	        incrementar_PC();
            	    break;
-       	    case SC_Args:
-       	        dArgc = machine->ReadRegister(4);
-       	        dArgv = machine->ReadRegister(5);
+       	    case SC_GetArgc:
+       	        argc = up->getArgc();
+       	        machine->WriteRegister(2, argc);
+       	        incrementar_PC();
+       	        break;
+       	        
+       	    case SC_GetArg:
+       	        argn = machine->ReadRegister(4);
+       	        dArg = machine->ReadRegister(5);
        	        argc = up->getArgc();
        	        argv = up->getArgv();
+       	        if(argn < argc)
+       	        {
+           	        argv = up->getArgv();
+           	        writeStrToUsr(argv[argn], dArg);
+       	        }
+       	        else
+       	        {
+       	            writeStrToUsr("", dArg);
+       	        }
+       	        incrementar_PC();
+       	        break;
+       	        
        	    case SC_Join:
 	            DEBUG('A', "Syscall no implementada: Join.\n");
            	    interrupt->Halt();
