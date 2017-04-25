@@ -98,9 +98,14 @@ void ExceptionHandler(ExceptionType which)
                 
                 fn = (char*)malloc(strlen(filename));
                 strncpy(fn, filename, strlen(filename));
-                int i;
-                for(i = 0; fn[i] != ' '; i++);
-                fn[i] = '\0';
+                for(int i = 0; i < strlen(filename); i++)
+                {
+                    if(fn[i] == ' ')
+                    {
+                        fn[i] = '\0';
+                        break;
+                    }
+                }
 
 	            t = new Thread(fn);
                 t->userProg->parseArgs(filename, MAX_NOMBRE);

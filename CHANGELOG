@@ -17,4 +17,4 @@
     La syscall exec tiene un problema: como ahora los programas se pueden llamar con argumentos no podemos llamar a exec con eso
     hay que obtener el primer argumento (nombre del programa) y llamar con eso.
 
-        
+    implementamos las syscall pero cuando llamamos a un programa con argumentos tira SIGSEGV

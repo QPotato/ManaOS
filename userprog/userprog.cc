@@ -74,8 +74,9 @@ void UserProg::parseArgs(char* callString, size_t maxSize)
         {
             if(callString[i] == ' ')
             {
-                argvl[argcl] = (char*)malloc((i - init) * sizeof(char));
-                strncpy(argvl[argcl++], &(callString[init]), i - init);
+                argvl[argcl] = (char*)malloc((i - init) * sizeof(char) + 1);
+                strncpy(argvl[argcl], &(callString[init]), i - init);
+                argv[argcl][i-init] = '\0';
                 espacios = true;
             }
         }
