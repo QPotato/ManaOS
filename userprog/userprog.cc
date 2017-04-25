@@ -51,6 +51,8 @@ void UserProg::cerrar(int fd)
 
 void UserProg::parseArgs(char* callString, size_t maxSize)
 {
+
+    DEBUG('B', "entre a la func\n");
     unsigned argcl = 0;
     size_t sz = min(maxSize, strlen(callString));
     
@@ -59,7 +61,12 @@ void UserProg::parseArgs(char* callString, size_t maxSize)
     int init = 0;
     bool espacios = false;
     
-    argvl = (char**) malloc(9000 * sizeof (char*));
+    DEBUG('B', "llegue -1\n");
+
+    argvl = (char**) malloc(90 * sizeof(char*));
+
+    DEBUG('B', "llegue 0\n");
+
     for(unsigned i = 0; i < sz; i++)
     {
         if(espacios)
@@ -76,26 +83,37 @@ void UserProg::parseArgs(char* callString, size_t maxSize)
             {
                 argvl[argcl] = (char*)malloc((i - init) * sizeof(char) + 1);
                 strncpy(argvl[argcl], &(callString[init]), i - init);
-                argv[argcl][i-init] = '\0';
+                argvl[argcl++][i-init] = '\0';
                 espacios = true;
             }
         }
     }
     
+    DEBUG('B', "llegue 1 %ld\n", this);
+
     //copio los argumentos al userprog
+    
+
     this->argsize = 0;
     this->argc = argcl;
     this->argv = (char**)malloc(argcl * sizeof(char*));
+
+    DEBUG('B', "llegue 2\n");
+
     for(unsigned i = 0; i < argcl; i++)
     {
-        int argSz = strlen(argv[i]);
+        int argSz = strlen(argvl[i]);
         this->argv[i] = (char*)malloc(argSz * sizeof(char));
         strncpy(this->argv[i], argvl[i], argSz);
         this->argsize += argSz * sizeof(char);
     }
+
+    DEBUG('B', "llegue 3\n");
+
     for(unsigned i = 0; i < argcl; i++)
         free(argvl[i]);
     free(argvl);
+
     return;
 }
 

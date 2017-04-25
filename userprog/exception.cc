@@ -96,7 +96,7 @@ void ExceptionHandler(ExceptionType which)
        	        readStrFromUsrSegura(r, filename, MAX_NOMBRE);
 	            DEBUG('A', "Exec con: #%s#. Vamos ManaOS!\n", filename);
                 
-                fn = (char*)malloc(strlen(filename));
+                fn = (char*)malloc(strlen(filename) + 1);
                 strncpy(fn, filename, strlen(filename));
                 for(int i = 0; i < strlen(filename); i++)
                 {
@@ -106,14 +106,18 @@ void ExceptionHandler(ExceptionType which)
                         break;
                     }
                 }
+                fn[strlen(filename)] = '\0';
 
 	            t = new Thread(fn);
-                t->userProg->parseArgs(filename, MAX_NOMBRE);
-       	        t->Fork(sProc, fn);
-                
-                free(fn);
+                DEBUG('A', "cree el thread. Vamos ManaOS!\n");
 
-    	        incrementar_PC();
+       	        t->Fork(sProc, fn);
+                DEBUG('A', "Forkee. Vamos ManaOS!\n");
+
+                t->userProg->parseArgs(filename, MAX_NOMBRE);
+                DEBUG('A', "Parsee argumentos. Vamos ManaOS!\n");
+    	        
+                incrementar_PC();
            	    break;
 
        	    case SC_GetArgc:

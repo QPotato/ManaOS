@@ -18,3 +18,7 @@
     hay que obtener el primer argumento (nombre del programa) y llamar con eso.
 
     implementamos las syscall pero cuando llamamos a un programa con argumentos tira SIGSEGV
+
+    sigue sin andar, ahora se comporta distinto cuando lo corremos desde gdb. Ambas formas crashean.
+
+
