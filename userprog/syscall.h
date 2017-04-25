@@ -29,7 +29,8 @@
 #define SC_Close	8
 #define SC_Fork		9
 #define SC_Yield	10
-#define SC_Args     11
+#define SC_GetArgc  11   
+#define SC_GetArg   12
 
 #ifndef IN_ASM
 
@@ -124,6 +125,12 @@ void Fork(void (*func)());
  * or not. 
  */
 void Yield();		
+
+/* Obtiene argc para userprog */
+int getArgc();
+
+/* Obtiene el n esimo argumento del userprog */
+void getArg(int, char*);
 
 #endif /* IN_ASM */
 
