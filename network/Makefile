@@ -533,7 +533,7 @@ addrspace.o: ../userprog/addrspace.cc /usr/include/stdc-predef.h \
  ../userprog/synchconsole.h ../machine/console.h ../threads/synch.h \
  ../userprog/bitmap.h ../filesys/synchdisk.h ../machine/disk.h \
  ../network/post.h ../machine/network.h ../threads/synchlist.h \
- ../bin/noff.h
+ ../bin/noff.h ../userprog/pasamemoria.h
 bitmap.o: ../userprog/bitmap.cc /usr/include/stdc-predef.h \
  ../threads/copyright.h ../userprog/bitmap.h ../threads/utility.h \
  ../threads/copyright.h ../machine/sysdep.h /usr/include/stdlib.h \

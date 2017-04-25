@@ -73,7 +73,7 @@ void ExceptionHandler(ExceptionType which)
     
     // Variables de exec
     Thread* t;
-    void* arg;
+    char *fn;
     
     // Variables de Args
     int argc, dArg;
@@ -95,13 +95,22 @@ void ExceptionHandler(ExceptionType which)
        	        r = machine->ReadRegister(4);
        	        readStrFromUsrSegura(r, filename, MAX_NOMBRE);
 	            DEBUG('A', "Exec con: #%s#. Vamos ManaOS!\n", filename);
-	            t = new Thread(filename);
-	            arg = malloc(strlen(filename) + 1);
-	            strcpy((char*) arg, filename);
-       	        t->Fork(sProc, arg);
-       	        t->userProg->parseArgs(filename, MAX_NOMBRE);
+                
+                fn = (char*)malloc(strlen(filename));
+                strncpy(fn, filename, strlen(filename));
+                int i;
+                for(i = 0; fn[i] != ' '; i++);
+                fn[i] = '\0';
+
+	            t = new Thread(fn);
+                t->userProg->parseArgs(filename, MAX_NOMBRE);
+       	        t->Fork(sProc, fn);
+                
+                free(fn);
+
     	        incrementar_PC();
            	    break;
+
        	    case SC_GetArgc:
        	        argc = up->getArgc();
        	        machine->WriteRegister(2, argc);
