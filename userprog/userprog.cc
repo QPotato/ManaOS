@@ -94,7 +94,6 @@ void UserProg::parseArgs(char* callString, size_t maxSize)
     //copio los argumentos al userprog
     
 
-    this->argsize = 0;
     this->argc = argcl;
     this->argv = (char**)malloc(argcl * sizeof(char*));
 
@@ -103,9 +102,9 @@ void UserProg::parseArgs(char* callString, size_t maxSize)
     for(unsigned i = 0; i < argcl; i++)
     {
         int argSz = strlen(argvl[i]);
-        this->argv[i] = (char*)malloc(argSz * sizeof(char));
+        this->argv[i] = (char*)malloc(argSz * sizeof(char) + 1);
         strncpy(this->argv[i], argvl[i], argSz);
-        this->argsize += argSz * sizeof(char);
+        this->argv[i][argSz] = '\0';
     }
 
     DEBUG('B', "llegue 3\n");
@@ -119,11 +118,13 @@ void UserProg::parseArgs(char* callString, size_t maxSize)
 
 int UserProg::getArgc()
 {
+    DEBUG('B', "estoy en getArgc y voy a devolver %d\n", this->argc);
     return this->argc;
 }
 
 char **UserProg::getArgv()
 {
+    DEBUG('B', "estoy en getArgv");
     return this->argv;
 }
 

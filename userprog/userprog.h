@@ -28,6 +28,5 @@ class UserProg
         int maxFileDes;
         int argc;
         char **argv;
-        size_t argsize;
 };
 #endif

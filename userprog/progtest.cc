@@ -48,10 +48,8 @@ void StartProcess(char *filename)
     DEBUG('A', "Creando ejecutable a partir de #%s#. Vamos ManaOS\n", filename);
     space = new AddrSpace(executable);    
     currentThread->userProg = new UserProg(space);
-
+    
     currentThread->userProg->parseArgs(filename, MAX_NOMBRE);
-
-    free(filename);
     free(fn);
 
     delete executable;			// close file
