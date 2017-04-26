@@ -89,7 +89,7 @@ void UserProg::parseArgs(char* callString, size_t maxSize)
         }
     }
     
-    DEBUG('B', "llegue 1 %ld\n", this);
+    DEBUG('B', "llegue 1\n");
 
     //copio los argumentos al userprog
     

@@ -21,19 +21,39 @@
 //----------------------------------------------------------------------
 void StartProcess(char *filename)
 {
-    OpenFile *executable = fileSystem->Open(filename);
+    char *fn;
+    fn = (char*)malloc(strlen(filename) + 1);
+    strncpy(fn, filename, strlen(filename));
+    for(int i = 0; i < strlen(filename); i++)
+    {
+        if(fn[i] == ' ')
+        {
+            fn[i] = '\0';
+            break;
+        }
+    }
+    fn[strlen(filename)] = '\0';
+    
+    DEBUG('A', "quiero iniciar proceso con filename -%s-\n", fn);
+    OpenFile *executable = fileSystem->Open(fn);
     AddrSpace *space;
+
+    DEBUG('A', "executable: %ld", executable);
 
     if (executable == NULL)
     {
-        printf("Unable to open file %s\n", filename);
+        printf("Unable to open file %s\n", fn);
         return;
     }
     DEBUG('A', "Creando ejecutable a partir de #%s#. Vamos ManaOS\n", filename);
     space = new AddrSpace(executable);    
     currentThread->userProg = new UserProg(space);
 
+    currentThread->userProg->parseArgs(filename, MAX_NOMBRE);
+
     free(filename);
+    free(fn);
+
     delete executable;			// close file
 
     space->InitRegisters();		// set the initial register values

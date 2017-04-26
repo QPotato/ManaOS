@@ -109,13 +109,10 @@ void ExceptionHandler(ExceptionType which)
                 fn[strlen(filename)] = '\0';
 
 	            t = new Thread(fn);
-                DEBUG('A', "cree el thread. Vamos ManaOS!\n");
+                DEBUG('A', "cree el thread. fn: %s. Vamos ManaOS!\n", fn);
 
-       	        t->Fork(sProc, fn);
-                DEBUG('A', "Forkee. Vamos ManaOS!\n");
-
-                t->userProg->parseArgs(filename, MAX_NOMBRE);
-                DEBUG('A', "Parsee argumentos. Vamos ManaOS!\n");
+       	        t->Fork(sProc, (void*)filename);
+                DEBUG('A', "Forkee. userProg: %ld. Vamos ManaOS!\n", t->userProg);
     	        
                 incrementar_PC();
            	    break;
