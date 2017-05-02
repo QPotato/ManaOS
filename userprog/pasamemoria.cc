@@ -28,19 +28,18 @@ void readStrFromUsrSegura(int usrAddr, char *outStr, int size)
 
 void writeStrToUsr(char *str, int usrAddr)
 {
-	do
-	{
+    for(;*str != '\0'; usrAddr++, str++)
 		machine->WriteMem(usrAddr, 1, *str);
-		usrAddr++;
-		str++;
-	}
-	while(*str != '\0');
+	machine->WriteMem(usrAddr, 1 , '\0');
 }
 
 void readBuffFromUsr(int usrAddr, char *outBuff, int byteCount)
 {
-    for(int i = 0; i < byteCount; i++)
-        machine->ReadMem(usrAddr + i, 1, (int*)(outBuff + i));
+    int tmp;
+    for(int i = 0; i < byteCount; i++) {
+        machine->ReadMem(usrAddr + i, 1, &tmp);
+        outBuff[i] = tmp;
+    }
 }
 
 void writeBuffToUsr(char *str, int usrAddr, int byteCount)

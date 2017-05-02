@@ -59,7 +59,7 @@ void ExceptionHandler(ExceptionType which)
     //TODO: limpiar toda esta basura
     //variables de create
     int r;
-    char filename[MAX_NOMBRE];
+    char* filename;
     
     //variables de read y write
     int usrBuffer;
@@ -93,6 +93,8 @@ void ExceptionHandler(ExceptionType which)
        	    
        	    case SC_Exec:
        	        r = machine->ReadRegister(4);
+       	        // Lo libera StartProcess en progtest.cc por concurrencia.
+       	        filename = (char*) malloc(sizeof(char) * MAX_NOMBRE);
        	        readStrFromUsrSegura(r, filename, MAX_NOMBRE);
 	            DEBUG('A', "Exec con: #%s#. Vamos ManaOS!\n", filename);
                 

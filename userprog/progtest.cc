@@ -51,7 +51,7 @@ void StartProcess(char *filename)
     
     currentThread->userProg->parseArgs(filename, MAX_NOMBRE);
     free(fn);
-
+    free(filename); // lo tenemos que liberar aca por temas de concurrencia. Esta funion se ejecuta en un fork. ExceptionHandler no tiene forma de saber cuando lo terminamos de usar.
     delete executable;			// close file
 
     space->InitRegisters();		// set the initial register values
