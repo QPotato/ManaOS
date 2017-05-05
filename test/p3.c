@@ -2,9 +2,6 @@
 
 int main()
 {
-    Create("asd3");
-    int fd = Open("asd3");
-    //Write("lol3", 4, fd);
-    
+    Write("Fui llamado con Exec\n", 25, ConsoleOutput);
     return 0;
 }

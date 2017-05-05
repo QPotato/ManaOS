@@ -21,4 +21,12 @@
 
     sigue sin andar, ahora se comporta distinto cuando lo corremos desde gdb. Ambas formas crashean.
 
+5 mayo 2017:
+    Hay que implementar la syscall Join para poder hacer la consola
 
+    No tengo la más mínima idea de qué significa el SpaceId que devuelve Exec ni de cómo usarlo para llamar a Join
+    
+    No tengo la más mínima idea de cómo implementar Join.
+
+    Por ahora la consola lee una linea de entrada estandar y la llama con Exec.
+    Actúa como si se llmase con & porque no hay Join.

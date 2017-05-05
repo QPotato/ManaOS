@@ -110,7 +110,7 @@ void ExceptionHandler(ExceptionType which)
                 }
                 fn[strlen(filename)] = '\0';
 
-	            t = new Thread(fn);
+	            t = new Thread(fn, true);
                 DEBUG('A', "cree el thread. fn: %s. Vamos ManaOS!\n", fn);
 
        	        t->Fork(sProc, (void*)filename);
