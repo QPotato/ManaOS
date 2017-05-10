@@ -128,8 +128,13 @@ void ExceptionHandler(ExceptionType which)
        	        break;
        	        
        	    case SC_Join:
-	            DEBUG('A', "Syscall no implementada: Join.\n");
-           	    interrupt->Halt();
+       	        3;
+       	        SpaceId s = machine->ReadRegister(4);
+       	        if(up->join(s))
+       	            machine->WriteRegister(2, 1);
+   	            else
+   	                machine->WriteRegister(2, 0);
+       	        incrementar_PC();
            	    break;
        	    
        	    case SC_Create:

@@ -161,6 +161,15 @@ SpaceId UserProg::nuevoHijo(char *filename, int j)
     return ret;
 }
 
+bool UserProg::join(SpaceId hijo)
+{
+    Thread* t = hijos.get(hijo);
+    if(t == NULL)
+        return false;
+    t->Join();
+    return true;
+}
+
 OpenFile* UserProg::getOpenFile(int fd)
 {
     DEBUG('A', "op: %lu\n", abiertos[fd]);

@@ -1,8 +1,10 @@
 #ifndef __UserProg_H__
 #define __UserProg_H__
-#include "addrspace.h"
-#include "openfile.h"
-
+#include "addrspace.h" 
+#include "openfile.h" 
+#include "thread.h" // para la lista de hijos
+#include "syscall.h" // SpaceId
+#include "listaCumiera.h"
 #define MAX_NOMBRE 1024
 #define MAX_ABIERTOS 256
 #define MAX_PROCESOS 10000
@@ -21,12 +23,19 @@ class UserProg
         int getArgc();
         char** getArgv();
         
+        SpaceId nuevoHijo(char* filename);
+        bool join(SpaceId hijo);
+        
         AddrSpace *space;			// User code this thread is running.
 
     private:
         OpenFile* abiertos[MAX_ABIERTOS];
         int maxFileDes;
+        
         int argc;
         char **argv;
+        
+        listaCumbiera hijos<Thread>;
+        int maxHijos;
 };
 #endif
