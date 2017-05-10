@@ -9,6 +9,8 @@ UserProg::UserProg(AddrSpace* s)
     abiertos[1] = NULL;
     maxFileDes = 2;
     space = s;
+
+    maxHijos = 0;
 }
 
 UserProg::~UserProg()
@@ -128,6 +130,37 @@ char **UserProg::getArgv()
     return this->argv;
 }
 
+SpaceId UserProg::nuevoHijo(char *filename, int j)
+{
+    Thread *t;
+    char *fn;
+    fn = (char*)malloc(strlen(filename) + 1);
+    strncpy(fn, filename, strlen(filename));
+    for(int i = 0; i < strlen(filename); i++)
+    {
+        if(fn[i] == ' ')
+        {
+            fn[i] = '\0';
+            break;
+        }
+    }
+    fn[strlen(filename)] = '\0';
+
+    bool join = j == 0 ? false : true;
+    t = new Thread(fn, join);
+
+    DEBUG('A', "cree el thread. fn: %s. Vamos ManaOS!\n", fn);
+    
+    int ret = -1;
+    if(join)
+        ret = hijos.put(t);
+
+    t->Fork(sProc, (void*)filename);
+    DEBUG('A', "Forkee. userProg: %ld. Vamos ManaOS!\n", t->userProg);
+
+    return ret;
+}
+
 OpenFile* UserProg::getOpenFile(int fd)
 {
     DEBUG('A', "op: %lu\n", abiertos[fd]);
@@ -136,3 +169,4 @@ OpenFile* UserProg::getOpenFile(int fd)
     else
         return NULL;
 }
+
