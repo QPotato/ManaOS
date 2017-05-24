@@ -20,7 +20,7 @@ CPPFLAGS = $(INCDIR)
 
 
 # if you aren't cross-compiling:
-#GCCDIR =
+#GCCDIR = ../test/mips-dec-ultrix42/mips-
 #LDFLAGS = -N -T 0
 #ASFLAGS =
 #CPPFLAGS = -P $(INCDIR)
@@ -34,7 +34,7 @@ CPP = /lib/cpp
 INCDIR =-I../userprog -I../threads
 CFLAGS = -G 0 -c $(INCDIR) -mips1
 
-all: lib/gcc-lib halt shell matmult sort filetest p1 p2 p3 exectest readtest argtest p4 cp
+all: lib/gcc-lib halt shell matmult sort filetest p1 p2 p3 exectest readtest argtest p4 cp cat
 	
 lib/gcc-lib:
 	ln -s `pwd`/mips-dec-ultrix42/ lib/gcc-lib

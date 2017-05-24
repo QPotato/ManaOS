@@ -112,6 +112,9 @@ SpaceId execProgram(char *buf, int back)
     else
     {
         //ejecuto programa utilitario (cat, cp, etc...) TODO: implementar
+        char path[128];
+        path = "../test/utilitarios/";
+        strcat
         Write("comando no implementado\n", 25, ConsoleOutput);
         ret = -1;
     }
