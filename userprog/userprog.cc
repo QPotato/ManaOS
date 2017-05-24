@@ -39,17 +39,24 @@ int UserProg::abrir(const char* nombre)
         return -1;
     }
     OpenFile* op = fileSystem->Open(nombre);
-    abiertos[maxFileDes] = op;
-    return maxFileDes++;
+    if(op != NULL)
+    {
+        abiertos[maxFileDes] = op;
+        return maxFileDes++;
+    }
+    return -1;
 }
 
 void UserProg::cerrar(int fd)
 {
-    DEBUG('A', "Warning: Llamada a cerrar sobre un archivo ya cerrado.\n");
     if(abiertos[fd] != NULL)
     {
         delete abiertos[fd];
         abiertos[fd] = NULL;
+    }
+    else
+    {
+        DEBUG('A', "Warning: Llamada a cerrar sobre un archivo ya cerrado.\n");
     }
 }
 

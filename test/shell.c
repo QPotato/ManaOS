@@ -4,6 +4,33 @@
 //Para poder hacer Write de un int...
 //
 
+int mystrlen(char* in)
+{
+    int len = 0;
+    while(in[len] != '\0')
+        len++;
+    return len;
+}
+
+int min(int a, int b)
+{
+    return (a < b ? a : b);
+}
+
+void mystrncat(char *dest, char *src, unsigned max)
+{
+    int i, limit, len = mystrlen(dest);
+    limit = min(mystrlen(dest) + mystrlen(src), max);
+    for(i = len; i < limit; i++)
+    {
+        dest[i] = src[i - len];
+    }
+    if(i < max)
+        dest[i] = '\0';
+    else
+        dest[max-1] = '\0';
+}
+
 int pow(int a, int b)
 {
     int i;
@@ -112,10 +139,11 @@ SpaceId execProgram(char *buf, int back)
     else
     {
         //ejecuto programa utilitario (cat, cp, etc...) TODO: implementar
-        char path[128];
-        path = "../test/utilitarios/";
-        strcat
-        Write("comando no implementado\n", 25, ConsoleOutput);
-        ret = -1;
+        char path[MAX_NOMBRE];
+        path[0] = '\0';
+        mystrncat(path, "../test/", MAX_NOMBRE);
+        mystrncat(path, buf, MAX_NOMBRE);
+        ret = Exec(path, !back);
     }
+    return ret;
 }
