@@ -30,3 +30,16 @@
 
     Por ahora la consola lee una linea de entrada estandar y la llama con Exec.
     Actúa como si se llmase con & porque no hay Join.
+
+24 mayo 2017:
+    Implementada la shell, anda bien con el &
+    
+    Implementados cp y cat. Al parecer andan bien.
+
+    fixeado bug en la consola que leía de más.
+
+    cambiado comportamiento de Read para que devuelva cuántos bytes leyó.
+
+    BUG: Open de un archivo inexistente y después Write con el fd que devolvió Open, ManaOS crashea.
+
+
