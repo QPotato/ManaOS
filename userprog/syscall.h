@@ -85,8 +85,8 @@ typedef int OpenFileId;
  * the console device.
  */
 
-#define ConsoleInput	0  
-#define ConsoleOutput	1  
+#define ConsoleInput	0
+#define ConsoleOutput	1
  
 /* Create a ManaOS file, with "name" */
 void Create(char *name);
