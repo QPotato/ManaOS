@@ -75,6 +75,7 @@ USERPROG_H = ../userprog/addrspace.h\
 	../userprog/pasamemoria.h\
 	../userprog/synchconsole.h\
 	../userprog/userprog.h\
+	../userprog/listaCumbiera.h\
 	../filesys/filesys.h\
 	../filesys/openfile.h\
 	../machine/console.h\

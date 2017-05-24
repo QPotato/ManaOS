@@ -52,8 +52,9 @@ int myItoa(int a, char *s)
 // MAIN     TODO: Llevar todo lo anterior a un .h
 //
 
-int
-main()
+void handleCmd(char*);
+
+int main()
 {
     OpenFileId input = ConsoleInput;
     OpenFileId output = ConsoleOutput;
@@ -79,14 +80,39 @@ main()
 
         if(i > 0)
         {
-            char aId[100];
-            Write("calling...\n", 20, output);
-            SpaceId id = Exec(buffer);
-            int len = myItoa(id, aId);
-            Write(aId, len, output);
-            Write("\n", 1, output);
+            handleCmd(buffer);
         }
     }
 }
 
+void handleCmd(char *buf)
+{
+    int background = 0;
+    if(buf[0] == '&')
+    {
+        background = 1;
+        buf += 1;
+    }
 
+    SpaceId id = execProgram(buf, background);
+    if(!background && id != -1)
+    {
+        Join(id);
+    }
+}
+
+SpaceId execProgram(char *buf, int back)
+{
+    SpaceId ret;
+    if(buf[0] == '.')
+    {
+        //ejecuto programa de usuario (./algo)
+        ret = Exec(buf, !back);
+    }
+    else
+    {
+        //ejecuto programa utilitario (cat, cp, etc...) TODO: implementar
+        Write("comando no implementado\n", 25, ConsoleOutput);
+        ret = -1;
+    }
+}

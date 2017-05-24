@@ -44,6 +44,8 @@
 #ifdef USER_PROGRAM
 #include "machine.h"
 #include "userprog.h"
+
+class UserProg;
 #endif
 
 // CPU register state to be saved on context switch.  

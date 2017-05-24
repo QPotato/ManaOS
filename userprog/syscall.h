@@ -29,7 +29,7 @@
 #define SC_Close	8
 #define SC_Fork		9
 #define SC_Yield	10
-#define SC_GetArgc  11   
+#define SC_GetArgc  11
 #define SC_GetArg   12
 
 #ifndef IN_ASM
@@ -59,7 +59,7 @@ typedef int SpaceId;
 /* Run the executable, stored in the ManaOS file "name", and return the 
  * address space identifier
  */
-SpaceId Exec(char *name);
+SpaceId Exec(char *name, int j);
  
 /* Only return once the the user program "id" has finished.  
  * Return the exit status.

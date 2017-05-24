@@ -96,6 +96,16 @@ int main(int argc, char **argv)
 #ifdef THREADS
     ThreadTest();
 #endif
+
+#ifdef USER_PROGRAM
+    //si no hay argumentos llamo a nuestro shell
+    if(argc == 1)
+    {
+        char *s = (char *) malloc(14 * sizeof(char));
+        strcpy(s, "../test/shell");
+        StartProcess(s);
+    }
+#endif
     for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount)
     {
 	    argCount = 1;
@@ -104,7 +114,7 @@ int main(int argc, char **argv)
 #ifdef USER_PROGRAM
         if (!strcmp(*argv, "-x")) {        	// run a user program
 	        ASSERT(argc > 1);
-	        char *spArg = (char*) malloc(strlen(*(argv + 1)) + 1);
+	        char *spArg = (char*) malloc(strlen(*(argv + 1)) + 1);  //A esto no lo libera ni fidel castro
 	        strcpy(spArg, *(argv + 1)) ;
             StartProcess(spArg);
             argCount = 2;

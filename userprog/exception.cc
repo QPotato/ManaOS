@@ -71,10 +71,16 @@ void ExceptionHandler(ExceptionType which)
     //variables de open
     UserProg* up = currentThread->userProg;
     
+    //variables de Exec
+    int j;
+
     // Variables de Args
     int argc, dArg;
     char** argv;
     int argn;
+
+    //variables de Join
+    SpaceId s;
 
     if (which == SyscallException) {
         switch(type)
@@ -90,16 +96,16 @@ void ExceptionHandler(ExceptionType which)
        	    
        	    case SC_Exec:
        	        r = machine->ReadRegister(4);
-                int j = machine->ReadRegister(5);
+                j = machine->ReadRegister(5);
                 
        	        // Lo libera StartProcess en progtest.cc por concurrencia.
        	        filename = (char*) malloc(sizeof(char) * MAX_NOMBRE);
        	        readStrFromUsrSegura(r, filename, MAX_NOMBRE);
 
-                SpaceId id = nuevoHijo(filename, j);
+                s = up->nuevoHijo(filename, j);
 
                 DEBUG('A', "Exec con: #%s#. Vamos ManaOS!\n", filename);
-                machine->WriteRegister(2, id);
+                machine->WriteRegister(2, s);
 
                 incrementar_PC();
            	    break;
@@ -128,8 +134,7 @@ void ExceptionHandler(ExceptionType which)
        	        break;
        	        
        	    case SC_Join:
-       	        3;
-       	        SpaceId s = machine->ReadRegister(4);
+       	        s = machine->ReadRegister(4);
        	        if(up->join(s))
        	            machine->WriteRegister(2, 1);
    	            else

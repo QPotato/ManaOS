@@ -4,10 +4,12 @@
 #include "openfile.h" 
 #include "thread.h" // para la lista de hijos
 #include "syscall.h" // SpaceId
-#include "listaCumiera.h"
+#include "listaCumbiera.h"
 #define MAX_NOMBRE 1024
 #define MAX_ABIERTOS 256
 #define MAX_PROCESOS 10000
+
+class Thread;
 
 // Estructura que almacena toda la informacion necesaria de un proceso de usuario.
 class UserProg
@@ -23,7 +25,7 @@ class UserProg
         int getArgc();
         char** getArgv();
         
-        SpaceId nuevoHijo(char* filename);
+        SpaceId nuevoHijo(char* filename, int j);
         bool join(SpaceId hijo);
         
         AddrSpace *space;			// User code this thread is running.
@@ -35,7 +37,7 @@ class UserProg
         int argc;
         char **argv;
         
-        listaCumbiera hijos<Thread>;
+        listaCumbiera<Thread> hijos;
         int maxHijos;
 };
 #endif

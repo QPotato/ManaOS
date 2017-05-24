@@ -3,6 +3,8 @@
 
 #define min(a,b)  (((a) < (b)) ? (a) : (b))
 
+void sProc(void* n);
+
 UserProg::UserProg(AddrSpace* s)
 {
     abiertos[0] = NULL;
@@ -146,13 +148,13 @@ SpaceId UserProg::nuevoHijo(char *filename, int j)
     }
     fn[strlen(filename)] = '\0';
 
-    bool join = j == 0 ? false : true;
-    t = new Thread(fn, join);
+    bool bjoin = j == 0 ? false : true;
+    t = new Thread(fn, bjoin);
 
     DEBUG('A', "cree el thread. fn: %s. Vamos ManaOS!\n", fn);
     
     int ret = -1;
-    if(join)
+    if(bjoin)
         ret = hijos.put(t);
 
     t->Fork(sProc, (void*)filename);
