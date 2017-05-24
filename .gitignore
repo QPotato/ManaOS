@@ -1,3 +1,12 @@
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
 *.o
 filesys/ManaOS
 network/ManaOS
@@ -120,3 +129,4 @@ vm/timer.o
 vm/translate.o
 vm/utility.o
 *.coff
+test/lib/gcc-lib
