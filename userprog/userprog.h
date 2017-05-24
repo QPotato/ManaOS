@@ -3,9 +3,9 @@
 #include "addrspace.h" 
 #include "openfile.h" 
 #include "thread.h" // para la lista de hijos
-#include "syscall.h" // SpaceId
+#include "syscall.h" // SpaceId, MAX_NOMBRE
 #include "listaCumbiera.h"
-#define MAX_NOMBRE 1024
+
 #define MAX_ABIERTOS 256
 #define MAX_PROCESOS 10000
 

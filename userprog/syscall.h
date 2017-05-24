@@ -32,7 +32,10 @@
 #define SC_GetArgc  11
 #define SC_GetArg   12
 
+
 #ifndef IN_ASM
+
+#define MAX_NOMBRE 1024
 
 /* The system call interface.  These are the operations the ManaOS
  * kernel needs to support, to be able to run user programs.
