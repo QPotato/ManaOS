@@ -42,4 +42,8 @@
 
     BUG: Open de un archivo inexistente y después Write con el fd que devolvió Open, ManaOS crashea.
 
+    Open de archivo inexistente (creo que) solucionado
 
+    movimos implementaciones de las syscalls a syscalls.cc
+
+    BUG: programas utilitarios tiran SIGSEGV si se llaman sin ./
