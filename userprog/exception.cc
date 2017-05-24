@@ -67,6 +67,7 @@ void ExceptionHandler(ExceptionType which)
     int fileDes;
     char* buffer;
     OpenFile* op;
+    int bytes;
     
     //variables de open
     UserProg* up = currentThread->userProg;
@@ -194,21 +195,21 @@ void ExceptionHandler(ExceptionType which)
    	            
                 if(fileDes == ConsoleInput)
                 {
-                    synchConsole->read(buffer, opSize);
-                    writeBuffToUsr(buffer, usrBuffer, opSize);
-       	            machine->WriteRegister(2, 0);
+                    bytes = synchConsole->read(buffer, opSize);
+                    writeBuffToUsr(buffer, usrBuffer, bytes);
+       	            machine->WriteRegister(2, bytes);
                 }
                 else if(fileDes == ConsoleOutput)
                 {
-                    printf("No podes leer de la salida a consola, PAVO! Vamos ManaOS!\n");
+                    DEBUG('A',"No podes leer de la salida a consola, PAVO! Vamos ManaOS!\n");
             	    interrupt->Halt(); //TODO: cambiar a que mate el proceso llamante
                 }
                 else
                 {
                     op = up->getOpenFile(fileDes);
-                    op->Read(buffer, opSize);
-                    writeBuffToUsr(buffer, usrBuffer, opSize);
-       	            machine->WriteRegister(2, 0);
+                    bytes = op->Read(buffer, opSize);
+                    writeBuffToUsr(buffer, usrBuffer, bytes);
+       	            machine->WriteRegister(2, bytes);
                     
                 }
                 free(buffer);
@@ -235,7 +236,7 @@ void ExceptionHandler(ExceptionType which)
                 else if(fileDes == ConsoleOutput)
                 {
                     readBuffFromUsr(usrBuffer, buffer, opSize);
-                    DEBUG('A', "Usuario escribe #%*s# FD: %d\n", opSize, buffer);
+                    DEBUG('A', "Usuario escribe #%*s# FD: %d\n", opSize, buffer, fileDes);
                     synchConsole->write(buffer, opSize);
        	            machine->WriteRegister(2, 0);
                 }

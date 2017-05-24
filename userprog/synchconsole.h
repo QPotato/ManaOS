@@ -10,7 +10,7 @@ class SynchConsole
         SynchConsole();
         ~SynchConsole();
         
-        void read(char* outStr, int readSize);
+        int read(char* outStr, int readSize);
         void write(const char* inStr, int writeSize);
         
         void handleReadAvail();

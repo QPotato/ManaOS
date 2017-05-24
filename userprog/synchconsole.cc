@@ -30,15 +30,21 @@ SynchConsole::~SynchConsole()
     delete readSemaphore;
 }
 
-void SynchConsole::read(char* outStr, int readSize)
+int SynchConsole::read(char* outStr, int readSize)
 {
-    for(int i = 0; i < readSize; i++)
+    char c;
+    int i;
+    for(i = 0; i < readSize; i++)
     {
         readLock->Acquire();			// only one disk I/O at a time
         readSemaphore->P();			// wait for interrupt
-        outStr[i] = consola->GetChar();
+        c = consola->GetChar();
+        if(c == EOF)
+            break;
+        outStr[i] = c;
         readLock->Release();
     }
+    return i;
 }
 
 void SynchConsole::write(const char* inStr, int writeSize)
