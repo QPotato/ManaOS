@@ -101,7 +101,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
     //bzero(machine->mainMemory, size);
     
     char datosExe[PageSize];
-    int rdSize;
+    unsigned int rdSize;
     
     DEBUG('a', "Initializing code segment, at 0x%x (virtual), size %d\n",	noffH.code.virtualAddr, noffH.code.size);
     for(int s = 0; s < noffH.code.size; s += rdSize)
@@ -143,7 +143,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
 
 AddrSpace::~AddrSpace()
 {
-    for(int i = 0; i < numPages; i++) {
+    for(unsigned i = 0; i < numPages; i++) {
         memoryManager->liberarPagina(pageTable[i].physicalPage);
     }
     delete pageTable;

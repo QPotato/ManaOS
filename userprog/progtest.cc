@@ -24,7 +24,7 @@ void StartProcess(char *filename)
     char *fn;
     fn = (char*)malloc(strlen(filename) + 1);
     strncpy(fn, filename, strlen(filename));
-    for(int i = 0; i < strlen(filename); i++)
+    for(unsigned i = 0; i < strlen(filename); i++)
     {
         if(fn[i] == ' ')
         {

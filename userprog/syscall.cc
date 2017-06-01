@@ -54,7 +54,7 @@ void getArgHandler() {
     }
     else
     {
-        writeStrToUsr("", dArg);
+        writeStrToUsr((char *)"", dArg);
     }
     incrementar_PC();
 }
@@ -154,7 +154,7 @@ void readHandler() {
 }
 
 void writeHandler() {
-    int usrBuffer, opSize, fileDes, bytes;
+    int usrBuffer, opSize, fileDes;
     char* buffer;
     OpenFile* op;
     UserProg* up = currentThread->userProg;

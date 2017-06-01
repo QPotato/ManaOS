@@ -13,17 +13,19 @@ void readStrFromUsr(int usrAddr, char *outStr)
     outStr[i] = '\0';
 }
 
-void readStrFromUsrSegura(int usrAddr, char *outStr, int size)
+unsigned readStrFromUsrSegura(int usrAddr, char *outStr, int size)
 {
-    int i = 0, read;
+    unsigned i = 0;
+    int read;
     machine->ReadMem(usrAddr, 1, &read);
-    while(read != '\0' && i < size - 1)
+    while(read != '\0' && i < (unsigned)size - 1)
     {
         outStr[i] = read;
         i++;
         machine->ReadMem(usrAddr + i, 1, &read);
     }
     outStr[i] = '\0';
+    return i;
 }
 
 void writeStrToUsr(char *str, int usrAddr)

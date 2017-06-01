@@ -19,6 +19,7 @@ int min(int a, int b)
 
 void mystrncat(char *dest, char *src, unsigned max)
 {
+    Write("me llamaron\n", 12, ConsoleOutput);
     int i, limit, len = mystrlen(dest);
     limit = min(mystrlen(dest) + mystrlen(src), max);
     for(i = len; i < limit; i++)
@@ -29,6 +30,8 @@ void mystrncat(char *dest, char *src, unsigned max)
         dest[i] = '\0';
     else
         dest[max-1] = '\0';
+
+    return;
 }
 
 int pow(int a, int b)
@@ -141,8 +144,10 @@ SpaceId execProgram(char *buf, int back)
         //ejecuto programa utilitario (cat, cp, etc...) TODO: implementar
         char path[MAX_NOMBRE];
         path[0] = '\0';
+        Write("strcat empieza\n", 16, ConsoleOutput);
         mystrncat(path, "../test/", MAX_NOMBRE);
         mystrncat(path, buf, MAX_NOMBRE);
+        Write("strcat ended\n", 14, ConsoleOutput);
         ret = Exec(path, !back);
     }
     return ret;
