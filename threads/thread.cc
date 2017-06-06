@@ -82,7 +82,8 @@ Thread::~Thread()
 	if(joinPort != NULL)
 	    delete joinPort;
 
-#ifdef USER_PROG    
+#ifdef USER_PROGRAM
+   
     if(userProg != NULL)
         delete userProg;
 #endif

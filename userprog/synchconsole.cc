@@ -39,8 +39,8 @@ int SynchConsole::read(char* outStr, int readSize)
         readLock->Acquire();			// only one disk I/O at a time
         readSemaphore->P();			// wait for interrupt
         c = consola->GetChar();
-        if(c == EOF)
-            break;
+//        if(c == EOF)
+//            break;
         outStr[i] = c;
         readLock->Release();
     }

@@ -17,7 +17,7 @@
 #include "filesys.h"
 #include "translate.h"
 
-#define UserStackSize		1024 	// increase this as necessary!
+#define UserStackSize		(1024 * 8)	// increase this as necessary!
 
 class AddrSpace {
   public:

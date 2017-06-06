@@ -23,6 +23,13 @@ int main()
     {
         getArg(i, fn);
         OpenFileId id = Open(fn);
+
+        if(id < 0)
+        {
+            Write("Archivo inexistente! Vamos ManaOS!\n", 30, ConsoleOutput);
+            return -1;
+        }
+
         char block[BLOCK_BYTES];
         int read = BLOCK_BYTES;
         while(read == BLOCK_BYTES)

@@ -181,7 +181,7 @@ int MemoryManager::alocarPagina()
     if(( p = bitmap->Find()) == -1)
     {
         DEBUG('A', "No hay mas marcos de memoria");
-        interrupt->Halt();
+        ASSERT(false);
     }
     
     return p;
