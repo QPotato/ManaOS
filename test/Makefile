@@ -37,7 +37,7 @@ CFLAGS = -G 0 -c $(INCDIR) -mips1
 all: lib/gcc-lib halt shell matmult sort filetest p1 p2 p3 exectest readtest argtest p4 cp cat
 	
 lib/gcc-lib:
-	ln -s `pwd`/mips-dec-ultrix42/ lib/gcc-lib
+	ln -s /home/fede/ManaOS/test/mips-dec-ultrix42/ lib/gcc-lib
 
 start.o: start.s ../userprog/syscall.h
 	$(CPP) $(CPPFLAGS) start.s > strt.s
