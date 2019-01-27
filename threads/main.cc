@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     if(argc == 1)
     {
         char *s = (char *) malloc(14 * sizeof(char));
-        strcpy(s, "../test/shell");
+        strcpy(s, "../test/bin/shell");
         StartProcess(s);
     }
 #endif

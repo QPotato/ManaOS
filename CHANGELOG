@@ -47,3 +47,10 @@
     movimos implementaciones de las syscalls a syscalls.cc
 
     BUG: programas utilitarios tiran SIGSEGV si se llaman sin ./
+
+27 enero 2019:
+    Reorganicé /test para separar /src y /bin. Arreglé el make para que quede piola y corregí el main. Falta arreglar shell.c
+    para que busque los programas en /bin
+
+    BUG (creo que repetido de arriba): pedirle a ManaOS que busque la shell en un path equivocado lo crashea. Eso de estar
+    indicando algo malo.
