@@ -14,12 +14,10 @@
 # and change the flags to ld and the build procedure for as
 #GCCDIR = ~/gnu/local/decstation-ultrix/bin/
 GCCDIR = mips-dec-ultrix42/mips-
-LDFLAGS = -T src/script -N
+LDFLAGS = -T script -N
 ASFLAGS = -mips1
 CPPFLAGS = $(INCDIR)
 
-SRCS := $(wildcard src/*.c)
-BINS := $(SRCS:src/%.c=bin/%)
 
 # if you aren't cross-compiling:
 #GCCDIR = ../test/mips-dec-ultrix42/mips-
@@ -36,20 +34,19 @@ CPP = /lib/cpp
 INCDIR =-I../userprog -I../threads
 CFLAGS = -G 0 -c $(INCDIR) -mips1
 
-.PHONY: all
-all: lib/gcc-lib build/start.o $(BINS)
+all: lib/gcc-lib halt shell matmult sort filetest p1 p2 p3 exectest readtest argtest p4 cp cat
 	
 lib/gcc-lib:
 	ln -s /home/fede/ManaOS/test/mips-dec-ultrix42/ lib/gcc-lib
 
-build/start.o: src/start.s ../userprog/syscall.h
-	$(CPP) $(CPPFLAGS) src/start.s > src/strt.s
-	$(AS) $(ASFLAGS) -o build/start.o src/strt.s
-	rm src/strt.s
+start.o: start.s ../userprog/syscall.h
+	$(CPP) $(CPPFLAGS) start.s > strt.s
+	$(AS) $(ASFLAGS) -o start.o strt.s
+	rm strt.s
 
-bin/%: src/%.c 
-	$(CC) $(CFLAGS) $< -o build/$*.o
-	$(LD) $(LDFLAGS) build/start.o build/$*.o -o build/$*.coff
-	../bin/coff2noff build/$*.coff $@
+%: start.o %.c 
+	$(CC) $(CFLAGS) -c $<
+	$(LD) $(LDFLAGS) start.o $*.o -o $*.coff
+	../bin/coff2noff $*.coff $@
 	
 
