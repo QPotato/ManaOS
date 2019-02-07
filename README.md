@@ -16,3 +16,8 @@ Exec entonces seria simplemente hacer un buen fork con StartProcess.
 
 --------------------------------------
 Cuando se queda sin threads se queda en un loop infinito. Capaz hay que arreglarlo. Capaz deja de existir el problema cuando haya una shell permanente...
+
+
+
+-------------------------------------
+sudo apt-get install libc6:i386
