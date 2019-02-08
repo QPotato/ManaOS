@@ -28,6 +28,7 @@
 int fruta;
 
 #define MOLIN 100000
+// Molinete rima con partes posteriores.
 void molinete(void* name)
 {
     for(int i = 0; i < MOLIN; i++)

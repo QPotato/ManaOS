@@ -145,7 +145,7 @@ SpaceId execProgram(char *buf, int back)
         char path[MAX_NOMBRE];
         path[0] = '\0';
         Write("strcat empieza\n", 16, ConsoleOutput);
-        mystrncat(path, "../test/", MAX_NOMBRE);
+        mystrncat(path, "../test/bin/", MAX_NOMBRE);
         mystrncat(path, buf, MAX_NOMBRE);
         Write("strcat ended\n", 14, ConsoleOutput);
         ret = Exec(path, !back);

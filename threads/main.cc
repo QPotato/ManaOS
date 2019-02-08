@@ -94,18 +94,9 @@ int main(int argc, char **argv)
     printf("\nEs un Mana Operating System, es para compartir!\n\n\n");
     
 #ifdef THREADS
-    ThreadTest();
+    // ThreadTest();
 #endif
 
-#ifdef USER_PROGRAM
-    //si no hay argumentos llamo a nuestro shell
-    if(argc == 1)
-    {
-        char *s = (char *) malloc(14 * sizeof(char));
-        strcpy(s, "../test/bin/shell");
-        StartProcess(s);
-    }
-#endif
     for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount)
     {
 	    argCount = 1;
@@ -134,7 +125,7 @@ int main(int argc, char **argv)
 #endif // USER_PROGRAM
 #ifdef FILESYS
 	    if (!strcmp(*argv, "-cp")) { 		// copy from UNIX to ManaOS
-	        ASSERT(argc > 2);
+            ASSERT(argc > 2);
 	        Copy(*(argv + 1), *(argv + 2));
 	        argCount = 3;
 	    } else if (!strcmp(*argv, "-p")) {	// print a ManaOS file
@@ -165,6 +156,14 @@ int main(int argc, char **argv)
 #endif // NETWORK
     }
 
+#ifdef USER_PROGRAM
+    // Llamo a nuestro shell
+    printf("Vamos a entrar a la consola.\n");
+    char *s = (char *) malloc(14 * sizeof(char));
+    strcpy(s, "../test/bin/shell");
+    StartProcess(s);
+#endif
+ 
     currentThread->Finish();	// NOTE: if the procedure "main" 
 				// returns, then the program "ManaOS"
 				// will exit (as any other normal program
