@@ -15,7 +15,6 @@ int main()
     OpenFileId o = Open(origin), d = Open(destination);
     char block[BLOCK_BYTES];
     int read = BLOCK_BYTES;
-    Write("Hola\n", 5, ConsoleOutput);
     while(read == BLOCK_BYTES)
     {
         read = Read(block, BLOCK_BYTES, o);
