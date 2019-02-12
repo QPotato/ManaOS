@@ -10,3 +10,21 @@ correr con -rs seed para setear la semilla. esto es medio confuso...
 en main.cc está comentado lo relevante sobre flags para correr y debugear
 
 
+
+
+
+12/02/2019:
+
+Surge problema.
+
+Actualmente un Thread tiene un UserProg, que puede ser NULL porque no todos los threads corren programas de usuario.
+
+Un UserProg tiene una lista de Threads que son los threads donde corren sus hijos.
+
+La pregunta es: vale la pena reestructurar el código para tener UserProg con un Thread adentro (que representa el thread
+en el que corre este programa) y una lista de UserProgs (sus hijos)?
+
+Lo que vamos a hacer:
+
+    El UserProg tiene una referencia al thread en el que corre.
+
