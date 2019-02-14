@@ -63,7 +63,7 @@ int myItoa(int a, char *s)
         s[1] = '\0';
         return 1;
     }
-    
+
     //obtengo el arreglo de digitos invertido
     for(i = 0; a >= pow(10, i); i++)
         inv[i] = getNthDigit(a, i);
@@ -87,7 +87,7 @@ int main()
 {
     OpenFileId input = ConsoleInput;
     OpenFileId output = ConsoleOutput;
-    char prompt[2], buffer[60];
+    char prompt[2], buffer[512];
     int i;
 
     prompt[0] = '-';
@@ -98,10 +98,10 @@ int main()
         Write(prompt, 2, output);
 
         i = 0;
-    
+
         do
         {
-            Read(&buffer[i], 1, input); 
+            Read(&buffer[i], 1, input);
         }
         while( buffer[i++] != '\n' );
 
