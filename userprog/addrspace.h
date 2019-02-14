@@ -33,8 +33,7 @@ class AddrSpace {
     void RestoreState();		// info on a context switch
 
     #ifdef USE_TLB
-        // FUTURO
-        // TranslationEntry* translate(int vpn);
+        TranslationEntry* translate(int vpn);
     #endif
 
   private:

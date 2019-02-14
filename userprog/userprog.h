@@ -36,6 +36,10 @@ class UserProg
         void saveState();
         void restoreState();
 
+        #ifdef USE_TLB
+        TranslationEntry* translate(int vpn);
+        #endif
+
         // Le dice al programa de usuario que se mate.
         // Cierra los archivos, libera su memotia y mata el thread.
         void nisman();

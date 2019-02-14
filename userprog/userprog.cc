@@ -194,3 +194,9 @@ void UserProg::restoreState() {
 void UserProg::nisman() {
     thread->Finish();
 }
+
+#ifdef USE_TLB
+		TranslationEntry* UserProg::translate(int vpn) {
+				return space->translate(vpn);
+		}
+#endif

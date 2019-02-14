@@ -214,20 +214,15 @@ void AddrSpace::RestoreState()
 			  machine->pageTable = pageTable;
 		    machine->pageTableSize = numPages;
 		#else
-				// FUTURO
-				// for(int i = 0; i < TLBSize; i++)
-				// 		machine->tlb[i].valid = false;
+				for(int i = 0; i < TLBSize; i++) {
+						machine->tlb[i].valid = false;
+				}
 		#endif
 }
 
 #ifdef USE_TLB
-		// FUTURO
-		// TranslationEntry* AddrSpace::translate(int vpn) {
-		// 		if (vpn >= numPages) {
-		// 				DEBUG('A', "virtual page # %d too large for page table size %d!\n",
-		// 				vpn, numPages);
-		// 				return NULL;
-		// 		}
-		// 		return &pageTable[vpn];
-		// }
+		TranslationEntry* AddrSpace::translate(int vpn) {
+			ASSERT((unsigned)vpn < numPages); // Pediste una pagina fuera de la tabla de paginacion!
+			return &pageTable[vpn];
+		}
 #endif

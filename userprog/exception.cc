@@ -23,8 +23,14 @@
 
 #include "copyright.h"
 #include "system.h"
+#include "machine.h"
+
 #include "syscall.h"
 #include "pasamemoria.h"
+
+#ifdef USE_TLB
+#include "tlbHandler.h"
+#endif
 //----------------------------------------------------------------------
 // ExceptionHandler
 // 	Entry point into the ManaOS kernel.  Called when a user program
@@ -128,17 +134,27 @@ void ExceptionHandler(ExceptionType which)
   	    printf("Segmentation Fault, PAVO!\nVamos ManaOS!\n");
         currentProgram->nisman();
     }
-    // else if(which == PageFaultException) {
-    //     userProg = currentThread->userProg
-    //     pageNumber =
-    //     pageFaultHanlder(userProg, pageNumber)
-    // }
-    // else if(which == ReadOnlyException) {
-	  //    readOnlyHandler(userProg, pageNumber)
-    // }
-    // else if(which == BusErrorException) {
-	  //    busErrorHandler(userProg, pageNumber)
-    // }
+
+    #ifdef USE_TLB
+        else if(which == PageFaultException) {
+            int virtualAddress = machine->ReadRegister(BadVAddrReg);
+            tlbHandler::pageFaultHandler(currentProgram, virtualAddress);
+        }
+        else if(which == ReadOnlyException) {
+            int virtualAddress = machine->ReadRegister(BadVAddrReg);
+            tlbHandler::readOnlyHandler(currentProgram, virtualAddress);
+        }
+        else if(which == BusErrorException) {
+            int virtualAddress = machine->ReadRegister(BadVAddrReg);
+            tlbHandler::busErrorHandler(currentProgram, virtualAddress);
+        }
+    #else
+        else if(which == PageFaultException) {
+            printf("Segmentation fault, pavo! Vamos ManaOS\n");
+            currentProgram->nisman();
+        }
+    #endif
+
     else
     {
   	    printf("Unexpected user mode exception %d %d\n", which, type);
