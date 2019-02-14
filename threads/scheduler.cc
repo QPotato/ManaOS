@@ -1,4 +1,4 @@
-// scheduler.cc 
+// scheduler.cc
 //	Routines to choose the next thread to run, and to dispatch to
 //	that thread.
 //
@@ -7,15 +7,15 @@
 //	(since we are on a uniprocessor).
 //
 // 	NOTE: We can't use Locks to provide mutual exclusion here, since
-// 	if we needed to wait for a lock, and the lock was busy, we would 
-//	end up calling FindNextToRun(), and that would put us in an 
+// 	if we needed to wait for a lock, and the lock was busy, we would
+//	end up calling FindNextToRun(), and that would put us in an
 //	infinite loop.
 //
 // 	Very simple implementation -- no priorities, straight FIFO.
 //	Might need to be improved in later assignments.
 //
 // Copyright (c) 1992-1993 The Regents of the University of California.
-// All rights reserved.  See copyright.h for copyright notice and limitation 
+// All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
 #include "copyright.h"
@@ -29,9 +29,9 @@
 
 Scheduler::Scheduler()
 {
-    for(int i = 0; i < MIN_PRIORITY + 1; i++) 
-        readyLists[i] = new List<Thread*>; 
-} 
+    for(int i = 0; i < MIN_PRIORITY + 1; i++)
+        readyLists[i] = new List<Thread*>;
+}
 
 //----------------------------------------------------------------------
 // Scheduler::~Scheduler
@@ -39,10 +39,10 @@ Scheduler::Scheduler()
 //----------------------------------------------------------------------
 
 Scheduler::~Scheduler()
-{ 
-    for(int i = 0; i < MIN_PRIORITY + 1; i++) 
+{
+    for(int i = 0; i < MIN_PRIORITY + 1; i++)
         delete readyLists[i];
-} 
+}
 
 //----------------------------------------------------------------------
 // Scheduler::ReadyToRun
@@ -79,7 +79,7 @@ Thread * Scheduler::FindNextToRun ()
 {
     int l;
     for(l = 0; readyLists[l]->IsEmpty() && l < MIN_PRIORITY; l++);
-    
+
     return readyLists[l]->Remove();
 }
 
@@ -100,29 +100,29 @@ Thread * Scheduler::FindNextToRun ()
 void Scheduler::Run (Thread *nextThread)
 {
     Thread *oldThread = currentThread;
-    
-#ifdef USER_PROGRAM			// ignore until running user programs 
+
+#ifdef USER_PROGRAM			// ignore until running user programs
     if (currentThread->userProg != NULL) {	// if this thread is a user program,
         currentThread->SaveUserState(); // save the user's CPU registers
-	currentThread->userProg->space->SaveState();
+	      currentThread->userProg->saveState();
     }
 #endif
-    
+
     oldThread->CheckOverflow();		    // check if the old thread
 					    // had an undetected stack overflow
     currentThread = nextThread;		    // switch to the next thread
     currentThread->setStatus(RUNNING);      // nextThread is now running
-    
+
     DEBUG('t', "Switching from thread \"%s\" to thread \"%s\"\n",
 	  oldThread->getName(), nextThread->getName());
-    
-    // This is a machine-dependent assembly language routine defined 
+
+    // This is a machine-dependent assembly language routine defined
     // in switch.s.  You may have to think
     // a bit to figure out what happens after this, both from the point
     // of view of the thread and from the perspective of the "outside world".
 
     SWITCH(oldThread, nextThread);
-    
+
     DEBUG('t', "Now in thread \"%s\"\n", currentThread->getName());
 
     // If the old thread gave up the processor because it was finishing,
@@ -133,11 +133,11 @@ void Scheduler::Run (Thread *nextThread)
         delete threadToBeDestroyed;
 	threadToBeDestroyed = NULL;
     }
-    
+
 #ifdef USER_PROGRAM
     if (currentThread->userProg != NULL) {		// if there is an address space
         currentThread->RestoreUserState();     // to restore, do it.
-	currentThread->userProg->space->RestoreState();
+	currentThread->userProg->restoreState();
     }
 #endif
 }
@@ -157,6 +157,6 @@ void
 Scheduler::Print()
 {
     printf("Ready list contents:\n");
-    for(int i = 0; i < MIN_PRIORITY + 1; i++) 
+    for(int i = 0; i < MIN_PRIORITY + 1; i++)
         readyLists[i]->Apply(ThreadPrint);
 }

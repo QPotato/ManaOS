@@ -5,12 +5,13 @@
 
 void sProc(void* n);
 
-UserProg::UserProg(AddrSpace* s)
+UserProg::UserProg(Thread* t, AddrSpace* s)
 {
     abiertos[0] = NULL;
     abiertos[1] = NULL;
     maxFileDes = 2;
     space = s;
+    thread = t;
 
     maxHijos = 0;
 }
@@ -64,12 +65,12 @@ void UserProg::parseArgs(char* callString, size_t maxSize)
 {
     unsigned argcl = 0;
     size_t sz = min(maxSize, strlen(callString));
-    
+
     char **argvl;
-    
+
     int init = 0;
     bool espacios = false;
-    
+
     argvl = (char**) malloc(90 * sizeof(char*));
 
     for(unsigned i = 0; i < sz; i++)
@@ -100,9 +101,9 @@ void UserProg::parseArgs(char* callString, size_t maxSize)
             }
         }
     }
-    
+
     //copio los argumentos al userprog
-    
+
     this->argc = argcl;
     this->argv = (char**)malloc(argcl * sizeof(char*));
 
@@ -153,7 +154,7 @@ SpaceId UserProg::nuevoHijo(char *filename, int j)
     t = new Thread(fn, bjoin);
 
     DEBUG('A', "cree el thread. fn: %s. Vamos ManaOS!\n", fn);
-    
+
     int ret = -1;
     if(bjoin)
         ret = hijos.put(t);
@@ -182,3 +183,14 @@ OpenFile* UserProg::getOpenFile(int fd)
         return NULL;
 }
 
+void UserProg::saveState() {
+    space->SaveState();
+}
+
+void UserProg::restoreState() {
+    space->RestoreState();
+}
+
+void UserProg::nisman() {
+    thread->Finish();
+}

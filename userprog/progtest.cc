@@ -1,11 +1,11 @@
-// progtest.cc 
+// progtest.cc
 //	Test routines for demonstrating that ManaOS can load
-//	a user program and execute it.  
+//	a user program and execute it.
 //
 //	Also, routines for testing the Console hardware device.
 //
 // Copyright (c) 1992-1993 The Regents of the University of California.
-// All rights reserved.  See copyright.h for copyright notice and limitation 
+// All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
 #include "copyright.h"
@@ -13,7 +13,7 @@
 #include "console.h"
 #include "addrspace.h"
 #include "synch.h"
- 
+
 //----------------------------------------------------------------------
 // StartProcess
 // 	Run a user program.  Open the executable, load it into
@@ -33,7 +33,7 @@ void StartProcess(char *filename)
         }
     }
     fn[strlen(filename)] = '\0';
-    
+
     DEBUG('A', "quiero iniciar proceso con filename -%s-\n", fn);
     OpenFile *executable = fileSystem->Open(fn);
     AddrSpace *space;
@@ -46,9 +46,9 @@ void StartProcess(char *filename)
         return;
     }
     DEBUG('A', "Creando ejecutable a partir de #%s#. Vamos ManaOS\n", filename);
-    space = new AddrSpace(executable);    
-    currentThread->userProg = new UserProg(space);
-    
+    space = new AddrSpace(executable);
+    currentThread->userProg = new UserProg(currentThread, space);
+
     currentThread->userProg->parseArgs(filename, MAX_NOMBRE);
     free(fn);
     free(filename); // lo tenemos que liberar aca por temas de concurrencia. Esta funion se ejecuta en un fork. ExceptionHandler no tiene forma de saber cuando lo terminamos de usar.
@@ -87,7 +87,7 @@ static void WriteDone(void* arg) { writeDone->V(); }
 //	the output.  Stop when the user types a 'q'.
 //----------------------------------------------------------------------
 
-void 
+void
 ConsoleTest (const char *in, const char *out)
 {
     char ch;
@@ -95,7 +95,7 @@ ConsoleTest (const char *in, const char *out)
     console = new Console(in, out, ReadAvail, WriteDone, 0);
     readAvail = new Semaphore("read avail", 0);
     writeDone = new Semaphore("write done", 0);
-    
+
     for (;;) {
 	readAvail->P();		// wait for character to arrive
 	ch = console->GetChar();
