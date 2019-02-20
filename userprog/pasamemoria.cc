@@ -24,6 +24,7 @@ unsigned readStrFromUsrSegura(int usrAddr, char *outStr, int size)
         i++;
         machine->ReadMem(usrAddr + i, 1, &read);
     }
+    DEBUG('V', "Terminé de readStrFromUsrSegura. Vamos ManaOS!\n");
     outStr[i] = '\0';
     return i;
 }

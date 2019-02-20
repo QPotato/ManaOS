@@ -104,7 +104,7 @@ USERPROG_O = addrspace.o bitmap.o exception.o progtest.o pasamemoria.o synchcons
 
 VM_H = ../vm/tlbHandler.h
 VM_C = ../vm/tlbHandler.cc
-VM_O = ../vm/tlbHandler.o
+VM_O = tlbHandler.o
 
 FILESYS_H =../filesys/directory.h \
 	../filesys/filehdr.h\
@@ -148,7 +148,7 @@ depend: $(CFILES) $(HFILES)
 	echo '$$r makedep' >>eddep
 	echo 'wq' >>eddep
 	ed - Makefile < eddep
-	rm eddep makedep
+	rm eddep makedep 
 	echo '# DEPENDENCIES MUST END AT END OF FILE' >> Makefile
 	echo '# IF YOU PUT STUFF HERE IT WILL GO AWAY' >> Makefile
 	echo '# see make depend above' >> Makefile

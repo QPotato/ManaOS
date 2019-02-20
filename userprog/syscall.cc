@@ -107,7 +107,7 @@ void openHandler() {
     {
         fileDes = up->abrir(filename);
         machine->WriteRegister(2, fileDes);
-        DEBUG('A', "El programa de usuario, abrio un archivo con FD: %i, llamado #%s#. Vamos ManaOS!\n", fileDes, filename);
+        DEBUG('A', "El programa de usuario abrio un archivo con FD: %i, llamado #%s#. Vamos ManaOS!\n", fileDes, filename);
     }
     incrementar_PC();
 }
@@ -166,6 +166,9 @@ void writeHandler() {
     opSize = machine->ReadRegister(5);
     fileDes = machine->ReadRegister(6);
     buffer = (char*) malloc(sizeof(char) * opSize);
+
+    DEBUG('V', "fileDes = %d\n", fileDes);
+
     if(buffer == NULL || fileDes < 0)
     {
         DEBUG('A', "Operacion de I/O incorrecta.\n");
@@ -187,7 +190,7 @@ void writeHandler() {
     {
         readBuffFromUsr(usrBuffer, buffer, opSize);
         op = up->getOpenFile(fileDes);
-        DEBUG('A', "Usuario escribe #%*s# FD: %d\n", opSize, buffer);
+        DEBUG('K', "Usuario escribe #%*s# FD: %d\n", opSize, buffer, fileDes);
         op->Write(buffer, opSize);
         machine->WriteRegister(2, 0);
     }

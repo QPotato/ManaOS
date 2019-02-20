@@ -68,96 +68,100 @@ void closeHandler();
 void ExceptionHandler(ExceptionType which)
 {
     int type = machine->ReadRegister(2);
-    UserProg* currentProgram = currentThread->userProg;
-    if (which == SyscallException) {
-        switch(type)
+    UserProg *currentProgram = currentThread->userProg;
+    if (which == SyscallException)
+    {
+        switch (type)
         {
-            case SC_Halt:
-                DEBUG('A', "Shutdown, initiated by user program.\n");
-                interrupt->Halt();
-           	    break;
+        case SC_Halt:
+            DEBUG('A', "Shutdown, initiated by user program.\n");
+            interrupt->Halt();
+            break;
 
-       	    case SC_Exit:
-                currentProgram->nisman();
-           	    break;
+        case SC_Exit:
+            currentProgram->nisman();
+            break;
 
-       	    case SC_Exec:
-       	        execHandler();
-           	    break;
+        case SC_Exec:
+            execHandler();
+            break;
 
-       	    case SC_GetArgc:
-       	        getArgcHandler();
-       	        break;
+        case SC_GetArgc:
+            getArgcHandler();
+            break;
 
-       	    case SC_GetArg:
-       	        getArgHandler();
-       	        break;
+        case SC_GetArg:
+            getArgHandler();
+            break;
 
-       	    case SC_Join:
-       	        joinHandler();
-           	    break;
+        case SC_Join:
+            joinHandler();
+            break;
 
-       	    case SC_Create:
-       	        createHandler();
-           	    break;
+        case SC_Create:
+            createHandler();
+            break;
 
-       	    case SC_Open:
-       	        openHandler();
-           	    break;
+        case SC_Open:
+            openHandler();
+            break;
 
-       	    case SC_Read:
-       	        readHandler();
-           	    break;
+        case SC_Read:
+            readHandler();
+            break;
 
-       	    case SC_Write:
-       	        writeHandler();
-           	    break;
+        case SC_Write:
+            writeHandler();
+            break;
 
-       	    case SC_Close:
-       	        closeHandler();
-           	    break;
+        case SC_Close:
+            closeHandler();
+            break;
 
-       	    case SC_Fork:
-	              DEBUG('A', "Syscall no implementada: Fork.\n");
-                currentProgram->nisman();
-           	    break;
+        case SC_Fork:
+            DEBUG('A', "Syscall no implementada: Fork.\n");
+            currentProgram->nisman();
+            break;
 
-       	    case SC_Yield:
-	              DEBUG('A', "Syscall no implementada: Yield.\n");
-                currentProgram->nisman();
-           	    break;
-
+        case SC_Yield:
+            DEBUG('A', "Syscall no implementada: Yield.\n");
+            currentProgram->nisman();
+            break;
         }
     }
-    else if(which == AddressErrorException)
+    else if (which == AddressErrorException)
     {
-  	    printf("Segmentation Fault, PAVO!\nVamos ManaOS!\n");
+        printf("Segmentation Fault, PAVO!\nVamos ManaOS!\n");
         currentProgram->nisman();
     }
 
-    #ifdef USE_TLB
-        else if(which == PageFaultException) {
-            int virtualAddress = machine->ReadRegister(BadVAddrReg);
-            tlbHandler::pageFaultHandler(currentProgram, virtualAddress);
-        }
-        else if(which == ReadOnlyException) {
-            int virtualAddress = machine->ReadRegister(BadVAddrReg);
-            tlbHandler::readOnlyHandler(currentProgram, virtualAddress);
-        }
-        else if(which == BusErrorException) {
-            int virtualAddress = machine->ReadRegister(BadVAddrReg);
-            tlbHandler::busErrorHandler(currentProgram, virtualAddress);
-        }
-    #else
-        else if(which == PageFaultException) {
-            printf("Segmentation fault, pavo! Vamos ManaOS\n");
-            currentProgram->nisman();
-        }
-    #endif
+#ifdef USE_TLB
+    else if (which == PageFaultException)
+    {
+        int virtualAddress = machine->ReadRegister(BadVAddrReg);
+        tlbHandler::pageFaultHandler(currentProgram, virtualAddress);
+    }
+    else if (which == ReadOnlyException)
+    {
+        int virtualAddress = machine->ReadRegister(BadVAddrReg);
+        tlbHandler::readOnlyHandler(currentProgram, virtualAddress);
+    }
+    else if (which == BusErrorException)
+    {
+        int virtualAddress = machine->ReadRegister(BadVAddrReg);
+        tlbHandler::busErrorHandler(currentProgram, virtualAddress);
+    }
+#else
+    else if (which == PageFaultException)
+    {
+        printf("Segmentation fault, pavo! Vamos ManaOS\n");
+        currentProgram->nisman();
+    }
+#endif
 
     else
     {
-  	    printf("Unexpected user mode exception %d %d\n", which, type);
-  	    ASSERT(false);
+        printf("Unexpected user mode exception %d %d\n", which, type);
+        ASSERT(false);
     }
 }

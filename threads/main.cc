@@ -1,4 +1,4 @@
-// main.cc 
+// main.cc
 //	Bootstrap code to initialize the operating system kernel.
 //
 //	Allows direct calls into internal operating system functions,
@@ -31,7 +31,7 @@
 //    -p prints a ManaOS file to stdout
 //    -r removes a ManaOS file from the file system
 //    -l lists the contents of the ManaOS directory
-//    -D prints the contents of the entire file system 
+//    -D prints the contents of the entire file system
 //    -t tests the performance of the ManaOS file system
 //
 //  NETWORK
@@ -43,7 +43,7 @@
 //  Some of the flags are interpreted here; some in system.cc.
 //
 // Copyright (c) 1992-1993 The Regents of the University of California.
-// All rights reserved.  See copyright.h for copyright notice and limitation 
+// All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
 #define MAIN
@@ -52,7 +52,6 @@
 
 #include "utility.h"
 #include "system.h"
-
 
 // External functions used by this file
 
@@ -63,114 +62,129 @@ void PerformanceTest(void);
 void StartProcess(char *file);
 void ConsoleTest(const char *in, const char *out);
 void MailTest(int networkID);
-void sProc(void* n);
+void sProc(void *n);
 //----------------------------------------------------------------------
 // main
-// 	Bootstrap the operating system kernel.  
-//	
+// 	Bootstrap the operating system kernel.
+//
 //	Check command line arguments
 //	Initialize data structures
 //	(optionally) Call test procedure
 //
 //	"argc" is the number of command line arguments (including the name
-//		of the command) -- ex: "ManaOS -d +" -> argc = 3 
+//		of the command) -- ex: "ManaOS -d +" -> argc = 3
 //	"argv" is an array of strings, one for each command line argument
 //		ex: "ManaOS -d +" -> argv = {"ManaOS", "-d", "+"}
 //----------------------------------------------------------------------
 
 int main(int argc, char **argv)
 {
-    int argCount;			// the number of arguments 
-					// for a particular command
+	int argCount; // the number of arguments
+				  // for a particular command
 
-    DEBUG('t', "Entering main");
-    (void) Initialize(argc, argv);
-    
-    printf("__     __                            __  __                    ___  ____  _ \n");
-    printf("\\ \\   / /_ _ _ __ ___   ___  ___    |  \\/  | __ _ _ __   __ _ / _ \\/ ___|| |\n");
-    printf(" \\ \\ / / _` | '_ ` _ \\ / _ \\/ __|   | |\\/| |/ _` | '_ \\ / _` | | | \\___ \\| |\n");
-    printf("  \\ V / (_| | | | | | | (_) \\__ \\   | |  | | (_| | | | | (_| | |_| |___) |_|\n");
-    printf("   \\_/ \\__,_|_| |_| |_|\\___/|___/   |_|  |_|\\__,_|_| |_|\\__,_|\\___/|____/(_)\n");
-    printf("\nEs un Mana Operating System, es para compartir!\n\n\n");
-    
+	DEBUG('t', "Entering main");
+	(void)Initialize(argc, argv);
+
+	printf("__     __                            __  __                    ___  ____  _ \n");
+	printf("\\ \\   / /_ _ _ __ ___   ___  ___    |  \\/  | __ _ _ __   __ _ / _ \\/ ___|| |\n");
+	printf(" \\ \\ / / _` | '_ ` _ \\ / _ \\/ __|   | |\\/| |/ _` | '_ \\ / _` | | | \\___ \\| |\n");
+	printf("  \\ V / (_| | | | | | | (_) \\__ \\   | |  | | (_| | | | | (_| | |_| |___) |_|\n");
+	printf("   \\_/ \\__,_|_| |_| |_|\\___/|___/   |_|  |_|\\__,_|_| |_|\\__,_|\\___/|____/(_)\n");
+	printf("\nEs un Mana Operating System, es para compartir!\n\n\n");
+
 #ifdef THREADS
-    // ThreadTest();
+	// ThreadTest();
 #endif
 
-    for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount)
-    {
-	    argCount = 1;
-        if (!strcmp(*argv, "-z"))               // print copyright
-            printf ("%s",copyright);
+	for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount)
+	{
+		argCount = 1;
+		if (!strcmp(*argv, "-z")) // print copyright
+			printf("%s", copyright);
 #ifdef USER_PROGRAM
-        if (!strcmp(*argv, "-x")) {        	// run a user program
-	        ASSERT(argc > 1);
-	        char *spArg = (char*) malloc(strlen(*(argv + 1)) + 1);  //A esto no lo libera ni fidel castro
-	        strcpy(spArg, *(argv + 1)) ;
-            StartProcess(spArg);
-            argCount = 2;
-        }
-        else if (!strcmp(*argv, "-c")) {      // test the console
-	        if (argc == 1)
-	            ConsoleTest(NULL, NULL);
-	        else {
-		        ASSERT(argc > 2);
-	            ConsoleTest(*(argv + 1), *(argv + 2));
-	            argCount = 3;
-	        }
-	    interrupt->Halt();		// once we start the console, then 
-					            // ManaOS will loop forever waiting 
-					            // for console input
-	    }
+		if (!strcmp(*argv, "-x"))
+		{ // run a user program
+			ASSERT(argc > 1);
+			char *spArg = (char *)malloc(strlen(*(argv + 1)) + 1); //A esto no lo libera ni fidel castro
+			strcpy(spArg, *(argv + 1));
+			StartProcess(spArg);
+			argCount = 2;
+		}
+		else if (!strcmp(*argv, "-c"))
+		{ // test the console
+			if (argc == 1)
+				ConsoleTest(NULL, NULL);
+			else
+			{
+				ASSERT(argc > 2);
+				ConsoleTest(*(argv + 1), *(argv + 2));
+				argCount = 3;
+			}
+			interrupt->Halt(); // once we start the console, then
+							   // ManaOS will loop forever waiting
+							   // for console input
+		}
 #endif // USER_PROGRAM
 #ifdef FILESYS
-	    if (!strcmp(*argv, "-cp")) { 		// copy from UNIX to ManaOS
-            ASSERT(argc > 2);
-	        Copy(*(argv + 1), *(argv + 2));
-	        argCount = 3;
-	    } else if (!strcmp(*argv, "-p")) {	// print a ManaOS file
-	        ASSERT(argc > 1);
-	        Print(*(argv + 1));
-	        argCount = 2;
-	    } else if (!strcmp(*argv, "-r")) {	// remove ManaOS file
-	        ASSERT(argc > 1);
-	        fileSystem->Remove(*(argv + 1));
-	        argCount = 2;
-	    } else if (!strcmp(*argv, "-l")) {	// list ManaOS directory
-                fileSystem->List();
-	    } else if (!strcmp(*argv, "-D")) {	// print entire filesystem
-                fileSystem->Print();
-	    } else if (!strcmp(*argv, "-t")) {	// performance test
-                PerformanceTest();
-	    }
+		if (!strcmp(*argv, "-cp"))
+		{ // copy from UNIX to ManaOS
+			ASSERT(argc > 2);
+			Copy(*(argv + 1), *(argv + 2));
+			argCount = 3;
+		}
+		else if (!strcmp(*argv, "-p"))
+		{ // print a ManaOS file
+			ASSERT(argc > 1);
+			Print(*(argv + 1));
+			argCount = 2;
+		}
+		else if (!strcmp(*argv, "-r"))
+		{ // remove ManaOS file
+			ASSERT(argc > 1);
+			fileSystem->Remove(*(argv + 1));
+			argCount = 2;
+		}
+		else if (!strcmp(*argv, "-l"))
+		{ // list ManaOS directory
+			fileSystem->List();
+		}
+		else if (!strcmp(*argv, "-D"))
+		{ // print entire filesystem
+			fileSystem->Print();
+		}
+		else if (!strcmp(*argv, "-t"))
+		{ // performance test
+			PerformanceTest();
+		}
 #endif // FILESYS
 #ifdef NETWORK
-        if (!strcmp(*argv, "-o")) {
-	        ASSERT(argc > 1);
-            Delay(2); 				// delay for 2 seconds
-						// to give the user time to 
-						// start up another ManaOS
-            MailTest(atoi(*(argv + 1)));
-            argCount = 2;
-        }
+		if (!strcmp(*argv, "-o"))
+		{
+			ASSERT(argc > 1);
+			Delay(2); // delay for 2 seconds
+					  // to give the user time to
+					  // start up another ManaOS
+			MailTest(atoi(*(argv + 1)));
+			argCount = 2;
+		}
 #endif // NETWORK
-    }
+	}
 
 #ifdef USER_PROGRAM
-    // Llamo a nuestro shell
-    printf("Vamos a entrar a la consola.\n");
-    char *s = (char *) malloc(14 * sizeof(char));
-    strcpy(s, "../test/bin/shell");
-    StartProcess(s);
+	// Llamo a nuestro shell
+	printf("Vamos a entrar a la consola.\n");
+	char *s = (char *)malloc(14 * sizeof(char));
+	strcpy(s, "../test/bin/shell");
+	StartProcess(s);
 #endif
- 
-    currentThread->Finish();	// NOTE: if the procedure "main" 
-				// returns, then the program "ManaOS"
-				// will exit (as any other normal program
-				// would).  But there may be other
-				// threads on the ready list.  We switch
-				// to those threads by saying that the
-				// "main" thread is finished, preventing
-				// it from returning.
-    return(0);			// Not reached...
+
+	currentThread->Finish(); // NOTE: if the procedure "main"
+		// returns, then the program "ManaOS"
+		// will exit (as any other normal program
+		// would).  But there may be other
+		// threads on the ready list.  We switch
+		// to those threads by saying that the
+		// "main" thread is finished, preventing
+		// it from returning.
+	return (0); // Not reached...
 }

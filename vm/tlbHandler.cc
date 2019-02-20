@@ -1,7 +1,8 @@
 #include "tlbHandler.h"
+#ifdef USE_TLB
 
 void tlbHandler::pageFaultHandler(UserProg* prog, int virtualAddress) {
-    unsigned vpn = (unsigned) virtAddr / PageSize;
+    unsigned vpn = (unsigned) virtualAddress / PageSize;
     TranslationEntry* entry = prog->translate(vpn);
 
     if(!entry->valid) {
@@ -13,8 +14,9 @@ void tlbHandler::pageFaultHandler(UserProg* prog, int virtualAddress) {
     // Tengo la entry y es válida!
     // La guardo en el cache.
     for(int i = 0; i < TLBSize; i++) {
-        if(!tlb[i].valid) {
-            tlb[i] = *entry;
+        if(!machine->tlb[i].valid) {
+            machine->tlb[i] = *entry;
+            DEBUG('A', "Sabé, encontraste lugar en la TLB!\n");
             return;
         }
     }
@@ -32,3 +34,5 @@ void tlbHandler::busErrorHandler(UserProg* prog, int virtualAddress) {
     printf("UUUFFF!! Asignaste un marco fìsico de memoria que no existe! Vamos ManaOS!\n");
     ASSERT(false);
 }
+
+#endif
