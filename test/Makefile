@@ -13,7 +13,7 @@
 # if you are cross-compiling, you need to point to the right executables
 # and change the flags to ld and the build procedure for as
 #GCCDIR = ~/gnu/local/decstation-ultrix/bin/
-GCCDIR = /home/ivo/Documents/facultad/ManaOS/test/mips-dec-ultrix42/mips-
+GCCDIR = mips-dec-ultrix42/mips-
 LDFLAGS = -T src/script -N
 ASFLAGS = -mips1
 CPPFLAGS = $(INCDIR)
@@ -40,7 +40,7 @@ CFLAGS = -G 0 -c $(INCDIR) -mips1
 all: lib/gcc-lib build/start.o $(BINS)
 	
 lib/gcc-lib:
-	ln -s /home/ivo/Documents/facultad/ManaOS/test/mips-dec-ultrix42/ lib/gcc-lib
+	ln -s mips-dec-ultrix42/ lib/gcc-lib
 
 build/start.o: src/start.s ../userprog/syscall.h
 	$(CPP) $(CPPFLAGS) src/start.s > src/strt.s
