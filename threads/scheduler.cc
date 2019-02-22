@@ -29,8 +29,8 @@
 
 Scheduler::Scheduler()
 {
-    for(int i = 0; i < MIN_PRIORITY + 1; i++)
-        readyLists[i] = new List<Thread*>;
+    for (int i = 0; i < MIN_PRIORITY + 1; i++)
+        readyLists[i] = new List<Thread *>;
 }
 
 //----------------------------------------------------------------------
@@ -40,7 +40,7 @@ Scheduler::Scheduler()
 
 Scheduler::~Scheduler()
 {
-    for(int i = 0; i < MIN_PRIORITY + 1; i++)
+    for (int i = 0; i < MIN_PRIORITY + 1; i++)
         delete readyLists[i];
 }
 
@@ -52,14 +52,14 @@ Scheduler::~Scheduler()
 //	"thread" is the thread to be put on the ready list.
 //----------------------------------------------------------------------
 
-void Scheduler::ReadyToRun (Thread *thread)
+void Scheduler::ReadyToRun(Thread *thread)
 {
     DEBUG('t', "Putting thread %s on ready list, prioridad minima.\n", thread->getName());
 
     thread->setStatus(READY);
     readyLists[MIN_PRIORITY]->Append(thread);
 }
-void Scheduler::ReadyToRun(Thread* thread, int prioridad)
+void Scheduler::ReadyToRun(Thread *thread, int prioridad)
 {
     ASSERT(prioridad >= 0 && prioridad <= 10);
     DEBUG('t', "Putting thread %s on ready list con prioridad %d.\n", thread->getName(), prioridad);
@@ -75,10 +75,11 @@ void Scheduler::ReadyToRun(Thread* thread, int prioridad)
 //	Thread is removed from the ready list.
 //----------------------------------------------------------------------
 
-Thread * Scheduler::FindNextToRun ()
+Thread *Scheduler::FindNextToRun()
 {
     int l;
-    for(l = 0; readyLists[l]->IsEmpty() && l < MIN_PRIORITY; l++);
+    for (l = 0; readyLists[l]->IsEmpty() && l < MIN_PRIORITY; l++)
+        ;
 
     return readyLists[l]->Remove();
 }
@@ -97,24 +98,30 @@ Thread * Scheduler::FindNextToRun ()
 //	"nextThread" is the thread to be put into the CPU.
 //----------------------------------------------------------------------
 
-void Scheduler::Run (Thread *nextThread)
+void Scheduler::Run(Thread *nextThread)
 {
     Thread *oldThread = currentThread;
 
-#ifdef USER_PROGRAM			// ignore until running user programs
-    if (currentThread->userProg != NULL) {	// if this thread is a user program,
+#ifdef USER_PROGRAM // ignore until running user programs
+    if (currentThread->userProg != NULL)
+    {                                   // if this thread is a user program,
         currentThread->SaveUserState(); // save the user's CPU registers
-	      currentThread->userProg->saveState();
+        currentThread->userProg->saveState();
     }
 #endif
-
-    oldThread->CheckOverflow();		    // check if the old thread
-					    // had an undetected stack overflow
-    currentThread = nextThread;		    // switch to the next thread
-    currentThread->setStatus(RUNNING);      // nextThread is now running
+#ifdef USE_TLB
+    for (int i = 0; i < TLBSize; i++)
+    {
+        machine->tlb[i].valid = false;
+    }
+#endif 
+    oldThread->CheckOverflow();        // check if the old thread
+                                       // had an undetected stack overflow
+    currentThread = nextThread;        // switch to the next thread
+    currentThread->setStatus(RUNNING); // nextThread is now running
 
     DEBUG('t', "Switching from thread \"%s\" to thread \"%s\"\n",
-	  oldThread->getName(), nextThread->getName());
+          oldThread->getName(), nextThread->getName());
 
     // This is a machine-dependent assembly language routine defined
     // in switch.s.  You may have to think
@@ -129,15 +136,17 @@ void Scheduler::Run (Thread *nextThread)
     // we need to delete its carcass.  Note we cannot delete the thread
     // before now (for example, in Thread::Finish()), because up to this
     // point, we were still running on the old thread's stack!
-    if (threadToBeDestroyed != NULL) {
+    if (threadToBeDestroyed != NULL)
+    {
         delete threadToBeDestroyed;
-	threadToBeDestroyed = NULL;
+        threadToBeDestroyed = NULL;
     }
 
 #ifdef USER_PROGRAM
-    if (currentThread->userProg != NULL) {		// if there is an address space
-        currentThread->RestoreUserState();     // to restore, do it.
-	currentThread->userProg->restoreState();
+    if (currentThread->userProg != NULL)
+    {                                      // if there is an address space
+        currentThread->RestoreUserState(); // to restore, do it.
+        currentThread->userProg->restoreState();
     }
 #endif
 }
@@ -149,14 +158,14 @@ void Scheduler::Run (Thread *nextThread)
 //----------------------------------------------------------------------
 
 static void
-ThreadPrint (Thread* t) {
-  t->Print();
+ThreadPrint(Thread *t)
+{
+    t->Print();
 }
 
-void
-Scheduler::Print()
+void Scheduler::Print()
 {
     printf("Ready list contents:\n");
-    for(int i = 0; i < MIN_PRIORITY + 1; i++)
+    for (int i = 0; i < MIN_PRIORITY + 1; i++)
         readyLists[i]->Apply(ThreadPrint);
 }

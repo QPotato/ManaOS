@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "defines": [
+                "USE_TLB",
+                "USER_PROGRAM",
+                "FILESYS_NEEDED",
+                "FILESYS_STUB",
+                "VM",
+                "USE_TLB",
+                "DFS_TICKS_FIX"
+            ],
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

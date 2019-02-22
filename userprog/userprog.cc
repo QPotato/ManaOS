@@ -196,7 +196,7 @@ void UserProg::nisman() {
 }
 
 #ifdef USE_TLB
-		TranslationEntry* UserProg::translate(int vpn) {
-				return space->translate(vpn);
-		}
+TranslationEntry* UserProg::translate(int vpn) {
+        return space->translate(vpn);
+}
 #endif

@@ -196,10 +196,10 @@ void AddrSpace::SaveState()
 #ifndef USE_TLB
     numPages = machine->pageTableSize;
 #else
-    for (int i = 0; i < TLBSize; i++)
-    {
-        machine->tlb[i].valid = false;
-    }
+    // for (int i = 0; i < TLBSize; i++)
+    // {
+    //     machine->tlb[i].valid = false;
+    // }
     DEBUG('V', "Limpio la TLB! (SaveState)\n");
 #endif
     //pageTable = machine->pageTable;
@@ -220,10 +220,10 @@ void AddrSpace::RestoreState()
     machine->pageTable = pageTable;
     machine->pageTableSize = numPages;
 #else
-    for (int i = 0; i < TLBSize; i++)
-    {
-        machine->tlb[i].valid = false;
-    }
+    // for (int i = 0; i < TLBSize; i++)
+    // {
+    //     machine->tlb[i].valid = false;
+    // }
     DEBUG('V', "Limpio la TLB! (RestoreState)\n");
 #endif
 }
