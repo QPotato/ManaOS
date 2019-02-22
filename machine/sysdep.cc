@@ -1,5 +1,5 @@
 // sysdep.cc
-//	Implementation of system-dependent interface.  ManaOS uses the 
+//	Implementation of system-dependent interface.  ManaOS uses the
 //	routines defined here, rather than directly calling the UNIX library,
 //	to simplify porting between versions of UNIX, and even to
 //	other systems, such as MSDOS.
@@ -8,7 +8,7 @@
 //	for the underlying UNIX system calls.
 //
 //	NOTE: all of these routines refer to operations on the underlying
-//	host machine (e.g., the DECstation, SPARC, etc.), supporting the 
+//	host machine (e.g., the DECstation, SPARC, etc.), supporting the
 //	ManaOS simulation code.  ManaOS implements similar operations,
 //	(such as opening a file), but those are implemented in terms
 //	of hardware devices, which are simulated by calls to the underlying
@@ -20,12 +20,13 @@
 // 	changed by the C++ compiler.
 //
 // Copyright (c) 1992-1993 The Regents of the University of California.
-// All rights reserved.  See copyright.h for copyright notice and limitation 
+// All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
 #include "copyright.h"
 
-extern "C" {
+extern "C"
+{
 #include <stdio.h>
 #include <string.h>
 #include <signal.h>
@@ -42,15 +43,13 @@ extern "C" {
 #include <unistd.h>
 #endif
 
-
-// UNIX routines called by procedures in this file 
+    // UNIX routines called by procedures in this file
 
 #include <stdlib.h> // rand(), srand(), etc.
 #include <unistd.h> // unlink(), open(), close(), sleep(), etc.
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/mman.h>
-
 }
 
 #include "interrupt.h"
@@ -58,7 +57,7 @@ extern "C" {
 
 //----------------------------------------------------------------------
 // PollFile
-// 	Check open file or open socket to see if there are any 
+// 	Check open file or open socket to see if there are any
 //	characters that can be read immediately.  If so, read them
 //	in, and return TRUE.
 //
@@ -73,46 +72,44 @@ extern "C" {
 //	"fd" -- the file descriptor of the file to be polled
 //----------------------------------------------------------------------
 
-bool
-PollFile(int fd)
+bool PollFile(int fd)
 {
     int rfd = (1 << fd), wfd = 0, xfd = 0, retVal;
     struct timeval pollTime;
 
-// decide how long to wait if there are no characters on the file
+    // decide how long to wait if there are no characters on the file
     pollTime.tv_sec = 0;
     if (interrupt->getStatus() == IdleMode)
-        pollTime.tv_usec = 20000;              	// delay to let other ManaOS run
+        pollTime.tv_usec = 20000; // delay to let other ManaOS run
     else
-        pollTime.tv_usec = 0;                 	// no delay
+        pollTime.tv_usec = 0; // no delay
 
 // poll file or socket
 #ifdef HOST_LINUX
-    retVal = select(32, (fd_set*)&rfd, (fd_set*)&wfd, (fd_set*)&xfd, &pollTime);
+    retVal = select(32, (fd_set *)&rfd, (fd_set *)&wfd, (fd_set *)&xfd, &pollTime);
 #else
     retVal = select(32, &rfd, &wfd, &xfd, &pollTime);
 #endif
 
     ASSERT((retVal == 0) || (retVal == 1));
     if (retVal == 0)
-	return false;                 		// no char waiting to be read
+        return false; // no char waiting to be read
     return true;
 }
 
 //----------------------------------------------------------------------
 // OpenForWrite
-// 	Open a file for writing.  Create it if it doesn't exist; truncate it 
+// 	Open a file for writing.  Create it if it doesn't exist; truncate it
 //	if it does already exist.  Return the file descriptor.
 //
 //	"name" -- file name
 //----------------------------------------------------------------------
 
-int
-OpenForWrite(const char *name)
+int OpenForWrite(const char *name)
 {
-    int fd = open(name, O_RDWR|O_CREAT|O_TRUNC, 0666);
+    int fd = open(name, O_RDWR | O_CREAT | O_TRUNC, 0666);
 
-    ASSERT(fd >= 0); 
+    ASSERT(fd >= 0);
     return fd;
 }
 
@@ -124,8 +121,7 @@ OpenForWrite(const char *name)
 //	"name" -- file name
 //----------------------------------------------------------------------
 
-int
-OpenForReadWrite(const char *name, bool crashOnError)
+int OpenForReadWrite(const char *name, bool crashOnError)
 {
     int fd = open(name, O_RDWR, 0);
 
@@ -138,8 +134,7 @@ OpenForReadWrite(const char *name, bool crashOnError)
 // 	Read characters from an open file.  Abort if read fails.
 //----------------------------------------------------------------------
 
-void
-Read(int fd, char *buffer, int nBytes)
+void Read(int fd, char *buffer, int nBytes)
 {
     int retVal = read(fd, buffer, nBytes);
     ASSERT(retVal == nBytes);
@@ -151,20 +146,17 @@ Read(int fd, char *buffer, int nBytes)
 //	available.
 //----------------------------------------------------------------------
 
-int
-ReadPartial(int fd, char *buffer, int nBytes)
+int ReadPartial(int fd, char *buffer, int nBytes)
 {
     return read(fd, buffer, nBytes);
 }
-
 
 //----------------------------------------------------------------------
 // WriteFile
 // 	Write characters to an open file.  Abort if write fails.
 //----------------------------------------------------------------------
 
-void
-WriteFile(int fd, const char *buffer, int nBytes)
+void WriteFile(int fd, const char *buffer, int nBytes)
 {
     int retVal = write(fd, buffer, nBytes);
     ASSERT(retVal == nBytes);
@@ -175,8 +167,7 @@ WriteFile(int fd, const char *buffer, int nBytes)
 // 	Change the location within an open file.  Abort on error.
 //----------------------------------------------------------------------
 
-void 
-Lseek(int fd, int offset, int whence)
+void Lseek(int fd, int offset, int whence)
 {
     int retVal = lseek(fd, offset, whence);
     ASSERT(retVal >= 0);
@@ -187,27 +178,24 @@ Lseek(int fd, int offset, int whence)
 // 	Report the current location within an open file.
 //----------------------------------------------------------------------
 
-int 
-Tell(int fd)
+int Tell(int fd)
 {
 #if defined(HOST_i386) || defined(HOST_LINUX)
-    return lseek(fd,0,SEEK_CUR); // 386BSD doesn't have the tell() system call
+    return lseek(fd, 0, SEEK_CUR); // 386BSD doesn't have the tell() system call
 #else
     return tell(fd);
 #endif
 }
-
 
 //----------------------------------------------------------------------
 // Close
 // 	Close a file.  Abort on error.
 //----------------------------------------------------------------------
 
-void 
-Close(int fd)
+void Close(int fd)
 {
     int retVal = close(fd);
-    ASSERT(retVal >= 0); 
+    ASSERT(retVal >= 0);
 }
 
 //----------------------------------------------------------------------
@@ -215,24 +203,22 @@ Close(int fd)
 // 	Delete a file.
 //----------------------------------------------------------------------
 
-bool 
-Unlink(const char *name)
+bool Unlink(const char *name)
 {
     return unlink(name);
 }
 
 //----------------------------------------------------------------------
 // OpenSocket
-// 	Open an interprocess communication (IPC) connection.  For now, 
-//	just open a datagram port where other ManaOS (simulating 
+// 	Open an interprocess communication (IPC) connection.  For now,
+//	just open a datagram port where other ManaOS (simulating
 //	workstations on a network) can send messages to this ManaOS.
 //----------------------------------------------------------------------
 
-int
-OpenSocket()
+int OpenSocket()
 {
     int sockID;
-    
+
     sockID = socket(AF_UNIX, SOCK_DGRAM, 0);
     ASSERT(sockID >= 0);
 
@@ -241,13 +227,12 @@ OpenSocket()
 
 //----------------------------------------------------------------------
 // CloseSocket
-// 	Close the IPC connection. 
+// 	Close the IPC connection.
 //----------------------------------------------------------------------
 
-void
-CloseSocket(int sockID)
+void CloseSocket(int sockID)
 {
-    (void) close(sockID);
+    (void)close(sockID);
 }
 
 //----------------------------------------------------------------------
@@ -255,7 +240,7 @@ CloseSocket(int sockID)
 // 	Initialize a UNIX socket address -- magical!
 //----------------------------------------------------------------------
 
-static void 
+static void
 InitSocketName(struct sockaddr_un *uname, const char *name)
 {
     uname->sun_family = AF_UNIX;
@@ -265,19 +250,18 @@ InitSocketName(struct sockaddr_un *uname, const char *name)
 //----------------------------------------------------------------------
 // AssignNameToSocket
 // 	Give a UNIX file name to the IPC port, so other instances of ManaOS
-//	can locate the port. 
+//	can locate the port.
 //----------------------------------------------------------------------
 
-void
-AssignNameToSocket(const char *socketName, int sockID)
+void AssignNameToSocket(const char *socketName, int sockID)
 {
     struct sockaddr_un uName;
     int retVal;
 
-    (void) unlink(socketName);    // in case it's still around from last time
+    (void)unlink(socketName); // in case it's still around from last time
 
     InitSocketName(&uName, socketName);
-    retVal = bind(sockID, (struct sockaddr *) &uName, sizeof(uName));
+    retVal = bind(sockID, (struct sockaddr *)&uName, sizeof(uName));
     ASSERT(retVal >= 0);
     DEBUG('n', "Created socket %s\n", socketName);
 }
@@ -286,10 +270,9 @@ AssignNameToSocket(const char *socketName, int sockID)
 // DeAssignNameToSocket
 // 	Delete the UNIX file name we assigned to our IPC port, on cleanup.
 //----------------------------------------------------------------------
-void
-DeAssignNameToSocket(const char *socketName)
+void DeAssignNameToSocket(const char *socketName)
 {
-    (void) unlink(socketName);
+    (void)unlink(socketName);
 }
 
 //----------------------------------------------------------------------
@@ -297,32 +280,31 @@ DeAssignNameToSocket(const char *socketName)
 // 	Return TRUE if there are any messages waiting to arrive on the
 //	IPC port.
 //----------------------------------------------------------------------
-bool
-PollSocket(int sockID)
+bool PollSocket(int sockID)
 {
-    return PollFile(sockID);	// on UNIX, socket ID's are just file ID's
+    return PollFile(sockID); // on UNIX, socket ID's are just file ID's
 }
 
 //----------------------------------------------------------------------
 // ReadFromSocket
 // 	Read a fixed size packet off the IPC port.  Abort on error.
 //----------------------------------------------------------------------
-void
-ReadFromSocket(int sockID, char *buffer, int packetSize)
+void ReadFromSocket(int sockID, char *buffer, int packetSize)
 {
     int retVal;
-//    Comentado para evitar error de compilacion Red Hat 9 (2004)    
-//    extern int errno;
+    //    Comentado para evitar error de compilacion Red Hat 9 (2004)
+    //    extern int errno;
     struct sockaddr_un uName;
     int size = sizeof(uName);
-   
-    retVal = recvfrom(sockID, buffer, packetSize, 0,
-				   (struct sockaddr *) &uName,(socklen_t*) &size);
 
-    if (retVal != packetSize) {
+    retVal = recvfrom(sockID, buffer, packetSize, 0,
+                      (struct sockaddr *)&uName, (socklen_t *)&size);
+
+    if (retVal != packetSize)
+    {
         perror("in recvfrom");
-//        Comentado para evitar error de compilacion Red Hat 9 (2004)	
-//        printf("called: %x, got back %d, %d\n", buffer, retVal, errno);
+        //        Comentado para evitar error de compilacion Red Hat 9 (2004)
+        //        printf("called: %x, got back %d, %d\n", buffer, retVal, errno);
     }
     ASSERT(retVal == packetSize);
 }
@@ -332,8 +314,7 @@ ReadFromSocket(int sockID, char *buffer, int packetSize)
 // 	Transmit a fixed size packet to another ManaOS' IPC port.
 //	Abort on error.
 //----------------------------------------------------------------------
-void
-SendToSocket(int sockID, const char *buffer, int packetSize, const char *toName)
+void SendToSocket(int sockID, const char *buffer, int packetSize, const char *toName)
 {
     struct sockaddr_un uName;
     int retVal;
@@ -341,15 +322,14 @@ SendToSocket(int sockID, const char *buffer, int packetSize, const char *toName)
     InitSocketName(&uName, toName);
 #ifdef HOST_LINUX
     retVal = sendto(sockID, buffer, packetSize, 0,
-			  (const struct sockaddr *) &uName, sizeof(uName));
+                    (const struct sockaddr *)&uName, sizeof(uName));
 #else
     retVal = sendto(sockID, buffer, packetSize, 0,
-			  (char *) &uName, sizeof(uName));
+                    (char *)&uName, sizeof(uName));
 #endif
 
     ASSERT(retVal == packetSize);
 }
-
 
 //----------------------------------------------------------------------
 // CallOnUserAbort
@@ -357,11 +337,10 @@ SendToSocket(int sockID, const char *buffer, int packetSize, const char *toName)
 //	hitting ctl-C.
 //----------------------------------------------------------------------
 
-void 
-CallOnUserAbort(VoidNoArgFunctionPtr func)
+void CallOnUserAbort(VoidNoArgFunctionPtr func)
 {
-    typedef void (*SignalHandler) (int);
-    (void)signal(SIGINT, (SignalHandler) func);
+    typedef void (*SignalHandler)(int);
+    (void)signal(SIGINT, (SignalHandler)func);
 }
 
 //----------------------------------------------------------------------
@@ -371,10 +350,9 @@ CallOnUserAbort(VoidNoArgFunctionPtr func)
 //	in a different UNIX shell.
 //----------------------------------------------------------------------
 
-void 
-Delay(int seconds)
+void Delay(int seconds)
 {
-    (void) sleep((unsigned) seconds);
+    (void)sleep((unsigned)seconds);
 }
 
 //----------------------------------------------------------------------
@@ -382,8 +360,7 @@ Delay(int seconds)
 // 	Quit and drop core.
 //----------------------------------------------------------------------
 
-void 
-Abort()
+void Abort()
 {
     abort();
 }
@@ -393,8 +370,7 @@ Abort()
 // 	Quit without dropping core.
 //----------------------------------------------------------------------
 
-void 
-Exit(int exitCode)
+void Exit(int exitCode)
 {
     exit(exitCode);
 }
@@ -405,8 +381,7 @@ Exit(int exitCode)
 //	now obsolete "srand" and "rand" because they are more portable!
 //----------------------------------------------------------------------
 
-void 
-RandomInit(unsigned seed)
+void RandomInit(unsigned seed)
 {
     srand(seed);
 }
@@ -416,15 +391,14 @@ RandomInit(unsigned seed)
 // 	Return a pseudo-random number.
 //----------------------------------------------------------------------
 
-int 
-Random()
+int Random()
 {
     return rand();
 }
 
 //----------------------------------------------------------------------
 // AllocBoundedArray
-// 	Return an array, with the two pages just before 
+// 	Return an array, with the two pages just before
 //	and after the array unmapped, to catch illegal references off
 //	the end of the array.  Particularly useful for catching overflow
 //	beyond fixed-size thread execution stacks.
@@ -434,7 +408,7 @@ Random()
 //	"size" -- amount of useful space needed (in bytes)
 //----------------------------------------------------------------------
 
-char * 
+char *
 AllocBoundedArray(int size)
 {
     int pgSize = getpagesize();
@@ -455,8 +429,7 @@ AllocBoundedArray(int size)
 //	"size" -- amount of useful space in the array (in bytes)
 //----------------------------------------------------------------------
 
-void 
-DeallocBoundedArray(const char *ptr, int size)
+void DeallocBoundedArray(const char *ptr, int size)
 {
     int pgSize = getpagesize();
 
@@ -464,5 +437,5 @@ DeallocBoundedArray(const char *ptr, int size)
     mprotect(ptr - pgSize, pgSize, PROT_READ | PROT_WRITE | PROT_EXEC);
     mprotect(ptr + size, pgSize, PROT_READ | PROT_WRITE | PROT_EXEC);
 #endif
-    delete [] (ptr - pgSize);
+    delete[](ptr - pgSize);
 }
