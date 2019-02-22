@@ -35,3 +35,10 @@ LO HICIMOS!!
 Mergeamos los cambios al master, y los trajimos a la branch plancha4.
 
 TODO: Empezar la práctica...
+
+22/2/2019
+
+El problema del loop de lectura era porque el paso de modo usuario a sistema y de sistema a usuario tambien vaciaba la TLB y
+eso generaba que se borren las cargas de paginas, reiniciando la lectura y quedando un ciclo de exceptions.
+
+Ahora estamos con otro problema que se queda sin TLB, no sabemos por que. La TLB ahora se limpia cuando el scheduler cambia de proceso corriendo.
