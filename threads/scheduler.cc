@@ -20,6 +20,7 @@
 
 #include "copyright.h"
 #include "scheduler.h"
+#include "tlbHandler.h"
 #include "system.h"
 
 //----------------------------------------------------------------------
@@ -110,10 +111,7 @@ void Scheduler::Run(Thread *nextThread)
     }
 #endif
 #ifdef USE_TLB
-    for (int i = 0; i < TLBSize; i++)
-    {
-        machine->tlb[i].valid = false;
-    }
+    tlbHandler->cleanTlb();
 #endif 
     oldThread->CheckOverflow();        // check if the old thread
                                        // had an undetected stack overflow
