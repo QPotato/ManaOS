@@ -31,7 +31,6 @@ unsigned readStrFromUsrSegura(int usrAddr, char *outStr, int size)
 
 void writeStrToUsr(char *str, int usrAddr)
 {
-    printf("je\n");
     for(;*str != '\0'; usrAddr++, str++)
 		machine->WriteMem(usrAddr, 1, *str);
 	machine->WriteMem(usrAddr, 1 , '\0');
@@ -48,7 +47,6 @@ void readBuffFromUsr(int usrAddr, char *outBuff, int byteCount)
 
 void writeBuffToUsr(char *str, int usrAddr, int byteCount)
 {
-    printf("je\n");
     for(int i = 0; i < byteCount; i++)
         machine->WriteMem(usrAddr + i, 1, str[i]);
 }

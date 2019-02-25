@@ -133,7 +133,6 @@ void readHandler() {
     else if(fileDes == ConsoleInput)
     {
         bytes = synchConsole->read(buffer, opSize);
-        printf("AAAAAAAAAAAAAAAAAAHHH\n");
         writeBuffToUsr(buffer, usrBuffer, bytes);
         machine->WriteRegister(2, bytes);
     }

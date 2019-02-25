@@ -20,9 +20,10 @@
 
 #include "copyright.h"
 #include "scheduler.h"
-#include "tlbHandler.h"
 #include "system.h"
-
+#ifdef USE_TLB
+#include "tlbHandler.h"
+#endif
 //----------------------------------------------------------------------
 // Scheduler::Scheduler
 // 	Initialize the list of ready but not running threads to empty.
@@ -111,7 +112,8 @@ void Scheduler::Run(Thread *nextThread)
     }
 #endif
 #ifdef USE_TLB
-    tlbHandler->cleanTlb();
+    if(netxtThread != currentThread)
+    tlbHandler::cleanTlb();
 #endif 
     oldThread->CheckOverflow();        // check if the old thread
                                        // had an undetected stack overflow

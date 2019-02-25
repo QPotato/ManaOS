@@ -37,9 +37,6 @@ void Machine::Run()
 	interrupt->setStatus(UserMode);
 	for (int instrucciones = 0;;instrucciones++)
 	{
-		if(instrucciones == 317) {
-			printf("je");
-		}
 		OneInstruction(instr);
 		interrupt->OneTick();
 		if (singleStep && (runUntilTime <= stats->totalTicks))

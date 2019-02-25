@@ -200,7 +200,7 @@ void AddrSpace::SaveState()
     // {
     //     machine->tlb[i].valid = false;
     // }
-    DEBUG('V', "Limpio la TLB! (SaveState)\n");
+    // DEBUG('V', "Limpio la TLB! (SaveState)\n");
 #endif
     //pageTable = machine->pageTable;
 }
@@ -224,7 +224,7 @@ void AddrSpace::RestoreState()
     // {
     //     machine->tlb[i].valid = false;
     // }
-    DEBUG('V', "Limpio la TLB! (RestoreState)\n");
+    // DEBUG('V', "Limpio la TLB! (RestoreState)\n");
 #endif
 }
 
