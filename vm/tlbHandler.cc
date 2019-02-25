@@ -35,4 +35,10 @@ void tlbHandler::busErrorHandler(UserProg* prog, int virtualAddress) {
     ASSERT(false);
 }
 
+void tlbHandler::cleanTlb() {
+    for(int i = 0; i < TLBSize; i++) {
+        machine->tlb[i].valid = false;
+    }
+}
+
 #endif
