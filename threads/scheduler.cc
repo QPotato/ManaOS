@@ -111,10 +111,6 @@ void Scheduler::Run(Thread *nextThread)
         currentThread->userProg->saveState();
     }
 #endif
-#ifdef USE_TLB
-    if(netxtThread != currentThread)
-    tlbHandler::cleanTlb();
-#endif 
     oldThread->CheckOverflow();        // check if the old thread
                                        // had an undetected stack overflow
     currentThread = nextThread;        // switch to the next thread

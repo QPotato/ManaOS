@@ -35,11 +35,22 @@ void tlbHandler::busErrorHandler(UserProg* prog, int virtualAddress) {
     ASSERT(false);
 }
 
-void tlbHandler::cleanTlb() {
-    DEBUG('A', "Limpio la TLB. Vamos ManaOS!\n");
-    for(int i = 0; i < TLBSize; i++) {
-        machine->tlb[i].valid = false;
+void tlbHandler::tlbCleaner(UserProg* newUserProg) {
+    // Actualizo, si es necesario, el lastUserProg
+    if(newUserProg == NULL) {
+        return;
     }
+
+    if(tlbHandler::lastUserProg != newUserProg) {
+        DEBUG('A', "Limpio la TLB. Vamos ManaOS!\n");
+        for(int i = 0; i < TLBSize; i++) {
+            machine->tlb[i].valid = false;
+        }
+        tlbHandler::lastUserProg = newUserProg;
+        return;
+    }
+
+    return;
 }
 
 #endif

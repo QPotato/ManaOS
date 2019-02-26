@@ -155,7 +155,7 @@ scheduler.o: ../threads/scheduler.cc /usr/include/stdc-predef.h \
  ../userprog/listaCumbiera.h ../threads/system.h ../machine/interrupt.h \
  ../threads/list.h ../machine/stats.h ../machine/timer.h \
  ../userprog/synchconsole.h ../machine/console.h ../threads/synch.h \
- ../userprog/bitmap.h
+ ../userprog/bitmap.h ../vm/tlbHandler.h ../threads/system.h
 synch.o: ../threads/synch.cc /usr/include/stdc-predef.h \
  ../threads/copyright.h ../threads/synch.h ../threads/thread.h \
  ../threads/utility.h ../machine/sysdep.h ../threads/copyright.h \
@@ -911,7 +911,8 @@ addrspace.o: ../userprog/addrspace.cc /usr/include/stdc-predef.h \
  ../userprog/syscall.h ../userprog/listaCumbiera.h ../threads/scheduler.h \
  ../machine/interrupt.h ../threads/list.h ../machine/stats.h \
  ../machine/timer.h ../userprog/synchconsole.h ../machine/console.h \
- ../threads/synch.h ../userprog/bitmap.h ../userprog/pasamemoria.h
+ ../threads/synch.h ../userprog/bitmap.h ../userprog/pasamemoria.h \
+ ../vm/tlbHandler.h
 bitmap.o: ../userprog/bitmap.cc /usr/include/stdc-predef.h \
  ../threads/copyright.h ../userprog/bitmap.h ../threads/utility.h \
  ../threads/copyright.h ../machine/sysdep.h /usr/include/c++/7/stdlib.h \
