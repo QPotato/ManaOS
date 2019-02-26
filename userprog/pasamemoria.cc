@@ -8,7 +8,9 @@ void readStrFromUsr(int usrAddr, char *outStr)
     {
         outStr[i] = read;
         i++;
-        machine->ReadMem(usrAddr + i, 1, &read);
+        while( !machine->ReadMem(usrAddr + i, 1, &read) ) {
+            DEBUG('K', "fallo en readMem! Reintento...\n");
+        }
     }
     outStr[i] = '\0';
 }
@@ -22,7 +24,9 @@ unsigned readStrFromUsrSegura(int usrAddr, char *outStr, int size)
     {
         outStr[i] = read;
         i++;
-        machine->ReadMem(usrAddr + i, 1, &read);
+        while( !machine->ReadMem(usrAddr + i, 1, &read) ) {
+            DEBUG('K', "fallo en readMem! Reintento...\n");
+        }
     }
     DEBUG('V', "Terminé de readStrFromUsrSegura. Vamos ManaOS!\n");
     outStr[i] = '\0';
@@ -31,22 +35,32 @@ unsigned readStrFromUsrSegura(int usrAddr, char *outStr, int size)
 
 void writeStrToUsr(char *str, int usrAddr)
 {
-    for(;*str != '\0'; usrAddr++, str++)
-		machine->WriteMem(usrAddr, 1, *str);
-	machine->WriteMem(usrAddr, 1 , '\0');
+    for(;*str != '\0'; usrAddr++, str++) {
+		while( !machine->WriteMem(usrAddr, 1, *str) ) {
+            DEBUG('K', "fallo en readMem! Reintento...\n");
+        }
+    }
+	while( !machine->WriteMem(usrAddr, 1 , '\0') ) {
+        DEBUG('K', "fallo en readMem! Reintento...\n");
+    }
 }
 
 void readBuffFromUsr(int usrAddr, char *outBuff, int byteCount)
 {
     int tmp;
     for(int i = 0; i < byteCount; i++) {
-        machine->ReadMem(usrAddr + i, 1, &tmp);
+        while( !machine->ReadMem(usrAddr + i, 1, &tmp) ) {
+            DEBUG('K', "fallo en readMem! Reintento...\n");
+        }
         outBuff[i] = tmp;
     }
 }
 
 void writeBuffToUsr(char *str, int usrAddr, int byteCount)
 {
-    for(int i = 0; i < byteCount; i++)
-        machine->WriteMem(usrAddr + i, 1, str[i]);
+    for(int i = 0; i < byteCount; i++) {
+        while( !machine->WriteMem(usrAddr + i, 1, str[i]) ) {
+            DEBUG('K', "fallo en readMem! Reintento...\n");
+        }
+    }
 }

@@ -15,7 +15,7 @@ int main()
     int argc = getArgc(), i;
     if(argc < 2)
     {
-        Write("No le pasaste archivos a cat, gato!!\n", 38, ConsoleOutput);
+        Write("No le pasaste archivos a cat, gato!!\n", 37, ConsoleOutput);
         return 0;
     }
     char fn[128];
@@ -26,7 +26,7 @@ int main()
 
         if(id < 0)
         {
-            Write("Archivo inexistente! Vamos ManaOS!\n", 36, ConsoleOutput);
+            Write("Archivo inexistente! Vamos ManaOS!\n", 35, ConsoleOutput);
             return -1;
         }
 
