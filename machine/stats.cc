@@ -22,6 +22,9 @@ Statistics::Statistics()
     numDiskReads = numDiskWrites = 0;
     numConsoleCharsRead = numConsoleCharsWritten = 0;
     numPageFaults = numPacketsSent = numPacketsRecvd = 0;
+#ifdef USE_TLB
+    numMemAccess = 0;
+#endif
 #ifdef DFS_TICKS_FIX
     numBugFix = 0;
 #endif
@@ -47,6 +50,9 @@ Statistics::Print()
     printf("Console I/O: reads %d, writes %d\n", numConsoleCharsRead, 
 	numConsoleCharsWritten);
     printf("Paging: faults %d\n", numPageFaults);
+#ifdef USE_TLB
+    printf("Hit Ratio: %f\n", 1.0f - (float(numPageFaults) / float(numMemAccess)));
+#endif
     printf("Network I/O: packets received %d, sent %d\n", numPacketsRecvd, 
 	numPacketsSent);
 }
