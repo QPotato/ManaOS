@@ -16,13 +16,15 @@ void tlbHandler::pageFaultHandler(UserProg* prog, int virtualAddress) {
     for(int i = 0; i < TLBSize; i++) {
         if(!machine->tlb[i].valid) {
             machine->tlb[i] = *entry;
-            DEBUG('A', "Sabé, encontraste lugar en la TLB!\n");
+            DEBUG('V', "Sabé, encontraste lugar en la TLB!\n");
             return;
         }
     }
 
-    printf("Te quedaste sin TLB! Vamos ManaOS!\n");
-    ASSERT(false); // Nos quedamos sin TLB!
+    int replace_index = 7;
+    DEBUG('V', "Te quedaste sin TLB! Pero no importa, sacamos al %d! Vamos ManaOS!\n", replace_index);
+    machine->tlb[replace_index] = *entry;
+    return;
 }
 
 void tlbHandler::readOnlyHandler(UserProg* prog, int virtualAddress) {
@@ -42,7 +44,7 @@ void tlbHandler::tlbCleaner(UserProg* newUserProg) {
     }
 
     if(tlbHandler::lastUserProg != newUserProg) {
-        DEBUG('A', "Limpio la TLB. Vamos ManaOS!\n");
+        DEBUG('V', "Limpio la TLB. Vamos ManaOS!\n");
         for(int i = 0; i < TLBSize; i++) {
             machine->tlb[i].valid = false;
         }
