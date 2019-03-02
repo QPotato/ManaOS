@@ -33,6 +33,9 @@ class Statistics {
     int numConsoleCharsRead;	// number of characters read from the keyboard
     int numConsoleCharsWritten; // number of characters written to the display
     int numPageFaults;		// number of virtual memory page faults
+#ifdef USE_TLB
+    int numMemAccess; // number of times the memory was accessed
+#endif
     int numPacketsSent;		// number of packets sent over the network
     int numPacketsRecvd;	// number of packets received over the network
 #ifdef DFS_TICKS_FIX

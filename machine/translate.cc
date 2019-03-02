@@ -87,6 +87,9 @@ ShortToMachine(unsigned short shortword) { return ShortToHost(shortword); }
 
 bool Machine::ReadMem(int addr, int size, int *value)
 {
+#ifdef USE_TLB
+    stats->numMemAccess++;
+#endif
 	int data;
 	ExceptionType exception;
 	int physicalAddress;
@@ -94,6 +97,10 @@ bool Machine::ReadMem(int addr, int size, int *value)
 	DEBUG('a', "Reading VA 0x%x, size %d\n", addr, size);
 
 	exception = Translate(addr, &physicalAddress, size, false);
+#ifdef USE_TLB
+    if(exception == PageFaultException)
+        stats->numPageFaults++;
+#endif
 	if (exception != NoException)
 	{
 		machine->RaiseException(exception, addr);
@@ -139,12 +146,19 @@ bool Machine::ReadMem(int addr, int size, int *value)
 
 bool Machine::WriteMem(int addr, int size, int value)
 {
+#ifdef USE_TLB
+    stats->numMemAccess++;
+#endif
 	ExceptionType exception;
 	int physicalAddress;
 
 	DEBUG('a', "Writing VA 0x%x, size %d, value 0x%x\n", addr, size, value);
 
 	exception = Translate(addr, &physicalAddress, size, true);
+#ifdef USE_TLB
+    if(exception == PageFaultException)
+        stats->numPageFaults++;
+#endif
 	if (exception != NoException)
 	{
 		machine->RaiseException(exception, addr);
