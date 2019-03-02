@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "tlbHandler.h"
 #ifdef USE_TLB
 
@@ -21,7 +23,7 @@ void tlbHandler::pageFaultHandler(UserProg* prog, int virtualAddress) {
         }
     }
 
-    int replace_index = 7;
+    int replace_index = rand() % TLBSize;
     DEBUG('V', "Te quedaste sin TLB! Pero no importa, sacamos al %d! Vamos ManaOS!\n", replace_index);
     machine->tlb[replace_index] = *entry;
     return;
