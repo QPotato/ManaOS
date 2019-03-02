@@ -52,6 +52,8 @@ extern "C"
 #include <sys/mman.h>
 }
 
+#include <errno.h>
+
 #include "interrupt.h"
 #include "system.h"
 

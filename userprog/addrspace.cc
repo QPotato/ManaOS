@@ -16,7 +16,6 @@
 // of liability and disclaimer of warranty provisions.
 
 #include "copyright.h"
-#include "noff.h"
 
 #include "machine.h"
 
@@ -66,8 +65,8 @@ SwapHeader(NoffHeader *noffH)
 
 AddrSpace::AddrSpace(OpenFile *executable)
 {
-    NoffHeader noffH;
-    unsigned int i, size;
+    progExecutable = executable;
+    unsigned int size;
 
     executable->ReadAt((char *)&noffH, sizeof(noffH), 0);
     if ((noffH.noffMagic != NOFFMAGIC) &&
@@ -90,11 +89,11 @@ AddrSpace::AddrSpace(OpenFile *executable)
 
     // first, set up the translation
     pageTable = new TranslationEntry[numPages];
-    for (i = 0; i < numPages; i++)
+    for (int i = 0; i < numPages; i++)
     {
         pageTable[i].virtualPage = i;
-        pageTable[i].physicalPage = memoryManager->alocarPagina();
-        pageTable[i].valid = true;
+        pageTable[i].physicalPage = -1;
+        pageTable[i].valid = false;
         pageTable[i].use = false;
         pageTable[i].dirty = false;
         pageTable[i].readOnly = false; // if the code segment was entirely on
@@ -105,7 +104,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
     // zero out the entire address space, to zero the unitialized data segment
     // and the stack segment
     //bzero(machine->mainMemory, size);
-
+    /*
     char datosExe[PageSize];
     unsigned int rdSize;
 
@@ -114,7 +113,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
     {
         // Escribimos una pagina leida de los datos del ejecutable.
         rdSize = executable->ReadAt(datosExe, PageSize, noffH.code.inFileAddr + s);
-        for (i = 0; i < rdSize; i++)
+        for (int i = 0; i < rdSize; i++)
         {
             // Escribimos el byte i de la pagina (s / PageSize) del ejecutable.
             int dirVirtual = noffH.code.virtualAddr + s + i;
@@ -130,7 +129,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
     {
         // Escribimos una pagina leida de los datos del ejecutable.
         rdSize = executable->ReadAt(datosExe, PageSize, noffH.initData.inFileAddr + s);
-        for (i = 0; i < rdSize; i++)
+        for (int i = 0; i < rdSize; i++)
         {
             // Escribimos el byte i de la pagina (s / PageSize) del ejecutable.
             int dirVirtual = noffH.initData.virtualAddr + s + i;
@@ -140,6 +139,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
             machine->mainMemory[dirFisica] = datosExe[i];
         }
     }
+    */
 }
 
 //----------------------------------------------------------------------
@@ -151,9 +151,12 @@ AddrSpace::~AddrSpace()
 {
     for (unsigned i = 0; i < numPages; i++)
     {
-        memoryManager->liberarPagina(pageTable[i].physicalPage);
+        if(pageTable[i].physicalPage >= 0) {
+            memoryManager->liberarPagina(pageTable[i].physicalPage);
+        }
     }
     delete pageTable;
+    delete progExecutable;
 }
 
 //----------------------------------------------------------------------
@@ -227,6 +230,78 @@ void AddrSpace::RestoreState()
 TranslationEntry *AddrSpace::translate(int vpn)
 {
     ASSERT((unsigned)vpn < numPages); // Pediste una pagina fuera de la tabla de paginacion!
-    return &pageTable[vpn];
+    TranslationEntry* entry = &pageTable[vpn];
+    
+    if(entry->valid) {
+        DEBUG('D', "[TRANSLATE]: la entry para la página %d ya era válida!\n", vpn);
+        return entry;
+    }
+
+    ASSERT(entry->physicalPage < 0);
+
+    entry->valid = true;
+    entry->physicalPage = memoryManager->alocarPagina();
+
+    int virtualPageStart = vpn * PageSize;
+
+    int codeStart = noffH.code.virtualAddr;
+    int codeEnd = codeStart + noffH.code.size;
+    if(virtualPageStart >= codeStart && virtualPageStart < codeEnd) {
+        // Esto es código!!
+        DEBUG('D', "[TRANSLATE]: la entry para la página %d parece ser código, cargarlo...\n", vpn);
+        entry->readOnly = true;
+        
+        char datosExe[PageSize];
+        unsigned int rdSize;
+
+        int inSegmentOffset = virtualPageStart - codeStart;
+
+        // Escribimos una pagina leida de los datos del ejecutable.
+        rdSize = progExecutable->ReadAt(datosExe, PageSize, noffH.code.inFileAddr + inSegmentOffset);
+        for (unsigned int i = 0; i < rdSize; i++)
+        {
+            // Escribimos el byte i de la pagina (s / PageSize) del ejecutable.
+            int dirVirtual = noffH.code.virtualAddr + inSegmentOffset + i;
+            int pagFisica = entry->physicalPage;
+            int dirFisica = pagFisica * PageSize + dirVirtual % PageSize;
+            machine->mainMemory[dirFisica] = datosExe[i];
+        }
+        
+        return entry;
+    }
+
+    int initDataStart = noffH.initData.virtualAddr;
+    int initDataEnd = codeStart + noffH.initData.size;
+    if(virtualPageStart >= initDataStart && virtualPageStart < initDataEnd) {
+        // Esto es initData!!
+        DEBUG('D', "[TRANSLATE]: la entry para la página %d parece ser del segmento de datos, cargarlo...\n", vpn);
+        entry->readOnly = true;
+        
+        char datosExe[PageSize];
+        unsigned int rdSize;
+
+        int inSegmentOffset = virtualPageStart - codeStart;
+
+        // Escribimos una pagina leida de los datos del ejecutable.
+        rdSize = progExecutable->ReadAt(datosExe, PageSize, noffH.initData.inFileAddr + inSegmentOffset);
+        for (unsigned int i = 0; i < rdSize; i++)
+        {
+            // Escribimos el byte i de la pagina (s / PageSize) del ejecutable.
+            int dirVirtual = noffH.initData.virtualAddr + inSegmentOffset + i;
+            int pagFisica = entry->physicalPage;
+            int dirFisica = pagFisica * PageSize + dirVirtual % PageSize;
+            machine->mainMemory[dirFisica] = datosExe[i];
+        }
+
+        return entry;
+    }
+
+    int uninitDataStart = noffH.uninitData.virtualAddr;
+    int uninitDataEnd = codeStart + noffH.uninitData.size;
+    //ASSERT(virtualPageStart >= uninitDataStart && virtualPageStart < uninitDataEnd);
+
+    DEBUG('D', "[TRANSLATE]: la entry para la página %d parece ser stack.\n", vpn);
+
+    return entry;
 }
 #endif
