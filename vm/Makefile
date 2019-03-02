@@ -1750,8 +1750,6 @@ system.o: ../threads/system.cc /usr/include/stdc-predef.h \
  ../machine/console.h ../threads/synch.h ../userprog/bitmap.h \
  ../threads/preemptive.h
 tlbHandler.o: ../vm/tlbHandler.cc /usr/include/stdc-predef.h \
- ../vm/tlbHandler.h ../machine/machine.h ../threads/copyright.h \
- ../threads/utility.h ../threads/copyright.h ../machine/sysdep.h \
  /usr/include/c++/7/stdlib.h /usr/include/c++/7/cstdlib \
  /usr/include/x86_64-linux-gnu/c++/7/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/7/bits/os_defines.h \
@@ -1794,7 +1792,9 @@ tlbHandler.o: ../vm/tlbHandler.cc /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
  /usr/include/alloca.h /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
- /usr/include/c++/7/bits/std_abs.h /usr/include/stdio.h \
+ /usr/include/c++/7/bits/std_abs.h ../vm/tlbHandler.h \
+ ../machine/machine.h ../threads/copyright.h ../threads/utility.h \
+ ../threads/copyright.h ../machine/sysdep.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/types/__FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
  /usr/include/x86_64-linux-gnu/bits/libio.h \
