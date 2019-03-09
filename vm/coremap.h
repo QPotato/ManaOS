@@ -1,5 +1,10 @@
+
+#ifndef COREMAP_H
+#define COREMAP_H
+
 #ifdef USE_TLB
 #include "machine.h"
+#include "addrspace.h"
 
 struct CoreMapEntry {
     AddrSpace* addrSpace;
@@ -8,8 +13,8 @@ struct CoreMapEntry {
     int physPage;
 
     CoreMapEntry();
-    CoreMapEntry(AddrSpace* addrSpace, unsigned vpn, int timestamp);
-}
+    CoreMapEntry(AddrSpace* _addrSpace, unsigned _vpn, unsigned _physPage, int _timestamp);
+};
 
 class CoreMap {
     public:
@@ -27,4 +32,5 @@ class CoreMap {
         CoreMapEntry LRUSwapPolicy();
 };
 
+#endif
 #endif

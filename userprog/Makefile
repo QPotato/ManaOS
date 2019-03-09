@@ -973,12 +973,12 @@ bitmap.o: ../userprog/bitmap.cc /usr/include/stdc-predef.h \
  /usr/lib/gcc/x86_64-linux-gnu/7/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/sys_errlist.h /usr/include/string.h \
- /usr/include/strings.h ../filesys/openfile.h ../threads/system.h \
- ../threads/utility.h ../threads/thread.h ../threads/synch.h \
- ../threads/list.h ../machine/machine.h ../machine/translate.h \
- ../machine/disk.h ../userprog/userprog.h ../userprog/addrspace.h \
+ /usr/include/strings.h ../filesys/openfile.h ../userprog/addrspace.h \
  ../filesys/filesys.h ../filesys/openfile.h ../machine/translate.h \
- ../bin/noff.h ../threads/thread.h ../userprog/syscall.h \
+ ../bin/noff.h ../threads/system.h ../threads/utility.h \
+ ../threads/thread.h ../threads/synch.h ../threads/list.h \
+ ../machine/machine.h ../machine/translate.h ../machine/disk.h \
+ ../userprog/userprog.h ../threads/thread.h ../userprog/syscall.h \
  ../userprog/listaCumbiera.h ../threads/scheduler.h \
  ../machine/interrupt.h ../threads/list.h ../machine/stats.h \
  ../machine/timer.h ../userprog/synchconsole.h ../machine/console.h \

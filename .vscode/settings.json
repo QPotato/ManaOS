@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.common": "makefile",
+        "*.dep": "makefile",
+        "typeinfo": "cpp"
+    }
+}

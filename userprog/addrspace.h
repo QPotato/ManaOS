@@ -17,6 +17,9 @@
 #include "filesys.h"
 #include "translate.h"
 #include "noff.h"
+#ifdef USE_TLB
+#include "swap.h"
+#endif
 
 #define UserStackSize		(1024 * 8)	// increase this as necessary!
 
@@ -37,16 +40,22 @@ class AddrSpace {
     #ifdef USE_TLB
         TranslationEntry* translate(int vpn);
         void swapOut(int vpn);
+        char asid[9];
     #endif
 
-  private:
     TranslationEntry *pageTable;	// Assume linear page table translation
 					// for now!
     unsigned int numPages;		// Number of pages in the virtual
 					// address space
+
+  private:
     
     NoffHeader noffH;
     OpenFile *progExecutable;
+
+    #ifdef USE_TLB
+    Swap *swap;
+    #endif
 };
 
 #endif // ADDRSPACE_H

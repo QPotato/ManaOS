@@ -3,17 +3,17 @@
 #include "coremap.h"
 
 CoreMapEntry::CoreMapEntry() {
-    addrSpace = NULL;
-    vpn = 0;
-    physPage = 0;
-    timestamp = 0;
+    this->addrSpace = NULL;
+    this->vpn = 0;
+    this->physPage = 0;
+    this->timestamp = 0;
 }
 
-CoreMapEntry::CoreMapEntry(AddrSpace* addrSpace, unsigned vpn, unsigned physPage, int timestamp) {
-    addrSpace = addrSpace;
-    vpn = vpn;
-    physPage = phyPage
-    timestamp = timestamp;
+CoreMapEntry::CoreMapEntry(AddrSpace* _addrSpace, unsigned _vpn, unsigned _physPage, int _timestamp) {
+    this->addrSpace = _addrSpace;
+    this->vpn = _vpn;
+    this->physPage = _physPage;
+    this->timestamp = _timestamp;
 }
 
 CoreMap::CoreMap() {
@@ -30,7 +30,7 @@ void CoreMap::savePage(AddrSpace* addrSpace, int vpn, int physPage) {
     ASSERT(physPage < NumPhysPages); // Te pasaste de página física!!
     ASSERT(addrSpace != NULL); // el addrSpace es NULL!!
 
-    DEBUG('S', "Guardando pagina virtual %d del addrSpace %s en pagina fisica %d\n", vpn, addrSpace->thread->getName(), physPage);
+    DEBUG('S', "Guardando pagina virtual %d del addrSpace %s en pagina fisica %d\n", vpn, addrSpace->asid, physPage);
 
     timestamp++;
     entries[physPage] = CoreMapEntry(addrSpace, vpn, physPage, timestamp);
@@ -39,7 +39,7 @@ void CoreMap::savePage(AddrSpace* addrSpace, int vpn, int physPage) {
 void CoreMap::freeSpaceEntries(AddrSpace* addrSpace){
     for(int i = 0; i < NumPhysPages; i++) {
         if(entries[i].addrSpace == addrSpace)
-            entries[i] = CoreMapEntry()
+            entries[i] = CoreMapEntry();
     }
 }
 

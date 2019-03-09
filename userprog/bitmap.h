@@ -18,7 +18,11 @@
 #include "copyright.h"
 #include "utility.h"
 #include "openfile.h"
+#include "addrspace.h"
+
+#ifdef USE_TLB
 #include "coremap.h"
+#endif
 
 // Definitions helpful for representing a bitmap as an array of integers
 #define BitsInByte 	8
@@ -70,9 +74,14 @@ class MemoryManager {
         
         
         int alocarPagina(AddrSpace* addrSpace, unsigned vpn);
+
+        #ifdef USE_TLB
         void freeSpaceMemory(AddrSpace* addrSpace);
+        #endif
     private:
       BitMap* bitmap;
+      #ifdef USE_TLB
       CoreMap* coremap;
+      #endif
 };
 #endif // BITMAP_H
