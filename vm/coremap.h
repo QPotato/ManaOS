@@ -5,6 +5,7 @@ struct CoreMapEntry {
     AddrSpace* addrSpace;
     unsigned vpn;
     int timestamp;
+    int physPage;
 
     CoreMapEntry();
     CoreMapEntry(AddrSpace* addrSpace, unsigned vpn, int timestamp);
@@ -16,7 +17,7 @@ class CoreMap {
         ~CoreMap();
 
         void savePage(AddrSpace* addrSpace, int vpn, int physPage);
-        void freeSpaceEntries(AddrSpace*, addrSpace)
+        void freeSpaceEntries(AddrSpace* addrSpace);
         CoreMapEntry getNextToSwap();
     private:
         unsigned int timestamp;

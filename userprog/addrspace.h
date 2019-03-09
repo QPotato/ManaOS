@@ -36,6 +36,7 @@ class AddrSpace {
     
     #ifdef USE_TLB
         TranslationEntry* translate(int vpn);
+        void swapOut(int vpn);
     #endif
 
   private:

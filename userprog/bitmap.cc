@@ -177,13 +177,18 @@ MemoryManager::~MemoryManager()
     delete coremap;
 }
 
-int MemoryManager::alocarPagina(AddrSpace* addrSpace, unsigned vpn)
-{
+int MemoryManager::alocarPagina(AddrSpace* addrSpace, unsigned vpn) {
     int p;
-    if(( p = bitmap->Find()) == -1)
-    {
+    if((p = bitmap->Find()) == -1) {
+#ifdef USE_TLB
+        centry = coremap->getNextToSwap();
+        bitmap->Clear(centry.physPage);
+        p = bitmap->Find();
+        centry->addrSpace->swapOut(centry.vpn);
+#else
         DEBUG('A', "No hay mas marcos de memoria");
         ASSERT(false);
+ #endif
     }
 
 #ifdef USE_TLB
@@ -192,7 +197,11 @@ int MemoryManager::alocarPagina(AddrSpace* addrSpace, unsigned vpn)
     return p;
 }
 
-void MemoryManager::liberarPagina(int which)
-{
-    bitmap->Clear(which);
+void MemoryManager::freeSpaceMemory(AddrSpace* addrSpace) {
+    for (unsigned i = 0; i < numPages; i++) {
+        if(pageTable[i].physicalPage >= 0) {
+            bitmap->Clear(addrSpace->pageTable[i].physicalPage);
+        }
+    }
+    coremap->freeSpaceEntries(addrSpace);
 }

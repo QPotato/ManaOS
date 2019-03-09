@@ -1,15 +1,18 @@
+#ifdef USE_TLB
 #include <stdlib.h>
 #include "coremap.h"
 
 CoreMapEntry::CoreMapEntry() {
     addrSpace = NULL;
     vpn = 0;
+    physPage = 0;
     timestamp = 0;
 }
 
-CoreMapEntry::CoreMapEntry(AddrSpace* addrSpace, unsigned vpn, int timestamp) {
+CoreMapEntry::CoreMapEntry(AddrSpace* addrSpace, unsigned vpn, unsigned physPage, int timestamp) {
     addrSpace = addrSpace;
     vpn = vpn;
+    physPage = phyPage
     timestamp = timestamp;
 }
 
@@ -30,7 +33,14 @@ void CoreMap::savePage(AddrSpace* addrSpace, int vpn, int physPage) {
     DEBUG('S', "Guardando pagina virtual %d del addrSpace %s en pagina fisica %d\n", vpn, addrSpace->thread->getName(), physPage);
 
     timestamp++;
-    entries[physPage] = CoreMapEntry(addrSpace, vpn, timestamp);
+    entries[physPage] = CoreMapEntry(addrSpace, vpn, physPage, timestamp);
+}
+
+void CoreMap::freeSpaceEntries(AddrSpace* addrSpace){
+    for(int i = 0; i < NumPhysPages; i++) {
+        if(entries[i].addrSpace == addrSpace)
+            entries[i] = CoreMapEntry()
+    }
 }
 
 CoreMapEntry CoreMap::getNextToSwap() {
@@ -52,3 +62,4 @@ CoreMapEntry CoreMap::LRUSwapPolicy() {
 
     return LRU;
 }
+#endif

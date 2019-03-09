@@ -108,14 +108,8 @@ AddrSpace::AddrSpace(OpenFile *executable)
 // 	Dealloate an address space.  Nothing for now!
 //----------------------------------------------------------------------
 
-AddrSpace::~AddrSpace()
-{
-    for (unsigned i = 0; i < numPages; i++)
-    {
-        if(pageTable[i].physicalPage >= 0) {
-            memoryManager->liberarPagina(pageTable[i].physicalPage);
-        }
-    }
+AddrSpace::~AddrSpace() {
+    memoryManager->freeSpaceMemory(this);
     delete pageTable;
     delete progExecutable;
 }

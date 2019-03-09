@@ -102,9 +102,9 @@ USERPROG_C = ../userprog/addrspace.cc\
 USERPROG_O = addrspace.o bitmap.o exception.o progtest.o pasamemoria.o synchconsole.o console.o machine.o \
 	mipssim.o translate.o userprog.o syscall.o
 
-VM_H = ../vm/tlbHandler.h
-VM_C = ../vm/tlbHandler.cc
-VM_O = tlbHandler.o
+VM_H = ../vm/tlbHandler.h ../vm/coremap.h
+VM_C = ../vm/tlbHandler.cc ../vm/coremap.cc
+VM_O = tlbHandler.o coremap.o
 
 FILESYS_H =../filesys/directory.h \
 	../filesys/filehdr.h\

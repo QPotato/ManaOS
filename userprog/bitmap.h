@@ -18,6 +18,7 @@
 #include "copyright.h"
 #include "utility.h"
 #include "openfile.h"
+#include "coremap.h"
 
 // Definitions helpful for representing a bitmap as an array of integers
 #define BitsInByte 	8
@@ -69,7 +70,7 @@ class MemoryManager {
         
         
         int alocarPagina(AddrSpace* addrSpace, unsigned vpn);
-        void liberarPagina(int);
+        void freeSpaceMemory(AddrSpace* addrSpace);
     private:
       BitMap* bitmap;
       CoreMap* coremap;
