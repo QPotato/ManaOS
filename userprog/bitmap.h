@@ -61,14 +61,17 @@ class BitMap {
     unsigned int *map;			// bit storage
 };
 
+
 class MemoryManager {
     public:
         MemoryManager();
         ~MemoryManager();
         
-        BitMap* bitmap;
         
-        int alocarPagina();
+        int alocarPagina(AddrSpace* addrSpace, unsigned vpn);
         void liberarPagina(int);
+    private:
+      BitMap* bitmap;
+      CoreMap* coremap;
 };
 #endif // BITMAP_H

@@ -33,6 +33,7 @@ class AddrSpace {
     void SaveState();			// Save/restore address space-specific
     void RestoreState();		// info on a context switch
 
+    
     #ifdef USE_TLB
         TranslationEntry* translate(int vpn);
     #endif

@@ -168,14 +168,16 @@ BitMap::WriteBack(OpenFile *file)
 MemoryManager::MemoryManager()
 {
     bitmap = new BitMap(NumPhysPages);
+    coremap = new CoreMap();
 }
 
 MemoryManager::~MemoryManager()
 {
     delete bitmap;
+    delete coremap;
 }
 
-int MemoryManager::alocarPagina()
+int MemoryManager::alocarPagina(AddrSpace* addrSpace, unsigned vpn)
 {
     int p;
     if(( p = bitmap->Find()) == -1)
@@ -183,7 +185,10 @@ int MemoryManager::alocarPagina()
         DEBUG('A', "No hay mas marcos de memoria");
         ASSERT(false);
     }
-    
+
+#ifdef USE_TLB
+    coremap->savePage(userProg, vpn, p)
+#endif
     return p;
 }
 

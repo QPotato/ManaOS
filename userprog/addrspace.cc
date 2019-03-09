@@ -101,45 +101,6 @@ AddrSpace::AddrSpace(OpenFile *executable)
                                        // pages to be read-only
     }
 
-    // zero out the entire address space, to zero the unitialized data segment
-    // and the stack segment
-    //bzero(machine->mainMemory, size);
-    /*
-    char datosExe[PageSize];
-    unsigned int rdSize;
-
-    DEBUG('a', "Initializing code segment, at 0x%x (virtual), size %d\n", noffH.code.virtualAddr, noffH.code.size);
-    for (int s = 0; s < noffH.code.size; s += rdSize)
-    {
-        // Escribimos una pagina leida de los datos del ejecutable.
-        rdSize = executable->ReadAt(datosExe, PageSize, noffH.code.inFileAddr + s);
-        for (int i = 0; i < rdSize; i++)
-        {
-            // Escribimos el byte i de la pagina (s / PageSize) del ejecutable.
-            int dirVirtual = noffH.code.virtualAddr + s + i;
-            int pagVirtual = dirVirtual / PageSize;
-            int pagFisica = pageTable[pagVirtual].physicalPage;
-            int dirFisica = pagFisica * PageSize + dirVirtual % PageSize;
-            machine->mainMemory[dirFisica] = datosExe[i];
-        }
-    }
-
-    DEBUG('a', "Initializing data segment, at 0x%x, size %d\n", noffH.initData.virtualAddr, noffH.initData.size);
-    for (int s = 0; s < noffH.initData.size; s += rdSize)
-    {
-        // Escribimos una pagina leida de los datos del ejecutable.
-        rdSize = executable->ReadAt(datosExe, PageSize, noffH.initData.inFileAddr + s);
-        for (int i = 0; i < rdSize; i++)
-        {
-            // Escribimos el byte i de la pagina (s / PageSize) del ejecutable.
-            int dirVirtual = noffH.initData.virtualAddr + s + i;
-            int pagVirtual = dirVirtual / PageSize;
-            int pagFisica = pageTable[pagVirtual].physicalPage;
-            int dirFisica = pagFisica * PageSize + dirVirtual % PageSize;
-            machine->mainMemory[dirFisica] = datosExe[i];
-        }
-    }
-    */
 }
 
 //----------------------------------------------------------------------
@@ -240,7 +201,7 @@ TranslationEntry *AddrSpace::translate(int vpn)
     ASSERT(entry->physicalPage < 0);
 
     entry->valid = true;
-    entry->physicalPage = memoryManager->alocarPagina();
+    entry->physicalPage = memoryManager->alocarPagina(this, vpn);
 
     int virtualPageStart = vpn * PageSize;
 
