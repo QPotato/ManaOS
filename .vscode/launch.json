@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceRoot}/vm/ManaOS",
-            "args": ["-d", "SVD"],
+            "args": ["-d", "S"],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}/test",
             "environment": [],

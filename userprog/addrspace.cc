@@ -95,7 +95,7 @@ AddrSpace::AddrSpace(OpenFile *executable) {
     swap = new Swap(asid, size);
 #endif
 
-    ASSERT(numPages <= NumPhysPages); // check we're not trying
+    //ASSERT(numPages <= NumPhysPages); // check we're not trying
                                       // to run anything too big --
                                       // at least until we have
                                       // virtual memory
@@ -248,7 +248,7 @@ TranslationEntry *AddrSpace::translate(int vpn)
         }
 
         int initDataStart = noffH.initData.virtualAddr;
-        int initDataEnd = codeStart + noffH.initData.size;
+        int initDataEnd = initDataStart + noffH.initData.size;
         if (virtualPageStart >= initDataStart && virtualPageStart < initDataEnd)
         {
             // Esto es initData!!

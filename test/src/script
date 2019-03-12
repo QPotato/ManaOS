@@ -19,9 +19,9 @@ SECTIONS
     *(.data)
     CONSTRUCTORS
   }
-   edata  =  .;
-   _edata  =  .;
-   _fbss = .;
+   edata  = .;
+   _edata  = .;
+   _fbss =.;
   .sbss  . : {
     *(.sbss)
     *(.scommon)
